@@ -1,0 +1,23 @@
+= search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+  %table.search_filter
+    %tr
+      %th Severity
+      %th Facility Class
+      %th Facility Method
+      %th Text
+      %th User
+    %tr
+      %td= f.select :severity_matches, @severity, { :include_blank => true }
+      %td= f.select :facility_class_matches, @facility_classes, { :include_blank => true }
+      %td= f.select :facility_method_matches, [ "create", "update", "delete" ], { :include_blank => true }
+      %td= f.text_field :text_cont, :placeholder => "contains"
+      %td= f.select :user_id_eq, @users, { :include_blank => true }
+      = searchform_action_buttons
+
+= render(:partial => 'shared/paginator', :locals => { :objects => @loggings })
+
+%table.index_table.index
+  %thead#systems_thead
+    = render :partial => 'thead'
+  %tbody#systems_body
+    = render :partial => 'logging', :collection => @loggings

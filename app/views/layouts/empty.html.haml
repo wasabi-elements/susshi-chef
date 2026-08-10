@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %title INSPINIA | Responsive admin theme
+    / Include style per-controller - vendor plugins
+    = stylesheet_link_tag params[:controller] if (Rails.application.assets || ::Sprockets::Railtie.build_environment(Rails.application)).find_asset("#{params[:controller]}.css")
+    / Main css styles
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    / Main javascript files
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body.gray-bg
+    / Main view
+    = yield
+    / Include javascript per-controller - vendor plugins
+    = javascript_include_tag params[:controller] if (Rails.application.assets || ::Sprockets::Railtie.build_environment(Rails.application)).find_asset("#{params[:controller]}.js")
+    / Include javascript per-view
+    / For demo purpose we include javascript in view but you can easily start SeedProject and organize it with Rails asset pipeline as you want
+    = yield :javascript

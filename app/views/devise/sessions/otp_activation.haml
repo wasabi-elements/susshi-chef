@@ -1,0 +1,11 @@
+%h3 Welcome to suSSHi Chef
+%p You should have received an OTP activation token with a length of 32 characters by e-mail.
+%h4 Please enter the OTP activation token
+
+= form_for("", url: users_sessions_verify_otp_activation_path, method: :post, html: { role: 'form', class: 'm-t'}) do |f|
+  .form-group
+    = f.text_field :otp_activation, autofocus: true, class: 'form-control', :placeholder => "Activation Token"
+  = f.submit  'Activate', class: 'btn btn-primary block full-width m-b'
+
+- if flash[:error]
+  %p.text-danger= flash[:error]

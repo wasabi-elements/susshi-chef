@@ -1,0 +1,44 @@
+= panel("Activated OTP Authentication") do
+  .row
+    .col-sm-2
+    .col-sm-10
+      %h2 You have activated OTP authentication for suSSHi Chef Administration!
+      %br
+      %p Please scan your personal OTP QR code with your favorite OTP app on your smart phone and send the other administrators their OTP activation codes.
+      %br
+
+  .row
+    .col-sm-2
+    .col-sm-10
+      %table
+        %tr
+          %td{width: "350px"}
+            = image_tag @qr_code, style: "border: 1px solid #e7eaec; border-radius: 4px;"
+          %td{style: "vertical-align: top"}
+            .alert.alert-warning.font-bold
+              If you leave this page without scanning the QR code, you will no longer be able to log in to suSSHi Chef!
+
+            %hr
+
+            %table.table.table-striped
+              %tr
+                %td.font-bold Issuer
+                %td= Preference.first.admin_auth_realm
+              %tr
+                %td.font-bold E-Mail
+                %td= current_user.email
+              %tr
+                %td.font-bold Secret
+                %td= current_user.otp_secret
+
+            %hr
+
+            %a.btn.btn-primary{href: root_path}
+              %i.fa.fa-check
+              Continue, I scanned the QR code
+
+            = simple_form_for(@preference, url: update_preferences_path, html: {style: "float: right;"}) do |f|
+              = f.input :admin_auth_method, as: "hidden", input_html: {value: "password"}
+              = button_tag(type: "submit", class: "btn btn-danger") do
+                %i.fa.fa-hand-paper
+                Stop, cancel OTP activation

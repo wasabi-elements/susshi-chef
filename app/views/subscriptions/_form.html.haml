@@ -1,0 +1,12 @@
+
+%p Please activate the subscription with your subscription key:
+%br
+
+= simple_form_for @subscription do |f|
+  = f.input_with_icon :subscription_key, icon: "fa-certificate", label: false
+
+  - if (@errors ||= []).any?
+    %p.text-danger= @errors.join(", ")
+    %br
+
+  = f.button :submit_cancel, html: { class: 'btn-primary'},  value: "Activate Subscription", cancel: false

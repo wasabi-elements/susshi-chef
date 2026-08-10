@@ -1,0 +1,10 @@
+= simple_form_for(@partition) do |f|
+  = f.input_with_icon :name, required: true, icon: 'fa-cube'
+  = f.input_with_icon :description, icon: 'fa-info-circle'
+  = f.input_with_icon :comment, icon: 'fa-comment'
+
+  .hr-line-dashed
+
+  = f.input_dual :user_ids, collection: User.all, label: 'Admin Users'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

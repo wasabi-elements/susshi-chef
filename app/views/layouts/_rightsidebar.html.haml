@@ -1,0 +1,106 @@
+#right-sidebar
+  .sidebar-container
+    %ul.nav.nav-tabs.navs-3
+      %li.active
+        %a{"data-toggle" => "tab", :href => "#tab-1"}
+          Notes
+      %li
+        %a{"data-toggle" => "tab", :href => "#tab-2"}
+          Projects
+      %li
+        %a{"data-toggle" => "tab", :href => "#tab-3"}
+          %i.fa.fa-gear
+    .tab-content
+      #tab-1.tab-pane
+        .sidebar-title
+          %h3
+            %i.fa.fa-comments-o
+            Latest Notes
+          %small
+            %i.fa.fa-tim
+            You have 10 new message.
+      #tab-2.tab-pane
+        .sidebar-title
+          %h3
+            %i.fa.fa-cube
+            Latest projects
+          %small
+            %i.fa.fa-tim
+            You have 14 projects. 10 not completed.
+      #tab-3.tab-pane.active
+        .sidebar-title
+          %h3
+            %i.fa.fa-gears
+            Settings
+          %small
+            %i.fa.fa-tim
+            You have 14 projects. 10 not completed.
+        .setings-item
+          %span
+            Show notifications
+          .switch
+            .onoffswitch
+              %input#example.onoffswitch-checkbox{:name => "collapsemenu", :type => "checkbox"}/
+              %label.onoffswitch-label{:for => "example"}
+                %span.onoffswitch-inner
+                %span.onoffswitch-switch
+        .setings-item
+          %span
+            Disable Chat
+          .switch
+            .onoffswitch
+              %input#example2.onoffswitch-checkbox{:checked => "checked", :name => "collapsemenu", :type => "checkbox"}/
+              %label.onoffswitch-label{:for => "example2"}
+                %span.onoffswitch-inner
+                %span.onoffswitch-switch
+        .setings-item
+          %span
+            Enable history
+          .switch
+            .onoffswitch
+              %input#example3.onoffswitch-checkbox{:name => "collapsemenu", :type => "checkbox"}/
+              %label.onoffswitch-label{:for => "example3"}
+                %span.onoffswitch-inner
+                %span.onoffswitch-switch
+        .setings-item
+          %span
+            Show charts
+          .switch
+            .onoffswitch
+              %input#example4.onoffswitch-checkbox{:name => "collapsemenu", :type => "checkbox"}/
+              %label.onoffswitch-label{:for => "example4"}
+                %span.onoffswitch-inner
+                %span.onoffswitch-switch
+        .setings-item
+          %span
+            Offline users
+          .switch
+            .onoffswitch
+              %input#example5.onoffswitch-checkbox{:checked => "checked", :name => "collapsemenu", :type => "checkbox"}/
+              %label.onoffswitch-label{:for => "example5"}
+                %span.onoffswitch-inner
+                %span.onoffswitch-switch
+        .setings-item
+          %span
+            Global search
+          .switch
+            .onoffswitch
+              %input#example6.onoffswitch-checkbox{:checked => "checked", :name => "collapsemenu", :type => "checkbox"}/
+              %label.onoffswitch-label{:for => "example6"}
+                %span.onoffswitch-inner
+                %span.onoffswitch-switch
+        .setings-item
+          %span
+            Update everyday
+          .switch
+            .onoffswitch
+              %input#example7.onoffswitch-checkbox{:name => "collapsemenu", :type => "checkbox"}/
+              %label.onoffswitch-label{:for => "example7"}
+                %span.onoffswitch-inner
+                %span.onoffswitch-switch
+        .sidebar-content
+          %h4 Settings
+          .small
+            I belive that. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            And typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).

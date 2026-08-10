@@ -1,0 +1,21 @@
+:javascript
+  $(function() {
+    $('table.table tbody##{id}').sortable({
+      items: 'tr',
+      axis: 'y',
+      dropOnEmpty: false,
+      handle: '.handle',
+      cursor: 'move',
+      update: function() {
+        $.ajax({
+          url: '/partition_keys/move/#{klass}',
+          type: 'post',
+          data: { reorder: $("tbody##{id} tr").map(function() { return this.id; }).get() },
+          dataType: 'script',
+          complete: function (request) {
+            location.reload();
+          }
+        });
+      }
+    });
+  });

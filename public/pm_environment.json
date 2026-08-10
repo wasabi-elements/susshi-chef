@@ -1,0 +1,25 @@
+{
+  "name": "suSSHi Chef Config API Environment",
+  "values": [
+    {
+      "key": "susshi_chef_api_scheme",
+      "value": "https",
+      "enabled": true
+    },
+    {
+      "key": "susshi_chef_api_host",
+      "value": "YOUR_SUSSHI_CHEF_API_HOST",
+      "enabled": true
+    },
+    {
+      "key": "susshi_chef_api_application",
+      "value": "YOUR_SUSSHI_CHEF_API_APPLICATION_NAME",
+      "enabled": true
+    },
+    {
+      "key": "susshi_chef_api_token",
+      "value": "YOUR_SUSSHI_CHEF_API_TOKEN",
+      "enabled": true
+    }
+  ]
+}

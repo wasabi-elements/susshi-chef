@@ -1,0 +1,51 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %title= strip_tags(content_for?(:title) ? 'suSSHi Chef - '+yield(:title) : 'suSSHi Chef by Wasabi Elements GmbH')
+    - if (Rails.application.assets || ::Sprockets::Railtie.build_environment(Rails.application)).find_asset("#{params[:controller]}.css")
+      = stylesheet_link_tag params[:controller]
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_include_tag "application", 'data-turbolinks-track' => true
+    = javascript_include_tag "chef_application"
+    = csrf_meta_tag
+    = yield :javascripts
+    = yield :head
+
+  %body
+    #wrapper{:class => "#{controller_name}.#{action_name}"}
+      = render 'layouts/navigation'
+      #page-wrapper{ :class => "gray-bg #{@extra_class}" }
+        = render 'layouts/topnavbar'
+        - unless controller_name == 'dashboards' && action_name == 'overview'
+          = render 'layouts/breadcrumb'
+          .wrapper.wrapper-content
+            = yield
+            #modal-dialog{class: 'modal fade', role: 'dialog', aria: { labelledby: 'myModalLabel', hidden: 'true'}}
+        - else
+          .wrapper.wrapper-content.animated.fadeInDown
+            = yield
+        = render 'layouts/footer'
+    - if (Rails.application.assets || ::Sprockets::Railtie.build_environment(Rails.application)).find_asset("#{params[:controller]}.js")
+      = javascript_include_tag params[:controller]
+    = yield :javascript
+
+    - unless is_active_controller('dashboards', 'in')
+      - if flash.any?
+        :javascript
+          setTimeout(function() {
+            toastr.options = {
+              positionClass: 'toast-bottom-right',
+              closeButton: true,
+              progressBar: true,
+              showMethod: 'slideDown',
+              timeOut: 4000,
+              extendedTimeOut: 4000
+            };
+
+          #{flash_toastr.join(' ').html_safe}
+
+          }, 1300);

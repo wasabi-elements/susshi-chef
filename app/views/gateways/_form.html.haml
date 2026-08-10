@@ -1,0 +1,22 @@
+= simple_form_for(@gateway) do |f|
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @gateway.partition.name }, label: 'Partition'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :name, required: true, icon: 'fa-dungeon', label: 'Hostname'
+  - if %w(new create).include?(params[:action])
+    = f.input_with_icon :susshid_identifier, required: true, hint: 'Identifier will be created automatically if empty. This identifier can not be changed after creation!',
+                                             icon: 'fa-globe', input_html: {maxlength: 4 }
+  - else
+    = f.input_with_icon :susshid_identifier, required: true, disabled: true, icon: 'fa-globe', input_html: {maxlength: 4 }
+
+  = f.input_with_icon :sic_host, label: 'SIC Hostname / IP Address', hint: 'Optional on first configuration. Would get set during gateway registration process.', icon: 'fa-cloud'
+  = f.input_with_icon :sic_port, label: 'SIC Port', icon: 'fa-ship'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :listen_addresses, label: 'Listen Addresses', as: :array, input_html: { min: 1, max: 100 }, icon: 'fa-headphones'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

@@ -1,0 +1,26 @@
+:javascript
+
+  function UpdateFormOnChange(){
+    var found = false;
+    var warning = false;
+    $("#auth_selections select option:selected").each(function(index, item) {
+        if ((found) && (($(item).val() == 'password') || ($(item).val() == 'keyboard-interactive'))) {
+            warning = true;
+        }
+        if ($(item).val() == 'publickey-ssh-agent') {
+           found = true;
+        };
+    });
+    if (warning) {
+      $('#agent-auth-hint').fadeIn("slow");
+    } else {
+      $('#agent-auth-hint').fadeOut(0);
+    };
+
+  };
+
+  $("#auth_selections * select").change(function() {
+     UpdateFormOnChange();
+  });
+
+  UpdateFormOnChange();

@@ -1,0 +1,133 @@
+- breadcrumb @session_report
+
+= panel do
+  %h3 Session
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value 'Operation Mode', @session_report.operation_mode_text, icon: @session_report.icon
+    = row_key_value 'Session ID', @session_report.susshi_uniqid, icon: 'fa-globe'
+    = row_key_value_block 'State', icon: 'fa-lightbulb' do
+      - case @session_report.session_state
+      - when 'new'
+        %span.btn.btn-xs.btn-success New
+      - when 'active'
+        %span.btn.btn-xs.btn-success Active
+      - when 'finished'
+        %span.btn.btn-xs.btn-primary Finished
+      - when 'denied'
+        %span.btn.btn-xs.btn-danger Denied
+      - when 'failed'
+        %span.btn.btn-xs.btn-warning Failed
+    - if @session_report.crash
+      = row_key_value_block 'Report incomplete', icon: 'fa-exclamation-triangle text-warning' do
+        This report is marked as incomplete. Please have a look at the gateway logs for further information about session.
+    - if %w(denied failed).include?(@session_report.session_state)
+      = row_key_value 'Message', @session_report.message, icon: 'fa-info-circle'
+    = row_key_value 'Start', @session_report.session_start.try(:utc), icon: 'fa-clock'
+    - if %w(finished denied failed).include?(@session_report.session_state)
+      - if @session_report.crash
+        - session_end = @session_report.updated_at.try(:utc) + @period
+        = row_key_value 'End', "Up to #{session_end}", icon: 'fa-clock'
+        = row_key_value 'Duration', %w(denied failed).include?(@session_report.session_state) ? '0 seconds (no session)' : "Up to #{distance_of_time_in_words(@session_report.session_start - session_end)}", icon: 'fa-clock'
+      - else
+        = row_key_value 'End', @session_report.session_end.try(:utc), icon: 'fa-clock'
+        = row_key_value 'Duration', %w(denied failed).include?(@session_report.session_state) ? '0 seconds (no session)' : distance_of_time_in_words(@session_report.session_start.try(:utc), @session_report.session_end.try(:utc)), icon: 'fa-clock'
+    - else
+      = row_key_value 'End', 'still logged in', icon: 'fa-clock'
+      = row_key_value 'Duration', distance_of_time_in_words(@session_report.session_start, Time.now), icon: 'fa-clock'
+    = row_key_value 'Client', @session_report.get_client_socket, icon: 'fa-desktop'
+    = row_key_value 'Gateway user', @session_report.susshi_user, icon: 'fa-user'
+    = row_key_value 'Target', (raw @session_report.get_target), icon: 'fa-arrow-right'
+    - unless @session_report.proxy_realm.blank?
+      = row_key_value 'Proxy Realm', @session_report.proxy_realm, icon: 'fa-plug'
+    = row_key_value 'Login String', @session_report.login_string, icon: 'fa-sign-in-alt'
+    - if @session_report.operation_mode == 1
+      = row_key_value 'Bastion Rule ID', @session_report.rule_id_formatted, icon: 'fa-chess-rook'
+    - if (@session_report.rule_id || 0) > 0
+      = row_key_value 'Access Rule ID', @session_report.rule_id_formatted, icon: 'fa-gem'
+    - unless @session_report.profile_name.blank?
+      = row_key_value 'Profile Name', @session_report.profile_name, icon: 'fa-toggle-on'
+    - if %w(new active).include?(@session_report.session_state)
+      = row_key_value_block "Terminate session", icon: 'fa-stop-circle' do
+        = link_to 'Terminate session', terminate_session_path(@session_report), class: 'btn btn-xs btn-white',
+          data: { confirm: "This will terminate the running session '#{@session_report.susshi_uniqid}' and disconnect the user immediately."}
+
+  %h3 Client Details
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value 'Client Authentication Method', @session_report.client_auth, icon: 'fa-key'
+    - unless @session_report.user_auth_fp.blank?
+      = row_key_value 'Public Userkey Fingerprint', @session_report.user_auth_fp, icon: 'fa-key'
+    = row_key_value 'Client SSH banner', @session_report.client_ssh, icon: 'fa-quote-left'
+    = row_key_value_block 'Client compression', icon: 'fa-compress' do
+      = boolean_value(@session_report.client_comp)
+    = row_key_value_block 'Connect used', icon: 'fa-link' do
+      = boolean_value(@session_report.connect_used)
+
+  - if @session_report.operation_mode == 0
+    %h3 Target Details
+    .hr-line-dashed
+    = attributes_table do
+      = row_key_value 'Target Authentication Method', @session_report.target_auth, icon: 'fa-key'
+      = row_key_value 'Target SSH banner', @session_report.target_ssh, icon: 'fa-quote-right'
+      = row_key_value_block 'Target compression', icon: 'fa-compress' do
+        = boolean_value(@session_report.target_comp)
+
+  - if %w(active finished).include?(@session_report.session_state)
+    %h3 Session Details
+    .hr-line-dashed
+    = attributes_table do
+      - case @session_report.operation_mode
+      - when 0
+        = row_key_value_block 'Interactive' do
+          = session_feature((@session_report.int_accept || 0) > 0, 'I', 'Interactive')
+        = row_key_value_block 'Command Execution' do
+          = session_feature((@session_report.cmd_accept || 0) > 0, 'E', 'Cmd Exec')
+        = row_key_value_block 'Agent Forwarding' do
+          = session_feature((@session_report.agent_accept || 0) > 0, 'A', 'Agent Forward')
+        = row_key_value_block 'Secure Copy (SCP)' do
+          = session_feature((@session_report.scp_sessions || 0) > 0, 'C', 'SCP')
+        = row_key_value_block 'Secure Copy (SFTP)' do
+          = session_feature((@session_report.sftp_sessions || 0) > 0, 'F', 'SFTP')
+        = row_key_value_block 'Local Port Forwardings' do
+          = session_feature((@session_report.lf_accept || 0) > 0, 'L', 'Local Port Forward')
+        = row_key_value_block 'Remote Port Forwardings' do
+          = session_feature((@session_report.rf_accept || 0) > 0, 'R', 'Remote Port Forward')
+        = row_key_value_block 'X11 Forwardings' do
+          = session_feature((@session_report.x11_accept || 0) > 0, 'X', 'X11')
+      - when 1
+        = row_key_value_block 'Local Port Forwardings' do
+          = session_feature((@session_report.lf_accept || 0) > 0, 'L', 'Local Port Forward')
+
+      = row_key_value_block 'Compression' do
+        = session_feature(@session_report.client_comp || @session_report.target_comp, 'C', 'Compression')
+      = row_key_value_block 'Channels' do
+        %span Accepted:
+        %span.badge.badge-primary= @session_report.ch_accept
+        %span / Closed:
+        %span.badge.badge-default= @session_report.ch_close
+        %span / Rejected:
+        %span.badge.badge-danger= @session_report.ch_reject
+        %span / Failed:
+        %span.badge.badge-warning= @session_report.ch_fail
+
+    %h3 Network I/O
+    .hr-line-dashed
+    = attributes_table do
+      = row_key_value 'Client IN (bytes)', number_to_human_size(@session_report.session_c_in), icon: 'fa-arrow-right'
+      = row_key_value 'Target OUT (bytes)', number_to_human_size(@session_report.session_t_out), icon: 'fa-arrow-right'
+      = row_key_value 'Target IN (bytes)', number_to_human_size(@session_report.session_t_in), icon: 'fa-arrow-left'
+      = row_key_value 'Client OUT (bytes)', number_to_human_size(@session_report.session_c_out), icon: 'fa-arrow-left'
+
+- if @system_events.any?
+
+  .row
+    .col-12
+      .ibox.float-e-margins
+        .ibox-content.m-b-sm.border-bottom
+          %h3 System Events
+          %table.table.table-striped.toggle-arrow-tiny.tablet.breakpoint
+            %thead
+              = render partial: 'system_events/thead', locals: { report_view: true }
+            %tbody#system_events-tbody
+              = render partial: 'system_events/system_event', collection: @system_events, locals: { report_view: true }

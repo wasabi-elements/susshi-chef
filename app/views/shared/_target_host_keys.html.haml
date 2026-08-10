@@ -1,0 +1,13 @@
+%h3= title ? title : 'Hostkeys'
+- target_host_keys.each_with_index do |key|
+  = attributes_table do
+    - if %w(TargetNetworkHost TargetDomainHost).include?(key.target.type)
+      = row_key_value 'Target Address', key.target.name, icon: key.target.icon
+    = row_key_value 'Key-Type', key.key_type, icon: 'fa-key'
+    = row_key_value 'Bits', key.bits, icon: 'fa-expand'
+    = row_key_value 'Fingerprint', key.fingerprint, icon: 'fa-fingerprint'
+    = row_key_value 'Date', key.updated_at, icon: 'fa-calendar'
+    - if key.susshi_user_login
+      = row_key_value 'User', (link_to key.susshi_user_login.name, key.susshi_user_login), icon: 'fa-user'
+      = row_key_value_block 'Action' do
+        = index_action_buttons(key)

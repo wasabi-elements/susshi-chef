@@ -1,0 +1,16 @@
+%tr
+  %th
+  %th= sortable_link query, :name
+  %th.text-nowrap= sortable_link query, :fullname, 'Full Name / Description'
+  %th.text-nowrap= sortable_link query, :email, 'Email Address'
+  %th.text-center= sortable_link query, :active
+  %th.text-center Password
+  - if @show_totp_column
+    %th.text-center TOTP
+  %th.text-center Memberships
+  %th.text-center Keys
+  %th.text-center Accesses
+  %th.text-center Bastions
+  - if @show_last_use
+    %th.text-center.text-nowrap= sortable_link query, :last_use_at, 'Last access'
+  %th.text-right Action

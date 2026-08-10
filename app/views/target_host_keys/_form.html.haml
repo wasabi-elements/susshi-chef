@@ -1,0 +1,8 @@
+= simple_form_for(@target_host_key) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input_with_icon :source, icon: 'fa-star'
+    = f.input_with_icon :public_blob, icon: 'fa-address-card'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

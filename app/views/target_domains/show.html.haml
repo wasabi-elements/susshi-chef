@@ -1,0 +1,18 @@
+- breadcrumb @target_domain
+
+= panel do
+  = attributes_table do
+    = row_key_value 'Partition', @target_domain.partition.name, icon: 'fa-cube'
+    = row_key_value 'Domain', @target_domain.domainname, icon: 'fa-globe-africa'
+    = row_key_value 'Match', "*.#{@target_domain.domainname}", icon: @target_domain.icon
+    = row_key_value_block 'Active', icon: 'fa-lightbulb' do
+      = boolean_value(@target_domain.active)
+    = row_key_values 'Memberships', @target_domain.target_groups.collect {|t| link_to t.name, t }, icon: 'fa-layer-group'
+    - if @target_domain.target_fusions.any?
+      = row_key_values 'Target Fusions', @target_domain.target_fusions.collect {|fusion| link_to fusion.display_name, fusion}, icon: 'fa-link'
+
+  - k = @target_domain.target_user_host_keys
+  - if k.any?
+    = render partial: 'shared/target_host_keys', locals: { title: 'User-individual Hostkeys', target_host_keys: k }
+
+  = show_action_buttons(@target_domain, { :destroy => @target_domain.is_destroyable? })

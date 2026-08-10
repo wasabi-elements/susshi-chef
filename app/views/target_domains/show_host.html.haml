@@ -1,0 +1,5 @@
+- breadcrumb @target_host
+
+= attributes_panel "Details of '#{@target_host.hostname}'" do
+  = row_key_value 'Partition', @target_host.partition.name, icon: 'fa-cube'
+  = row_key_value 'Hostname', @target_host.hostname, icon: 'fa-globe'

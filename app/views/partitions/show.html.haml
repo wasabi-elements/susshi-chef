@@ -1,0 +1,10 @@
+- breadcrumb @partition
+
+= panel do
+  = attributes_table do
+    = row_key_value "name", @partition.name
+    = row_key_value "comment", @partition.comment
+    = row_key_value "description", @partition.description
+    = row_key_value "Admin Users", ( raw @partition.users.collect {|p| link_to(p.fullname, p) }.join(", "))
+
+  = show_action_buttons(@partition)

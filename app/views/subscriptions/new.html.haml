@@ -1,0 +1,55 @@
+- breadcrumb :subscription
+
+= panel do
+  - content_for(:navbar_subscription, "No Subscription")
+
+  - if defined?(EE::Engine)
+    .information-text
+      %h2 Enterprise Edition — No Active Subscription
+      .hr-line-dashed
+
+      %p Your suSSHi Chef Enterprise Edition is installed, but no valid subscription is active. Enterprise features are currently disabled.
+      %br
+
+      %h2 Activate Your Subscription
+      .hr-line-dashed
+
+      %p= Subscription.mount_hint
+      %p Your Installation Identifier: #{Preference.instance.installation_identifier}.
+      %br
+
+      %p= "Need a subscription? View our #{link_to "Subscription Plans", external_link_subscription_plan_url, target: "_blank", rel: "noopener noreferrer"}."
+  - else
+    .information-text
+      %h2 AGPL Licensed. Professionally Supported.
+      .hr-line-dashed
+
+      %p Our software is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) — fully open source, fully transparent.
+      %br
+      %p.bold But production environments require more than code.
+      %p If you are using this software commercially, a support subscription helps ensure its long-term sustainability.
+      %br
+      %p With our suSSHi Chef Enterprise Edition and a Support Subscription, you get:
+      %ul
+        %li More features like Audit Log Encryption, suSSHi Proxy, suSSHi Bastion, Target Fusions and Dynamic TOTP
+        %li Priority email support and GitHub issue handling
+        %li Direct access to the core maintainers
+        %li Bug investigation & guidance
+        %li Custom feature development
+        %li Long-term stability and roadmap influence
+      %br
+      %p
+        Open source gives you freedom.
+        %br
+        Our support gives you certainty.
+      %br
+      %p.bold Let’s build your solution together.
+      %br
+
+      %p= "View our #{link_to "Subscription Plans", external_link_subscription_plan_url, target: "_blank", rel: "noopener noreferrer"}."
+      %p Your Installation Identifier: #{Preference.instance.installation_identifier}.
+
+  %br
+  .information-text
+    %p.text-center
+      = render partial: "links"

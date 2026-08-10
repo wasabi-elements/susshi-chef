@@ -1,0 +1,41 @@
+= simple_form_for(@susshi_user_login, remote: request.xhr?) do |f|
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @susshi_user_login.partition.name }, label: 'Partition'
+
+  = f.input_with_icon :username, required: true, icon: 'fa-user'
+  = f.input_with_icon :fullname, required: true, icon: 'fa-address-book', label: 'Full Name'
+  = f.input_with_icon :email, required: false, icon: 'fa-envelope', label: 'Email Address'
+
+  .checkbox.checkbox-primary
+    = f.input :active, label: 'User is active'
+    -#= f.input :ShellLogin, label: 'User is allowed to access suSSHi shell'
+
+  .hr-line-dashed
+
+  = f.fields_for :assist do |assist|
+    = f.input_with_icon :password, required: false, icon: 'fa-key', label: 'Password'
+    = f.input_with_icon :password_confirmation, required: false, icon: 'fa-key', label: 'Password Confirmation', hint: "Setting a password allows user to login with a password. This is not recommended - user keys should be used instead"
+    - unless @susshi_user_login.password.blank? or %w(new create).include?(params[:action])
+      .checkbox.checkbox-primary
+        = assist.input :password_remove, as: :boolean, label: 'Remove Password'
+    - if @show_totp_fields
+      = assist.input_with_icon :totp, label: 'Time-based One-time Password ', icon: 'fa-stopwatch', required: false,
+        collection: SusshiUserLogin.totp_collection(@susshi_user_login.totp_state || 'inactive'), include_blank: false
+
+  .hr-line-dashed
+
+  = f.simple_fields_for :susshi_user_keys, dynamic: true do |k|
+    .key-group
+      = k.input :public_blob, label: 'Public Userkey', input_html: {rows: 8, class: 'sshkey-input-with-title'}, hint: "Supported formats are PKCS1 (openSSH's .pub files), PKCS8 and SSH Public Key File Format (RFC4716)."
+      = k.input_with_icon :title, icon: 'fa-info-circle', label: 'Title'
+      = remove_fields_link_helper k, 'Remove Userkey'
+
+  = add_fields_link_helper f, :susshi_user_keys, 'Add Userkey'
+
+  .hr-line-dashed
+  = f.input_dual :susshi_user_group_ids, collection: SusshiUserGroup.duallist_collection(@susshi_user_login.partition.id), label: 'Memberships'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

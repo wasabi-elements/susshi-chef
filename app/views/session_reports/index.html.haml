@@ -1,0 +1,37 @@
+- breadcrumb :session_reports
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    = f.fields_for :assist, OpenStruct.new(@assist) do |a|
+      .row
+        .col-sm-2
+          = f.select :operation_mode_eq, SessionReport.operation_mode_collection, include_blank: 'All', label: 'Operation Mode'
+        .col-sm-2
+          = f.text_field :susshi_uniqid_cont, placeholder: 'contains', label: 'Session ID'
+        .col-sm-2
+          = f.text_field :susshi_user_cont, placeholder: 'contains', label: 'Gateway User'
+        .col-sm-2
+          = f.text_field :target_user_cont, placeholder: 'contains', label: 'Target User'
+        .col-sm-2
+          = f.text_field :proxy_realm_cont, placeholder: 'contains', label: 'Proxy Realm'
+        .col-sm-2
+          = f.text_field :message_cont, placeholder: 'contains', label: 'Message'
+      .row
+        .col-sm-2
+          = f.select :session_state_in_list, SessionReport.state_collection, include_blank: true, label: 'State'
+        .col-sm-4
+        .col-sm-2
+          = f.text_field :target_ip_cont, placeholder: 'contains', label: 'Target IP Address'
+        .col-sm-2
+          = f.text_field :target_host_cont, placeholder: 'contains', label: 'Target Host'
+        .col-sm-2
+          = a.text_field :daterange, placeholder: 'between', label: 'Session Start', id: :daterangepicker, value: @daterange
+
+= list_panel(:session_reports, @session_reports, @q)
+
+:javascript
+  $('#daterangepicker').daterangepicker({
+    opens: 'left'
+  }, function(start, end, label) {
+    $('system_event_search#form').submit();
+  });

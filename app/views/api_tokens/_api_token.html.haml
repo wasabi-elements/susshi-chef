@@ -1,0 +1,37 @@
+- subscription = Subscription.instance
+%tr
+  %td
+    %i.fa.fa-wrench
+  %td= link_to api_token.application, api_token_path(api_token)
+  %td.text-nowrap
+    %i.fa.fa-cube
+    = api_token.partition.name
+  %td= api_token.description
+  %td= api_token.comment
+  %td.text-nowrap
+    - permissions(api_token, :source_ips)
+  %td.text-nowrap
+    - susshi_user_permissions(api_token, :susshi_users)
+  %td.text-nowrap
+    - permissions(api_token, :target_users)
+  %td.text-nowrap
+    - permissions(api_token, :targets)
+  %td.text-nowrap
+    - permissions(api_token, :profiles)
+  %td.text-nowrap
+    - permissions(api_token, :accesses)
+  - if subscription.feature_proxies?
+    %td.text-nowrap
+      - permissions(api_token, :proxies)
+  %td.text-nowrap
+    - operations_permissions(api_token, :operations)
+  %td.text-nowrap
+    - healths_permissions(api_token, :healths)
+  - if subscription.feature_dynamic_otp?
+    %td.text-nowrap
+      - dotp_permissions(api_token, :dotp)
+  %td.text-nowrap
+    - oidc_permissions(api_token, :oidc)
+
+  %td.text-right.text-nowrap
+    = index_action_buttons(api_token, { :destroy => is_active_controller('api_tokens', true) })

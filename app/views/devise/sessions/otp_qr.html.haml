@@ -1,0 +1,10 @@
+%h3 Welcome to suSSHi Chef
+%br
+%p Please scan the QR code with your favorite authenticator app or securely store the OTP secret to add it manually.
+= form_for("", url: users_sessions_commit_otp_path, method: :post, html: { role: 'form', class: 'm-t'}) do |f|
+  = image_tag @otp_qr_code
+  %p.font-bold
+    %span.text-muted= @otp_secret
+  %br
+  %p
+  = f.submit  'Confirm', class: 'btn btn-primary block full-width m-b'

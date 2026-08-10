@@ -1,0 +1,73 @@
+- breadcrumb :partition_keys
+
+= panel do
+  %h2 Partition Host Keys
+  .hr-line-dashed
+  %p This is the list of available Host Keys for Gateways and Proxies
+
+  - if @partition_host_keys_ignored.any?
+    .hr-line-dashed
+    %h3 1. Used Gateway Host Keys
+
+  %table{class: 'table table-striped toggle-arrow-tiny tablet breakpoint'}
+    %thead
+      = render partial: 'thead', locals: { sortable: true, order_title: 'Per-Type Order', proxy: false }
+    - @partition_host_keys_used.keys.sort_by{|key_type| @hostkey_algorithms.index key_type}.each do |key_type|
+      - id = "partition_host_keys_#{key_type}"
+      - keys = @partition_host_keys_used[key_type]
+      %tbody{id: id}
+        = render partial: 'partition_key_sortable', :collection => keys, locals: { order: true, proxy: false }
+        = render partial: 'sortable', formats: [:js], locals: {id: id, klass: 'PartitionHostKey'}
+    %br
+  .row
+    .col-md-9
+      %p.m-md
+        This list contains all keys that the gateway can offer to a client based on the settings of the allowed hostkey algorithms under
+        = link_to "Partition / Edit Settings / Hostkey Algorithms / Client Side Hostkey Algorithms", edit_partition_setting_path(current_user.partition.id)
+        = ". Finally, the client uses its own preference list to select which of the gateway's hostkey algorithms it wants to use. During the key exchange phase, the appropriate key type is then transmitted."
+      %p.m-md
+        If multiple keys of the same type exist, only the key in the first order is used during the key exchange
+        = @partition_setting.ClientHostKeyUpdate ? "phase, but all keys are sent to the client if the client supports the OpenSSH protocol extension 'hostkeys-00@openssh.com'." : 'phase.'
+
+  - if @partition_host_keys_ignored.any?
+    .hr-line-dashed
+    %h3 2. Gateway Host Keys ignored in Key Exchange Phase
+    .row
+      .col-md-8
+        %p.m-l-md
+          The following Hostkeys, if active, are loaded onto the gateways
+          = "and send to the client if client supports the OpenSSH 'hostkeys-00@openssh.com' protocol extension" if @partition_setting.ClientHostKeyUpdate
+          , but ignored in the Key Exchange phase, because of the Host-Key Algorithms selected:
+    %table{class: 'table table-striped toggle-arrow-tiny tablet breakpoint'}
+      %thead
+        = render partial: 'thead', locals: { sortable: false, proxy: false }
+      %tbody
+        - @partition_host_keys_ignored.each do |key_type, keys|
+          = render partial: 'partition_key', :collection => keys, locals: { order: false, proxy: false }
+      %br
+
+= panel do
+  %h2 Partition Auth Keys
+  .hr-line-dashed
+  %p This is the list of available Authentication Keys to authenticate against target.
+
+  %table{class: 'table table-striped toggle-arrow-tiny tablet breakpoint'}
+    %thead
+      = render partial: 'thead', locals: { sortable: true, order_title: 'Order', proxy: false }
+    - id = "partition_auth_keys"
+    %tbody{id: id}
+      = render partial: 'partition_key_sortable', :collection => @partition_auth_keys, locals: { order: true, proxy: false }
+      = render partial: 'sortable', formats: [:js], locals: {id: id, klass: 'PartitionAuthKey'}
+  %br
+
+- if Subscription.instance.feature_proxies?
+  = panel do
+    %h2 Proxy Auth-Keys
+    .hr-line-dashed
+    %p This is the list of proxy-individual Authentication Keys to authenticate against targets reachable via the corresponding proxy.
+    %table{class: 'table table-striped toggle-arrow-tiny tablet breakpoint'}
+      %thead
+        = render partial: 'thead', locals: { sortable: false, order_title: 'Per-Proxy Order', proxy: true }
+      %tbody
+        = render partial: 'partition_key', :collection => @proxy_auth_keys, locals: { proxy: true, order: true }
+    %br

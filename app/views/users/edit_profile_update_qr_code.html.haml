@@ -1,0 +1,9 @@
+- breadcrumb @user
+
+= panel("Updated User Profile") do
+  .row
+    .col-sm-2
+    .col-sm-10
+      %h3 You have just changed your eMail Address
+      %p Please scan the QR code to update your profile in the OTP App as well:
+      = image_tag @qr_code

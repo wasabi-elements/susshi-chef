@@ -1,0 +1,44 @@
+- report_view ||= false
+%tr
+  %td.text-left.text-nowrap
+    = system_event.devicereportedtime
+  - unless report_view
+    %td.text-left.text-nowrap
+      - session_id = system_event.message.blank? ? '' : system_event.message[/\[([0-9]{6}.*?)\]/, 1]
+      - if session_id.blank?
+        = "-"
+      - else
+        - unless @search_session_id.blank?
+          = link_to (raw session_id.gsub(/#{@search_session_id}/i, '<b>\\0</b>')), url(:system_events, q: {assist: {session_id_cont: session_id}}), remote: false
+        - else
+          = link_to session_id, url(:system_events, q: {assist: {session_id_cont: session_id }}), remote: false
+  - debug = system_event.message.blank? ? '' : system_event.message[/debug([1-5]):/, 1]
+
+  %td.no-select
+    - c, color = system_event.log_level_class
+    - if debug
+      %span{class: "btn btn-xs btn-block btn-#{color} btn-loglevel"}
+        %span>< D
+        %span.debug-level= debug
+    - else
+      %span{class: "btn btn-xs btn-block btn-#{color} btn-loglevel"}= c
+  %td.text-left.text-nowrap
+    - message = CGI::escapeHTML(system_event.message&.gsub(/(\[[0-9]{6}.*?\]|\[[0-9]{5}\]|debug[1-5]:)/,'') || '')
+    - unless @search_message.blank?
+      = raw message.gsub(/#{CGI::escapeHTML(@search_message)}/i, '<b>\\0</b>')
+    - else
+      = raw message
+  - unless report_view
+    %td.text-left.text-nowrap.no-select
+      - if system_event.fromhost.blank?
+        = "-"
+      - elsif system_event.fromhost.match?(/^0000/)
+        = "( #{system_event.fromhost[5..-1]} )"
+      - else
+        = system_event.fromhost[5..-1]
+    %td.text-left.text-nowrap.no-select
+      = "[#{system_event.fromhost[0..3]}]" unless system_event.fromhost.blank? or system_event.fromhost.match?(/^0000/)
+    %td.text-center.text-nowrap.no-select
+      - unless system_event.syslogtag.blank?
+        - pid = system_event.syslogtag[/\[([0-9]+)\](.*)/, 1]
+        = link_to pid, url(:system_events, q: {assist: {pid: pid }}), remote: false

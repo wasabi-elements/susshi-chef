@@ -1,0 +1,14 @@
+%tr
+  %td.text-center
+    %i.fa.fa-toggle-on
+  %td= link_to profile.name, edit_profile_path(profile)
+  %td= profile.description
+  %td= profile.client_auth_set.name
+  - if User.any_log_encryption_recipient?
+    %td.text-center= boolean_value(profile.LogEncryption, titles: ['enabled', 'not enabled'])
+  %td.text-center
+    = object_counter_badge(profile.accesses, tooltip: false)
+  %td.text-right.text-nowrap
+    = index_action_buttons(profile, { destroy: is_active_controller('profiles', true) ? profile.is_destroyable? : false})
+    = link_to clone_profile_path(profile), class: 'btn btn-xs btn-white' do
+      %i.fa.fa-clone

@@ -1,0 +1,23 @@
+- user = target_host_key.susshi_user_login
+%tr
+  %td.text-center
+    %i{class: "fa #{target_host_key.target.icon}"}
+  %td= link_to target_host_key.target.display_name, target_host_key.target
+  %td= target_host_key.target.display_type
+  - if user
+    %td.text-center
+      %i.fa.fa-user-circle
+    %td.text-nowrap
+      = link_to user.name, user
+  - else
+    %td.text-center
+      %i.fa.fa-key
+    %td.text-nowrap
+      = "[system-wide]"
+  %td.text-nowrap= target_host_key.key_type
+  %td.text-nowrap= target_host_key.bits
+  %td.text-nowrap= target_host_key.source
+  %td.text-nowrap= target_host_key.fingerprint
+
+  %td.text-right.text-nowrap
+    = index_action_buttons(target_host_key, { :destroy => is_active_controller('target_host_keys', true) })

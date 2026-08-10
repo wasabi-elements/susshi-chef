@@ -1,0 +1,14 @@
+%tr
+  %th
+  %th= sortable_link query, :name
+  - if @any_proxy
+    %th= sortable_link query, 'proxies.realm', 'Proxy'
+  %th= sortable_link query, 'target_sockets.ip_addresses', 'IP Address(es) / Domain Match'
+  %th= sortable_link query, :description
+  %th.text-center System-wide Hostkeys
+  %th.text-center User Hostkeys
+  %th.text-center Memberships
+  %th.text-center Accesses
+  %th.text-center Fusions
+  %th.text-center= sortable_link query, :active
+  %th.text-right Action

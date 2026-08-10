@@ -1,0 +1,78 @@
+- breadcrumb @susshi_user_login
+
+- swift_user = SwiftSusshiUser.find_by(id: @susshi_user_login.id)
+
+- if swift_user&.auth_passable? == false
+  = message_panel "Temporarily locked", type: :warning, icon: 'exclamation-triangle' do
+    %p
+      Gateway User '#{@susshi_user_login.name}' is temporarily locked because of too many authentication failures.
+    = form_for @susshi_user_login, url: unlock_susshi_user_login_path(@susshi_user_login) do |f|
+      %button.btn.btn-primary{type: :submit}
+        %i.fa.fa-unlock
+        Unlock
+
+= panel do
+  = attributes_table do
+    = row_key_value "Partition", @susshi_user_login.partition.name, icon: 'fa-cube'
+    = row_key_value "Username", @susshi_user_login.username, icon: 'fa-user'
+    = row_key_value "Full name", @susshi_user_login.fullname, icon: 'fa-address-book'
+    = row_key_value "Email Address", @susshi_user_login.email, icon: 'fa-envelope' unless @susshi_user_login.email.blank?
+    = row_key_value_block "Active", icon: 'fa-lightbulb' do
+      = boolean_value(@susshi_user_login.active, titles: ['User is active', 'User is inactive'])
+    = row_key_value_block "Password set", icon: 'fa-key' do
+      = boolean_value(!@susshi_user_login.password.blank?, titles: ['Password set', 'No password set'])
+    = row_key_values "Memberships", @susshi_user_login.susshi_user_groups.collect {|u| link_to u.name, u}, icon: 'fa-users'
+    - if @susshi_user_login.use_count.zero?
+      = row_key_value_block 'Last login', icon: 'fa-history' do
+        %span.label.label-xs.label-warning Never logged in
+    - else
+      = row_key_value 'First login', "#{@susshi_user_login.first_use_at} -- #{distance_of_time_in_words(Time.now - @susshi_user_login.first_use_at)} ago", icon: 'fa-history'
+      = row_key_value 'Last login', "#{@susshi_user_login.last_use_at} -- #{distance_of_time_in_words(Time.now - @susshi_user_login.last_use_at)} ago", icon: 'fa-history'
+      - unless swift_user.blank? or swift_user.last_auth_fail_at.blank?
+        - last = Time.at(swift_user.last_auth_fail_at.to_i)
+        = row_key_value 'Last Auth fail', "#{last} -- #{distance_of_time_in_words(Time.now - last)} ago", icon: 'fa-history'
+      = row_key_value 'Login count', @susshi_user_login.use_count, icon: 'fa-chart-area'
+
+  - if Preference.first.frontend_totp_show_on_ui?
+    %h3 Time-based One-Time Password (TOTP)
+    = attributes_table do
+      = row_key_value "State", @susshi_user_login.totp_state.titleize, icon: 'fa-stopwatch'
+      - case @susshi_user_login.totp_state
+        - when 'active'
+          = row_key_value_block "QR Code", icon: 'fas fa-qrcode' do
+            = image_tag @susshi_user_login.totp_qr_image.to_data_url
+
+            - if Preference.action_mailer_setup? && @susshi_user_login.email.present?
+              = content_tag(:a, class: 'btn btn-white', href: susshi_user_login_send_qr_code_path(@susshi_user_login)) do
+                %i.fa.fa-envelope
+                %span{style: 'padding-left: 5px;'} Send via Email
+            - else
+              - mail = ApplicationMailer.with(user: @susshi_user_login).qr_code
+              = mail_to(@susshi_user_login.email, subject: mail.subject, body: mail.text_part.decoded, class: 'btn btn-white') do
+                %i.fa.fa-envelope
+                %span{style: 'padding-left: 5px;'} Send via Email
+
+          = row_key_value "Secret", @susshi_user_login.totp_secret, icon: 'fa-key'
+        - when 'activation_pending'
+          = row_key_value "Activation Token", @susshi_user_login.totp_activation_token, icon: 'fa-key'
+
+  - if @susshi_user_login.susshi_user_keys.any?
+    %h3 Authentication keys
+    - @susshi_user_login.susshi_user_keys.each_with_index do |key,index|
+      = attributes_table do
+        = row_key_value 'Key-Type', key.key_type, icon: 'fa-key'
+        = row_key_value 'Bits', key.bits, icon: 'fa-expand'
+        = row_key_value 'Fingerprint', key.fingerprint, icon: 'fa-fingerprint'
+
+  - if @susshi_user_login.target_host_keys.any?
+    %h3 Target Host-Keys accepted by User
+    - @susshi_user_login.target_host_keys.each_with_index do |key,index|
+      = attributes_table do
+        = row_key_value "Target #{index+1}", key.target.name, icon: key.target.icon
+        = row_key_value 'Key-Type', key.key_type, icon: 'fa-key'
+        = row_key_value 'Bits', key.bits, icon: 'fa-expand'
+        = row_key_value 'Fingerprint', key.fingerprint, icon: 'fa-fingerprint'
+        = row_key_value_block 'Action' do
+          = index_action_buttons(key)
+
+  = show_action_buttons(@susshi_user_login, { :destroy => @susshi_user_login.is_destroyable? })

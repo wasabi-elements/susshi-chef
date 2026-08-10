@@ -1,0 +1,22 @@
+- subscription = Subscription.instance
+%tr
+  %th
+  %th= sortable_link query, :application, 'Application'
+  %th= sortable_link query, :partition_name, 'Partition'
+  %th= sortable_link query, :description, 'Description'
+  %th= sortable_link query, :comment, 'Comment'
+  %th Source IPs
+  %th Gateway Users
+  %th Target users
+  %th Targets
+  %th Profiles
+  %th Accesses
+  - if subscription.feature_proxies?
+    %th Proxies
+  %th{title: "Operations Actions"} Operations
+  %th{title: "Healths Actions"}  Healths
+  - if subscription.feature_dynamic_otp?
+    %th{title: "Dynamic OTP Target Authentication"} DOTP
+  %th{title: "OpenID Connect"} OIDC
+
+  %th.text-right Action

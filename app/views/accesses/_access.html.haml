@@ -1,0 +1,114 @@
+- tr_class = 'denied' unless access.profile
+- tr_class = 'disabled' unless access.active
+- title = access.name unless access.name.blank?
+- if title
+  %tr.row-group-spacer
+  %tr
+    %td.row-group-title{colspan: 14 + (@show_last_use ? 1 : 0) }= title
+
+%tr.policy{id: "access_#{access.id}", class: tr_class}
+  - hint = 'Drag and drop to change position'
+  %td.row-group-border
+  %td{class: 'text-center handle', title: hint}
+    %i.fa.fa-gem
+  %td.handle.text-center{title: hint}= "#{access.position}"
+  %td.handle{title: hint}= "##{access.id_formatted}"
+  %td
+    %ul.values
+      - access.source_ips.sort { |x,y| x.identifier <=> y.identifier }.each do |source|
+        %li.text-nowrap
+          %i{class: "fa #{source.icon}"}
+          - unless source.system_int
+            = link_to source.identifier, edit_source_ip_path(source),
+                      remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+          - else
+            = source.identifier
+  %td
+    %ul.values
+      - if access.susshi_users.any?
+        - access.susshi_users.sort { |x,y| x.name <=> y.name }.each do |user|
+          %li.text-nowrap
+            %i{class: "fa #{user.icon}"}
+            = link_to user.name, user.type == 'SusshiUserLogin' ? edit_susshi_user_login_path(user) : edit_susshi_user_group_path(user),
+                      remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+      - else
+        %i.fa.fa-star-o
+        All
+  - if access.target_fusions.any?
+    - if defined?(EE::Engine)
+      %td{colspan: 2}
+        %ul.values
+          - access.target_fusions.sort { |x,y| x.name <=> y.name }.each do |fusion|
+            %li.text-nowrap
+            %i{class: "fa #{fusion.icon}"}
+            = link_to fusion.name, fusion.type == 'TargetFusionLink' ? ee.edit_target_fusion_link_path(fusion) : ee.edit_target_fusion_group_path(fusion),
+                            remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+      %td
+        %ul.values
+          - access.target_fusions.sort { |x,y| x.name <=> y.name }.each do |fusion|
+            %li.text-nowrap
+              = "[ #{fusion.display_name.split(' (').last.gsub(/[\(\)]/,'')} ]"
+    - else
+      %td{colspan: 3} (No Enterprise Edition support)
+  - else
+    %td
+      %ul.values
+        - access.target_users.sort { |x,y| x.name <=> y.name }.each do |user|
+          %li.text-nowrap
+            %i{class: "#{user.icon}"}
+            - unless user.system_int
+              = link_to user.name, edit_target_user_path(user),
+                        remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+            - else
+              = user.name
+    %td
+      %ul.values
+        - access.targets.sort { |x,y| x.display_name_a <=> y.display_name_a }.each do |target|
+          %li.text-nowrap
+            %i{class: "fa #{target.icon}"}
+            - path = case target.type
+              - when 'TargetDomain'
+                - edit_target_domain_path(target)
+              - when 'TargetDynamic'
+                - edit_target_dynamic_path(target)
+              - when 'TargetGroup'
+                - edit_target_group_path(target)
+              - when 'TargetHost'
+                - edit_target_host_path(target)
+              - when 'TargetNetwork'
+                - edit_target_network_path(target)
+            = link_to target.display_name_a.first, path,
+                      remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+    %td
+      %ul.values
+        - access.targets.sort { |x,y| x.display_name_a <=> y.display_name_a }.each do |target|
+          %li.text-nowrap
+            = "[ #{target.display_name_a.last.gsub(/[\(\)]/,'')} ]"
+  %td.text-nowrap
+    %span.text.now
+    - if access.profile
+      %i.fa.fa-toggle-on
+      = link_to access.profile.name, edit_profile_path(access.profile),
+                remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+    - else
+      %i.fa.fa-ban
+      DENY
+  %td.text-center
+    = boolean_value(access.active, titles: ['Rule is active', 'Rule is inactive'])
+  %td.text-center
+    - if access.debug_level > 0
+      %span{class: "badge badge-#{%w(warning-light warning danger)[access.debug_level - 1]}"}= access.debug_level
+
+  - if @show_last_use
+    %td.text-center.text-nowrap
+      - if access.use_count > 0
+        = access.last_use_at.try(:utc)
+      - else
+        %span{class: "label label-xs label-warning"} Never
+
+  %td= access.description
+  %td.text-right.text-nowrap
+    = link_to raw(content_tag(:i, nil, class: 'fa fa-arrows-alt')), access_move_dialog_path(id: access.id), class: 'btn btn-xs btn-white',
+              remote: true, title: 'Move policy rule', data: { toggle:  'modal', target: '#modal-dialog' }
+    = index_action_buttons(access, { :destroy => is_active_controller('accesses', true) ? access.is_destroyable? : false })
+

@@ -1,0 +1,11 @@
+- breadcrumb @target_host_key
+
+= panel do
+  = attributes_table do
+    = row_key_value 'Target', @target_host_key.target.name, icon: @target_host_key.target.icon
+    = row_key_value 'Key type', @target_host_key.key_type, icon: 'fa-key'
+    = row_key_value 'Source', @target_host_key.source, icon: 'fa-star'
+    = row_key_value 'Fingerprint', @target_host_key.fingerprint, icon: 'fa-fingerprint'
+    = row_key_value 'Public blob', @target_host_key.public_blob, icon: 'fa-address-card'
+    - if @target_host_key.susshi_user_login
+      = row_key_value 'User', (link_to @target_host_key.susshi_user_login.name, @target_host_key.susshi_user_login), icon: 'fa-user'

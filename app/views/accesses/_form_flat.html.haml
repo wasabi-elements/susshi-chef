@@ -1,0 +1,48 @@
+= simple_form_for(@access) do |f|
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @access.partition.name }, label: 'Partition'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :name, icon: 'fa-gem', label: 'Policy Title'
+
+  - if %w(new create).include?(params[:action])
+    = f.input_with_icon :position, collection: @positions, icon: 'fa-map-marker-alt', label: 'Add new policy', include_blank: 'at the end'
+  - else
+    = f.input_with_icon :position, collection: @positions, icon: 'fa-map-marker-alt', label: 'Policy Position', include_blank: false
+
+  = f.input_with_icon :description, icon: 'fa-info'
+
+  = f.input_with_icon :debug_level, collection: Access.debug_level_collection, icon: 'fa-stethoscope', label: 'Debug Level', hint: 'Setting a debug level can have strong effects on the performance of the gateways and should therefore only be activated for rules with few hits.'
+
+  .checkbox.checkbox-primary
+    = f.input :active, label: 'Rule is active'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :source_ip_ids, collection: SourceIp.duallist_collection(@access.partition.id), label: 'Source IP Addresses',  icon: 'fa-globe', input_html: { multiple: true }
+
+  .hr-line-dashed
+
+  = f.input_with_icon :susshi_user_ids, collection: SusshiUser.duallist_collection(@access.partition.id), label: 'Gateway Users',
+    hint: "Selecting no user means 'All' configured (and active) gateway users.",  icon: 'fa-user', input_html: { multiple: true }
+
+  .hr-line-dashed
+
+  = f.input_with_icon :target_user_ids, collection: TargetUser.duallist_collection(@access.partition.id), label: 'Target Users',  icon: 'far fa-user', input_html: { multiple: true }
+
+  = f.input_with_icon :target_ids, collection: Target.duallist_collection(@access.partition.id), label: 'Targets',  icon: 'far fa-server', input_html: { multiple: true }
+
+  - if defined?(EE::Engine) && Subscription.instance.feature_target_fusions?
+    .hr-line-dashed
+
+    = f.input_with_icon :target_fusion_ids, collection: TargetFusion.duallist_collection(@access.partition.id), label: 'Target Fusion',  icon: 'far fa-link', input_html: { multiple: true }
+
+  .hr-line-dashed
+
+  = f.input_with_icon :profile_id, collection: Profile.all_collection, include_blank: 'DENY',  icon: 'fa-toggle-on', label: 'Profile'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

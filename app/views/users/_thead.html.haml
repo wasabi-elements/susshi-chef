@@ -1,0 +1,13 @@
+%tr
+  %th
+  %th= sortable_link query, :role, "Role"
+  %th= sortable_link query, :username, "Username"
+  %th= sortable_link query, :fullname, "Full Name"
+  %th= sortable_link query, :email, "Email Address"
+  %th.text-center Partitions
+  - if Preference.first.otp_active?
+    %th.text-center OTP
+  - if Subscription.instance.feature_audit_log_encryption?
+    %th.text-center= sortable_link query, :log_encryption_key, "Audit Log Encryption Key"
+    %th.text-center Audit Log Key Self Service
+  %th.text-right Action

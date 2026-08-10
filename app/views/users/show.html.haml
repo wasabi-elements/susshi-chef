@@ -1,0 +1,23 @@
+- breadcrumb @user
+
+= attributes_panel do
+  = row_key_value "name", @user.username, icon: 'fa-user'
+  = row_key_value "fullname", @user.fullname, icon: 'fa-address-book'
+  = row_key_value "Email Address", @user.email, icon: 'fa-envelope'
+  - if @user.last_sign_in_at.blank?
+    = row_key_value_block 'Last login', icon: 'fa-history' do
+      %span.label.label-xs.label-warning Never logged in
+  - else
+    = row_key_value "Last login", "#{@user.last_sign_in_at} -- #{distance_of_time_in_words(Time.now - @user.last_sign_in_at)} ago", icon: 'fa-history'
+    = row_key_value "Last Login from", @user.last_sign_in_ip, icon: 'fa-history'
+  = row_key_value "Partitions", ( raw @user.partitions.collect {|p| link_to(p.name, p) }.join(", ")), icon: 'fa-cube'
+  - if Preference.first.otp_active?
+    - if @user.otp_activation_token.blank?
+      = row_key_value "OTP Authentication State",'Active', icon: 'fa-stopwatch'
+      = row_key_value_block "Reset OTP Secret", icon: 'fa-key' do
+        = link_to "Reset", reset_user_otp_path(@user), class: 'btn btn-warning', data: { title: "Reset OTP Secret and generate new OTP Activation Token", confirm: 'Are you sure?', commit: 'Sure!'}
+
+    - else
+      = row_key_value "OTP Authentication State",'Pending', icon: 'fa-stopwatch'
+      = row_key_value_block "OTP Activation Token", icon: 'fa-key' do
+        = @user.otp_activation_token

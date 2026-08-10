@@ -1,0 +1,36 @@
+:javascript
+  const PERMISSION_PRESETS = {
+    "Full Permissions": Array.from(document.querySelectorAll('input[type=checkbox][id^=api_token_permissions]')).map(o => o.id),
+    "Sous Chef Permissions": [
+        "api_token_permissions_susshi_users_read",
+        "api_token_permissions_susshi_users_update",
+        "api_token_permissions_operations_read",
+        "api_token_permissions_oidc_read",
+        "api_token_permissions_oidc_destroy"
+    ],
+    "Dynamic OTP Validation Permissions": [
+        "api_token_permissions_dotp_read"
+    ]
+  }
+
+  function updatePermissions(permissions, state) {
+    permissions.forEach(permission => {
+      const input = document.querySelector(`input[type=checkbox][id=${permission}]`);
+      if (input instanceof HTMLInputElement) {
+        input.checked = state;
+      }
+    });
+  }
+
+  function UpdatePermissionsPreset() {
+    updatePermissions(PERMISSION_PRESETS["Full Permissions"], false);
+
+    const selected = $("#api_token_assist_permissions_preset option:selected");
+    if (PERMISSION_PRESETS.hasOwnProperty(selected.val())) {
+      updatePermissions(PERMISSION_PRESETS[selected.val()], true);
+    }
+  }
+
+  $("#api_token_assist_permissions_preset").change(function() {
+    UpdatePermissionsPreset();
+  });

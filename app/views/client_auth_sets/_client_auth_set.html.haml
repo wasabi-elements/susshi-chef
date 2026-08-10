@@ -1,0 +1,16 @@
+%tr
+  %td.text-center
+    %i.fa.fa-magic
+  %td= link_to client_auth_set.name, edit_client_auth_set_path(client_auth_set)
+  %td= client_auth_set.description
+  %td= client_auth_set.publickey_client_auth.try(:human_type) || '-'
+  %td= client_auth_set.interactive_client_auth.try(:human_type) || '-'
+  %td.text-center= client_auth_set.auth_logic_human
+  %td.text-center
+    = boolean_value(client_auth_set.cache_enabled)
+  %td.text-center= client_auth_set.auth_logic_human(cached: true)
+  %td.text-center= object_counter_badge(client_auth_set.profiles, tooltip: false)
+  %td.text-center= object_counter_badge(client_auth_set.bastion_profiles, tooltip: false)
+  %td= client_auth_set.comment
+  %td.text-right.text-nowrap
+    = index_action_buttons(client_auth_set, {destroy: is_active_controller('client_auth_sets', true) ? client_auth_set.is_destroyable? : false})

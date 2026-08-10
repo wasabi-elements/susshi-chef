@@ -1,0 +1,31 @@
+:javascript
+  function GatherHostkey(){
+      $.ajax({
+        url:      '#{url_for(:action => 'scan_host')}',
+        type:     'POST',
+        data:     { id: $("#target_dynamic_id").val(),
+                    hostname: $("#target_dynamic_hostname").val()
+                   },
+        dataType: 'json',
+        error:    function(XMLHttpRequest, errorTextStatus, error){
+                    $('#host_key_errors').html('<div class="alert alert-danger">Failed to submit: '+ errorTextStatus+'</div>');
+                  },
+        success:  function(data){
+
+                  $('#host_key_errors').html('');
+
+                    if (data.return != 'success') {
+                        $('#host_key_errors').html('<div class="alert alert-danger">'+data.return+'</div>');
+                    } else {
+                        var ip = Object.keys(data.hostkeys)[0];
+                        var host_keys = data.hostkeys[ip];
+                        var key_type = Object.keys(host_keys)[0];
+                        var base64 = host_keys[key_type].base64;
+                        var fingerprint = host_keys[key_type].fingerprint;
+                        $('#host_key_errors').html('<div class="alert alert-success">Successfully gathered a '+
+                        key_type.toUpperCase()+' hostkey from '+data.hostname+' ('+ip+') with fingerprint '+fingerprint+' ...</div>');
+                        $('#target_dynamic_target_host_keys_attributes_0_public_blob').val(key_type+' '+base64)
+                    }
+                  }
+      });
+  };

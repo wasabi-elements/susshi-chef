@@ -1,0 +1,28 @@
+- breadcrumb @target_user
+
+= panel do
+  = attributes_table do
+    = row_key_value "Partition", @target_user.partition.name, icon: 'fa-cube'
+    = row_key_value 'Type', @target_user.type_humanized, icon: @target_user.icon
+    = row_key_value 'Name', @target_user.name, icon: @target_user.icon
+    = row_key_value 'Description', @target_user.description, icon: 'fa-info'
+    - unless @target_user.regex.blank?
+      = row_key_value_block 'Gateway User Match Pattern', icon: 'fa-percent' do
+        Matches on Gateway User
+        %span.label.label-xs.label-primary= "^#{@target_user.regex}$"
+    - unless @target_user.translate.blank?
+      = row_key_value_block 'Translation', icon: 'fa-percent' do
+        Translates into
+        %span.label.label-xs.label-primary= @target_user.translate
+    - unless @target_user.regex_target_user.blank?
+      = row_key_value_block 'Target User Match Pattern', icon: 'fa-percent' do
+        Matches Target User on
+        %span.label.label-xs.label-success= @target_user.regex_target_user
+    - if @target_user.type == 'TargetUserGroup'
+      = row_key_values 'Members', @target_user.target_users.collect{|u| link_to u.name, u}, icon: 'fa-user'
+    - else
+      = row_key_values 'Memberships', @target_user.target_user_groups.collect{|u| link_to u.name, u}, icon: 'fa-users'
+    - if @target_user.target_fusions.any?
+      = row_key_values 'Target Fusions', @target_user.target_fusions.collect {|fusion| link_to fusion.display_name, fusion}, icon: 'fa-link'
+
+  = show_action_buttons(@target_user, { :edit => !@target_user.system_int, :destroy => @target_user.is_destroyable? })

@@ -1,0 +1,15 @@
+.row.vcenter.margin-bottom-sm
+  .col-sm-5
+    %div{:id => ("#{id_prefix}_paginator" rescue "paginator")}
+      %div{:id => ("#{id_prefix}_paginator_info" rescue "paginator_info"), :class => 'info'}
+        = page_entries_info objects
+  .col-sm-6.text-right
+    %div{:id => ("#{id_prefix}_paginator_pager" rescue "paginator_pager"), class: 'paginator_pager'}
+      = paginate objects, :remote => true, :params => (paginate_params rescue {}), views_prefix: 'layouts'
+  .col-sm-1.text-right
+    %div{:id => ("#{id_prefix}_paginator_per_page" rescue "paginator_per_page"), class: 'per_page_selector'}
+      = form_tag(url_for(:action => (paginate_params[:action] rescue params[:action])), :method => :get, :remote => true) do
+        - pp = per_pages rescue [5, 30, 50, 100, 250]
+        = select_tag(:per_page, options_for_select(pp.collect { |p| [ "#{p} per page", p] }, params_per_page))
+:javascript
+  $('div.per_page_selector').submitOnChange();

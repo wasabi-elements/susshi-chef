@@ -1,0 +1,60 @@
+- breadcrumb @api_token
+
+= panel do
+  %h3 Information
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value 'Partition', @api_token.partition.name, icon: 'fa-cube'
+    = row_key_value 'Application', @api_token.application, icon: 'fa-wrench'
+    = row_key_value 'Description', @api_token.description, icon: 'fa-info-circle'
+    = row_key_value 'Comment', @api_token.comment, icon: 'fa-info'
+
+  %h3 Config API Accesses
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value_block 'Source IPs' do
+      - permissions(@api_token, :source_ips, true)
+    = row_key_value_block 'Gateway Users & Keys' do
+      - permissions(@api_token, :susshi_users, true)
+    = row_key_value_block 'Target Users' do
+      - permissions(@api_token, :target_users, true)
+    = row_key_value_block 'Targets & Host Keys' do
+      - permissions(@api_token, :targets, true)
+    = row_key_value_block 'Profiles' do
+      - permissions(@api_token, :profiles, true)
+    = row_key_value_block 'Accesses' do
+      - permissions(@api_token, :accesses, true)
+    = row_key_value_block 'Proxies' do
+      - permissions(@api_token, :proxies, true)
+
+  %h3 Operations API Accesses
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value_block 'Perform Operations' do
+      - operations_permissions(@api_token, :operations, true)
+    = row_key_value_block 'Health Checks' do
+      - healths_permissions(@api_token, :healths, true)
+    = row_key_value_block 'Dynamic OTP' do
+      - dotp_permissions(@api_token, :dotp, true)
+    = row_key_value_block 'OpenID Connect' do
+      - oidc_permissions(@api_token, :oidc, true)
+
+  %h3 Accessing the API
+  .hr-line-dashed
+
+  %p
+    The REST configuration API is accessible via https://susshi-chef.domain/api/v1/config with the Application name and the API token captured right after creation.
+    %br
+    You have to include the following HTTP headers in each request to access the API with this API Token configuration:
+
+  = attributes_table do
+    = row_key_value 'API-Application', @api_token.application
+    = row_key_value 'API-Token', "< the API token captured right after creation >"
+    = row_key_value 'Content-Type', 'application/json'
+    = row_key_value 'Accept', 'application/json'
+
+
+  %p
+    Please refer to the
+    = link_to 'suSSHi API Manual', dashboards_api_manual_path, target: :_blank
+    for all details about the REST configuration API.

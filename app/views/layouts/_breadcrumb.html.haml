@@ -1,0 +1,7 @@
+.row.wrapper.border-bottom.white-bg.page-heading
+  .col-lg-10
+    %h2= content_for?(:title) ? yield(:title) : 'suSSHi Chef'
+    %ol.breadcrumb
+      = breadcrumbs style: :bootstrap, link_current: true
+  .col-lg-2
+

@@ -1,0 +1,9 @@
+%tr
+  %th.text-center
+  %th= sortable_link query, :name
+  %th= sortable_link query, :description
+  %th= sortable_link query, :client_auth_set_name, 'Client Auth Set'
+  - if User.any_log_encryption_recipient?
+    %th.text-center= sortable_link query, :LogEncryption, "Audit Log Encryption"
+  %th.text-center Policies
+  %th.text-right Action

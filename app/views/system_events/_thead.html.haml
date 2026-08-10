@@ -1,0 +1,14 @@
+- report_view ||= false
+%tr
+  - unless report_view
+    %th= sortable_link @q, :devicereportedtime, 'Timestamp'
+    %th Session ID
+    %th
+    %th Message
+    %th{colspan: 2}= sortable_link @q, :fromhost, 'Gateway / System'
+    %th.text-center PID
+  - else
+    %tr
+    %th Timestamp
+    %th
+    %th Message

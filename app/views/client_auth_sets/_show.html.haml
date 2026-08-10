@@ -1,0 +1,48 @@
+- unless request.xhr?
+  - breadcrumb @client_auth_set
+
+= panel do
+  %h3 Client Auth Set
+  = attributes_table do
+    = row_key_value 'Partition', @client_auth_set.partition.name, icon: 'fa-cube'
+    = row_key_value 'Name', @client_auth_set.name, icon: 'fa-toggle-on'
+    = row_key_value 'Description', @client_auth_set.description, icon: 'fa-info' unless @client_auth_set.description.blank?
+    = row_key_value 'Comment', @client_auth_set.comment, icon: 'fa-comment' unless @client_auth_set.comment.blank?
+    = row_key_value 'Required Methods', @client_auth_set.auth_logic_human, icon: 'fa-sign-in-alt'
+    = row_key_value_block 'Caching', icon: "fa-toggle-#{@client_auth_set.cache_enabled ? 'on' : 'off'}" do
+      = @client_auth_set.cache_enabled ? 'IP Session Caching enabled' : 'IP Session Caching disabled'
+
+  %h3 Public Key Authentication
+  = attributes_table do
+    = row_key_value 'Authentication Method', @client_auth_set.publickey_client_auth.try(:human_type) || '-', icon: 'fa-toggle-key'
+
+  %h3 Interactive Authentication
+  = attributes_table do
+    = row_key_value 'Authentication Method', @client_auth_set.interactive_client_auth.try(:human_type) || '-', icon: 'fa-toggle-key'
+    - int_auth = @client_auth_set.interactive_client_auth
+    - unless int_auth.blank?
+      = row_key_value_block 'KBD-Interactive Title', icon: 'fa-info' do
+        %pre= int_auth.kbd_int_auth_title.blank? ? 'suSSHi2 Gateway authentication (default)' : int_auth.kbd_int_auth_title
+      = row_key_value_block 'KBD-Interactive Instruction', icon: 'fa-info' do
+        %pre= int_auth.kbd_int_auth_instruction.blank? ? 'Please login with your gateway password (default)' : int_auth.kbd_int_auth_instruction
+      = row_key_value_block 'KBD-Interactive Prompt', icon: 'fa-info' do
+        %pre= int_auth.kbd_int_auth_prompt.blank? ? 'Gateway password:_ (default)' : int_auth.kbd_int_auth_prompt
+
+      - if @client_auth_set.interactive_client_auth.class.const_defined? 'PROPERTIES'
+        - @client_auth_set.interactive_client_auth.class.const_get('PROPERTIES').each do |property, options|
+          = row_key_value_block options[:label], icon: options[:icon] do
+            %pre= options[:as] == :password ? int_auth.try(property).gsub(/\S/, '*') : int_auth.try(property)
+
+  %h3 IP Session Caching settings
+  = attributes_table do
+    = row_key_value_block 'Caching', icon: "fa-toggle-#{@client_auth_set.cache_enabled ? 'on' : 'off'}" do
+      = @client_auth_set.cache_enabled ? 'IP Session Caching enabled' : 'IP Session Caching disabled'
+    = row_key_value 'Max cache time', @client_auth_set.max_cache_time, icon: 'fa-clock'
+    = row_key_value_block 'Refresh idle timer', icon: "fa-toggle-#{@client_auth_set.cache_refresh ? 'on' : 'off'}" do
+      = @client_auth_set.cache_refresh == true ? 'Refresh idle timer on subsequent successful user authentications' : 'No refresh'
+    - if @client_auth_set.cache_refresh == true
+      = row_key_value 'Cache idle time', @client_auth_set.cache_idle_time, icon: 'fa-clock'
+    = row_key_value 'Required Methods when cached', @client_auth_set.auth_logic_human(cached: true), icon: 'fa-sign-in-alt'
+
+  - unless request.xhr?
+    = show_action_buttons(@client_auth_set, { :destroy => @client_auth_set.is_destroyable? })

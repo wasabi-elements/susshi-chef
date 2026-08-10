@@ -1,0 +1,78 @@
+:ruby
+  status = @status.dig(gateway.id, 'status')
+  suspended = @status.dig(gateway.id, 'suspended')
+
+%tr
+  %td
+    %i.fa.fa-dungeon
+  %td.text-nowrap= link_to gateway.name, gateway_path(gateway)
+  %td.text-nowrap= gateway.partition.name
+  %td= gateway.susshid_identifier
+  %td.text-nowrap
+    - unless gateway.sic_host.blank?
+      = "#{gateway.sic_host}:#{gateway.sic_port}"
+    - else
+      = 'Not set'
+  %td.text-nowrap
+    = gateway.sic_certificate_not_after
+    - if gateway.ssl_client_fingerprint != gateway.sic_certificate_fingerprint
+      %span.badge.badge-success.m-l Certificate Download Pending
+  %td.text-nowrap
+  - if status.nil? && !gateway.sic_host.blank?
+    %td.text-center.status-pending
+      %i.fa.fa-spin.fa-spinner.fa-fw
+    %td.text-center -
+    %td.text-center -
+    %td.text-center -
+    %td.text-center -
+  - elsif status == 'running'
+    - if suspended == true
+      %td.text-center
+        %span.badge.badge-success
+          %i.fa.fa-pause
+          Monitor Suspended
+    - else
+      %td.text-center
+        %span.badge.badge-primary Running
+    %td.text-center
+      - pending = gateway.swift_changes_pending(@status[gateway.id]['version'] || 0)
+      - if pending > 0
+        %span.badge.badge-warning= "#{pluralize(pending, 'change')} pending"
+      - else
+        %span.badge.badge-primary
+          No Changes pending
+    %td.text-nowrap.text-center= @status[gateway.id]['system_time']
+    %td.text-center= @status[gateway.id]['active_sessions']
+    %td.text-center= @status[gateway.id]['software_version']
+  - else
+    %td.text-center
+      %span.badge.badge-warning
+        - if gateway.sic_host.blank?
+          Please bind the gateway
+        - else
+          Failed - not started?
+    %td.text-center
+      %span.badge.badge-warning
+        - if gateway.created_at > (SwiftGateway.maximum(:created_at) || 0)
+          Please activate pending changes first
+        - else
+          Unknown
+    %td.text-center -
+    %td.text-center -
+    %td.text-center -
+  %td.text-right.text-nowrap
+    - case suspended
+    - when true
+      = link_to unsuspend_gateway_path(gateway), class: 'btn btn-xs btn-white', title: 'Un-suspend Monitor-Server on gateway',
+        data: { confirm: 'This will un-suspend the gateways monitor server which will then return to normal operation.'} do
+        %i.fa.fa-play
+    - when false
+      = link_to suspend_gateway_path(gateway), class: 'btn btn-xs btn-white', title: 'Suspend Monitor-Server on gateway',
+        data: { confirm: 'This will suspend the gateways monitor server which will then reply with 423 Locked messages.'} do
+        %i.fa.fa-pause
+
+    = link_to restart_gateway_path(gateway), class: 'btn btn-xs btn-white', title: 'Restart gateway',
+      data: { confirm: 'This will restart the gateway process and reload configuration. No active sessions will get disrupted, but gateway may not handel new connections for 1-2 seconds.'} do
+      %i.fa.fa-sync-alt
+    = index_action_buttons(gateway, { :destroy => is_active_controller('gateways', true) })
+

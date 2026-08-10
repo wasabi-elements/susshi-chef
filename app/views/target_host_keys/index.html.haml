@@ -1,0 +1,21 @@
+- breadcrumb :target_host_keys
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-1
+        = f.select :target_type_eq, Target.types_collection_for_hostkeys, label: 'Target type', include_blank: true
+      .col-sm-2
+        = f.text_field :target_name_cont, placeholder: 'contains', label: 'Target Name'
+      .col-sm-2
+        = f.text_field :susshi_user_login_name_cont, placeholder: "contains or 'system-wide'", label: 'User Name'
+      .col-sm-1
+        = f.select :key_type_eq, SshKey.ssh_key_type_collection, label: 'Key Type', include_blank: true
+      .col-sm-2
+        = f.text_field :source_cont, placeholder: 'contains', label: 'Source'
+      .col-sm-2
+        = f.text_field :fingerprint_cont, placeholder: 'contains', label: 'Fingerprint'
+      .col-sm-2
+        = f.text_field :public_blob_cont  , placeholder: 'contains', label: 'Public Blob'
+
+= list_panel(:target_host_keys, @target_host_keys, @q)

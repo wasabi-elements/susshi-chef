@@ -1,0 +1,66 @@
+- breadcrumb @access
+
+= panel do
+  = attributes_table do
+    = row_key_value 'Partition', @access.partition.name, icon: 'fa-cube'
+    = row_key_value 'Name', value_not_blank(@access.name), icon: 'fa-gem'
+    = row_key_value 'ID', @access.id_formatted, icon: 'fa-gem'
+    = row_key_value 'Position', @access.position_formatted, icon: 'fa-map-marker-alt'
+    = row_key_value 'Description', @access.description, icon: 'fa-info'
+    = row_key_value_block 'Active', icon: 'fa-lightbulb' do
+      = boolean_value(@access.active)
+
+    = row_key_value_block 'Sources', icon: 'fa-globe' do
+      - @access.source_ips.each do |source|
+        = link_to source.identifier, edit_source_ip_path(source),
+                      remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+        %br
+
+    = row_key_value_block 'Gateway Users', icon: 'fa fa-user' do
+      - if @access.susshi_users.any?
+        - @access.susshi_users.each do |user|
+          = link_to user.name, user.type == 'SusshiUserLogin' ? edit_susshi_user_login_path(user) : edit_susshi_user_group_path(user),
+                      remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+          %br
+      - else
+        All
+    = row_key_value_block 'Target Users', icon: 'far fa-user' do
+      - @access.target_users.each do |user|
+        = link_to user.name, edit_target_user_path(user),
+                  remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+        %br
+
+    = row_key_value_block 'Targets', icon: 'fa-server' do
+      - @access.targets.each do |target|
+        - path = case target.type
+          - when 'TargetHost'
+            - edit_target_host_path(target)
+          - when 'TargetDynamic'
+            - edit_target_dynamic_path(target)
+          - when 'TargetGroup'
+            - edit_target_group_path(target)
+        = link_to target.display_name_a.first, path,
+                  remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+        %br
+
+    - if @access.profile
+      = row_key_value_block 'Profile', icon: 'fa-toggle-on' do
+        = link_to @access.profile.name, edit_profile_path(@access.profile),
+                        remote: true, data: { toggle:  'modal', target: '#modal-dialog' }
+    - else
+      = row_key_value_block '', icon: 'fa-ban' do
+        DENY
+
+    - if @access.debug_level > 0
+      = row_key_value_block 'Debug Level', icon: 'fa-bug' do
+        %span{class: "badge badge-#{%w(warning-light warning danger)[@access.debug_level - 1]}"}= @access.debug_level
+
+    - if @access.use_count > 0
+      = row_key_value 'First use', @access.first_use_at, icon: 'fa-history'
+      = row_key_value 'Last use', "#{@access.last_use_at} -- #{distance_of_time_in_words(Time.now - @access.last_use_at)} ago", icon: 'fa-history'
+      = row_key_value 'Use count', @access.use_count, icon: 'fa-chart-area'
+    - else
+      = row_key_value_block 'Use', icon: 'fa-history' do
+        %span{class: "label label-xs label-warning"} Never used
+
+  = show_action_buttons(@access, { destroy: @access.is_destroyable? })

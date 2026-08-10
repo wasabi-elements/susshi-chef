@@ -1,0 +1,59 @@
+- locked = @susshi_users_auth_passable[susshi_user.id] == false
+- tr_class = 'disabled' unless susshi_user.active
+- tr_title = 'Temporarily locked because of too many authentication failures.' if locked
+
+%tr{class: tr_class, title: tr_title}
+  %td.text-center
+    %i.fa{class: (locked ? 'fa-user-slash' : susshi_user.icon), title: susshi_user.title}
+  %td.text-nowrap= link_to susshi_user.name, polymorphic_path(susshi_user, {action: 'edit'})
+  %td= value_not_blank(susshi_user.fullname)
+  %td= value_not_blank(susshi_user.email)
+  %td.text-center
+    = boolean_value(susshi_user.active, titles: ['User is active', 'User is inactive'])
+  %td.text-center
+    = boolean_value(!susshi_user.password.blank?, titles: ['Password set', 'No password set'])
+  - if @show_totp_column
+    %td.text-center
+      - if susshi_user.is_a?(SusshiUserLogin)
+        - case susshi_user.totp_state
+          - when 'inactive'
+            %i.far.fa-circle{title: 'Inactive'}
+          - when 'active'
+            %i.fa.fa-check.text-success{title: 'Active'}
+          - when 'activation_pending'
+            %i.fa.fa-power-off.text-warning{title: 'Activation pending'}
+      - else
+        = '-'
+  %td.text-center
+    - if susshi_user.is_a?(SusshiUserGroup)
+      = object_counter_badge(susshi_user.susshi_user_logins, type: :pill, tooltip: false)
+    - else
+      = object_counter_badge(susshi_user.susshi_user_groups, color: :default, tooltip: false, zero_value: '-', zero_blank: true)
+  %td.text-center
+    - if susshi_user.is_a?(SusshiUserLogin)
+      = object_counter_badge(susshi_user.susshi_user_keys)
+    - else
+      = '-'
+  %td.text-center
+    :ruby
+      accesses = [susshi_user.accesses, susshi_user.try(:group_accesses)].compact
+      bastions = [susshi_user.bastions, susshi_user.try(:group_bastions)].compact
+      options = {type: susshi_user.is_a?(SusshiUserGroup) ? :label : :badge}
+      options.merge!(zero_value: "-", zero_blank: true) if accesses.any?(&:any?) || bastions.any?(&:any?)
+    = object_counter_badge(accesses, **options)
+  %td.text-center
+    = object_counter_badge(bastions, **options)
+  - if @show_last_use
+    %td.text-center
+      - if susshi_user.is_a?(SusshiUserLogin)
+        - if susshi_user.use_count > 0
+          = susshi_user.last_use_at.try(:utc)
+        - else
+          %span.label.label-xs.label-warning Never
+      - else
+        = '-'
+  %td.text-right.text-nowrap
+    - if locked
+      = link_to raw(fa_icon('unlock')), unlock_susshi_user_login_path(susshi_user), method: :patch, class: 'btn btn-xs btn-white',
+                title: 'Unlock', data: {title: "Unlock Gateway User '#{susshi_user.name}'", confirm: 'Are you sure?'}
+    = index_action_buttons(susshi_user, {destroy: is_active_controller('susshi_users', true) ? susshi_user.is_destroyable? : false})

@@ -1,0 +1,13 @@
+- breadcrumb @susshi_user_group
+
+= panel do
+  = attributes_table do
+    = row_key_value "Partition", @susshi_user_group.partition.name, icon: 'fa-cube'
+    = row_key_value "name", @susshi_user_group.groupname, icon: 'fa-users'
+    = row_key_value "Full name", value_not_blank(@susshi_user_group.fullname), icon: 'fa-address-book'
+    = row_key_value_block 'Active', icon: 'fa-lightbulb' do
+      = boolean_value(@susshi_user_group.active)
+
+    = row_key_values "Members", @susshi_user_group.susshi_user_logins.collect {|u| link_to u.name, u}, icon: 'fa-user'
+
+  = show_action_buttons(@susshi_user_group, { :destroy => @susshi_user_group.is_destroyable? })

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+SCRIPT=`basename $0`
+
+if [[ `uname` == "Linux" ]]; then
+  INSTALL_DIR=/opt/wasabi/susshi-chef
+  BUNDLE=/usr/local/rbenv/shims/bundle
+  NGINX=/usr/sbin/nginx
+  eval "$(rbenv init -)"
+else
+  INSTALL_DIR=.
+  BUNDLE=bundle
+  NGINX=nginx
+fi
+
+echo "Starting Console ..."
+
+[[ -z $SECRET_KEY_BASE ]] && export SECRET_KEY_BASE=`openssl rand -hex 64`
+[[ -z $RAILS_ENV ]] && export RAILS_ENV=production
+
+echo "---------------"
+echo "To enable (SQL) Debug output run: ActiveRecord::Base.logger = Logger.new(STDOUT)"
+echo "---------------"
+
+$INSTALL_DIR/bin/rails console

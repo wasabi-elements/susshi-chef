@@ -1,0 +1,119 @@
+- breadcrumb :preferences
+
+- ssl_step = :create_csr
+- if @preference.server_certificate
+  - ssl_step = :activate
+  - if @preference.active_server_certificate and @preference.active_server_certificate.data == @preference.server_certificate.data
+    - ssl_step = :finished
+- else
+  - if @preference.server_csr
+    - ssl_step = :sign_csr
+
+- if @preference.active_server_certificate
+  #certinfo.panel-group
+    .panel.panel-primary
+      .panel-heading
+        %h5.panel-title
+          %a{"data-parent" => "#certinfo", "data-toggle" => "collapse", :href => "#collapseOne"} You have an active server certificate
+      #collapseOne.panel-collapse.collapse
+        .panel-body
+          - ci = SSL::Server.certificate_info(@preference.active_server_certificate.data)
+          = attributes_table do
+            = row_key_value 'Subject', ci['subject'].to_s
+            = row_key_value 'Issuer', ci['issuer'].to_s
+            = row_key_value 'Not before', ci['not_before']
+            = row_key_value 'Not after', ci['not_after']
+            = row_key_value 'Serial', ci['serial'].to_s
+            = row_key_value 'Signature Algorithm', ci['signature_algorithm']
+
+- case ssl_step
+- when :create_csr
+  = panel('SSL Certificate Signing Request') do
+    %h1 Step 1 - Create a Certificate Signing Request
+    %p Please give all information required by your enterprise CA for a Certificate Signing Request (CSR).
+    = simple_form_for :ssl, url: create_csr_preferences_path do |f|
+      = f.error_notification
+      = f.input_with_icon :cn, label: 'Common Name (DNS)', input_html: {value: request.host}, icon: 'fa fa-globe'
+      = f.input_with_icon :o, label: 'Organization', icon: 'fa fa-building'
+      = f.input_with_icon :ou, label: 'Organizational Unit', required: false, icon: 'fa fa-sitemap'
+      = f.input_with_icon :l, label: 'Locality/City', icon: 'fa fa-map-marker'
+      = f.input_with_icon :st, label: 'State/Province', icon: 'fa fa-map'
+      = f.input_with_icon :c, label: 'Country', icon: 'fa fa-flag'
+      = f.input_with_icon :rsa_size, collection: ['2048', '4096'], include_blank: false, label: 'RSA Key size', icon: 'fa fa-expand'
+      = f.input_with_icon :sha_size, collection: ['256', '384', '512'], include_blank: false, label: 'SHA2 Bitsize', icon: 'fa fa-expand'
+      = f.button :submit_cancel, 'Create CSR', html: { class: 'btn-primary' }
+
+    .hr-line-dashed
+    %h1 Alternative Option
+    %p Import an existing private key and certificate, both in PEM format:
+    = simple_form_for :ssl, url: upload_server_ssl_preferences_path do |f|
+      = f.error_notification
+      = f.input :file_private_pem, as: :file, label: 'Private Key (PEM file)'
+      = f.input :file_certificate_pem, as: :file, label: 'Signed Certificate (PEM file)'
+      = f.input_with_icon :passphrase, as: :password, label: 'Import Passphrase', icon: 'fa fa-key'
+      = f.button :submit_cancel, 'Import Key & Certificate', html: { class: 'btn-primary' }
+    -#
+      .hr-line-dashed
+      %p ... or select a PKCS12 file containing both, the private key and the certificate:
+      = simple_form_for :ssl, url: upload_server_ssl_preferences_path do |f|
+        = f.error_notification
+        = f.input :file_p12, as: :file, label: 'PKCS12 File'
+        = f.input :passphrase, label: 'Import Passphrase'
+        = f.button :submit_cancel, 'Import PKCS12', html: { class: 'btn-primary' }
+
+- when :sign_csr
+  = panel('SSL Certificate Signing & Upload') do
+    %h1 Step 2 - Download Certificate Signing Request
+    %p Please download the CSR and get it signed by your enterprise CA.
+
+    = link_to csr_preferences_path(format: :csr) do
+      %span.btn.btn-primary.m-t
+        Download CSR
+
+    .hr-line-dashed
+    %h1 Step 3 - Import Certificate
+    %p Please select the signed certificate and upload it.
+
+    = simple_form_for :ssl, url: create_certificate_preferences_path do |f|
+      = f.error_notification
+      = f.input :file, as: :file, col: 0, label: false
+      = f.button :submit_cancel, 'Import Certificate', col: 0, html: { class: 'btn-primary' }
+
+    .hr-line-dashed
+    %h1 ... or return to step 1
+    %p If something is wrong with your CSR, you may destroy it and return to step 1.
+
+    = link_to destroy_csr_preferences_path(format: :csr), method: :delete,
+                   data: { title: "Destroy CSR and Key", confirm: 'Are you sure?', commit: 'Sure!'} do
+      %span.btn.btn-warning.m-t
+        Destroy CSR
+
+- when :activate
+  = panel('Activate the Certificate') do
+    %h1 Step 4 - Activate the Certificate
+    %p You have successfully installed a certificate. You now have to activate the certificate and restart the susshi-chef server to get it active on the web server as well.
+
+    = link_to activate_certificate_preferences_path do
+      %span.btn.btn-primary.m-t
+        Activate Certificate
+
+    .hr-line-dashed
+    %p If you want to install a new certificate, destroy the existing certificate and private key to generate / import new ones.
+    %p The installed active certificate will stay until you activate the new key & certificate.
+    = link_to destroy_csr_preferences_path(format: :csr), method: :delete,
+                    data: { title: "Destroy CSR and Key", confirm: 'Are you sure?', commit: 'Sure!'} do
+      %span.btn.btn-warning.m-t
+        Create new Key & Signing Request
+
+- when :finished
+  = panel('Finished') do
+    %h1 Congratulations - you are all done.
+    %p You have successfully finished the activation of the SSL certificate. If not already done, please restart the susshi-chef server to get it active on the web server as well.
+
+    .hr-line-dashed
+    %p If you have to install a new certificate, destroy the existing certificate and private key to generate / import new ones.
+    %p The installed active certificate will stay until you activate the new key & certificate.
+    = link_to destroy_csr_preferences_path(format: :csr), method: :delete,
+                    data: { title: "Destroy CSR and Key", confirm: 'Are you sure?', commit: 'Sure!'} do
+      %span.btn.btn-warning.m-t
+        Create new Key & Signing Request

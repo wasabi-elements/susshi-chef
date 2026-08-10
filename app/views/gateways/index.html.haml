@@ -1,0 +1,22 @@
+- breadcrumb :gateways
+
+:javascript
+  document.addEventListener("DOMContentLoaded", () => {
+   const page = document.querySelector("li.active > a.page-link")?.text || 1;
+   const statusPending = document.querySelectorAll(".status-pending")?.length !== 0;
+    if (statusPending) { $.get(`${window.location}.js?page=${page}&status=true`); }
+  });
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-3
+        = f.text_field :name_cont, placeholder: 'contains', label: 'Name'
+      .col-sm-3
+        = f.text_field :susshid_identifier_cont, placeholder: 'contains', label: 'Susshid Identifier'
+      .col-sm-3
+        = f.text_field :sic_host_cont, placeholder: 'contains', label: 'SIC Address'
+      .col-sm-3
+        = f.text_field :sic_port_eq, placeholder: 'equals', label: 'SIC Port'
+
+= list_panel(:gateways, @gateways, @q)

@@ -1,0 +1,83 @@
+:javascript
+
+  function UpdateFormOnInteractiveTypeChange(){
+    const selected = $("#client_auth_set_interactive_client_auth_attributes_type option:selected").val();
+
+    $(".interactive_auth_type_settings").fadeOut(0);
+    $(".interactive_auth_type_settings input").attr("disabled", "disabled");
+
+    if (selected === "") {
+        $(".interactive_auth_settings").fadeOut(0);
+        $(".interactive_auth_settings input").val("");
+        $("#client_auth_set_interactive_client_auth_attributes__destroy").val("1");
+        $(".interactive_auth_type_settings input").val("");
+    } else {
+        $(".interactive_auth_settings").fadeIn("slow");
+        $("#client_auth_set_interactive_client_auth_attributes__destroy").val("");
+        $(".interactive_auth_type_settings:not([id='" + selected + "']) input").val("");
+
+        const attributesSection = document.getElementById(selected);
+        $(attributesSection).fadeIn("slow");
+        attributesSection?.querySelectorAll("input").forEach(input => $(input).removeAttr("disabled"));
+    }
+  }
+
+  function UpdateFormOnPublickeyTypeChange(){
+    const selected = $("#client_auth_set_publickey_client_auth_attributes_type option:selected").val();
+
+    if (selected === "") {
+        $(".publickey_auth_settings").fadeOut(0);
+        $(".publickey_auth_settings input").val('');
+        $("#client_auth_set_publickey_client_auth_attributes__destroy").val('1');
+    } else {
+        $(".publickey_auth_settings").fadeIn("slow");
+        $("#client_auth_set_publickey_client_auth_attributes__destroy").val('');
+    }
+  }
+
+
+  function UpdateFormOnCacheChange(){
+    const checked = $("#client_auth_set_cache_enabled").is(":checked");
+
+    if (checked) {
+      $(".cache_settings").fadeIn("slow");
+      $(".cache_settings input").removeAttr("disabled");
+    } else {
+      $(".cache_settings").fadeOut(0);
+      $(".cache_settings input").attr("disabled", "disabled");
+    }
+  }
+
+  function UpdateFormOnCacheIdleChange(){
+    const checked = $("#client_auth_set_cache_refresh").is(":checked");
+
+    if (checked) {
+      $("#cache_idle_settings").fadeIn("slow");
+      $("#client_auth_set_cache_idle_time").removeAttr("disabled");
+    } else {
+      $("#cache_idle_settings").fadeOut(0);
+      $("#client_auth_set_cache_idle_time").attr("disabled", "disabled");
+    }
+  }
+
+  $("#client_auth_set_cache_enabled").change(function() {
+     UpdateFormOnCacheChange();
+  });
+
+  $("#client_auth_set_cache_refresh").change(function() {
+     UpdateFormOnCacheIdleChange();
+  });
+
+  $("#client_auth_set_interactive_client_auth_attributes_type").change(function() {
+     UpdateFormOnInteractiveTypeChange();
+  });
+
+  $("#client_auth_set_publickey_client_auth_attributes_type").change(function() {
+     UpdateFormOnPublickeyTypeChange();
+  });
+
+
+  UpdateFormOnCacheChange();
+  UpdateFormOnCacheIdleChange();
+  UpdateFormOnInteractiveTypeChange();
+  UpdateFormOnPublickeyTypeChange();

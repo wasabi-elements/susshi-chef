@@ -1,0 +1,5 @@
+.footer
+  .pull-right
+    suSSHi Chef #{defined?(EE::Engine) ? "Enterprise Edition" : nil} | #{CHEF_CONFIG['version_info']} (#{GIT_INFO}) | Rails #{Rails.version}
+  %div
+    = link_to raw("Copyright &copy #{CHEF_CONFIG['copyright']}"), external_link_susshi_url, target: "_blank"

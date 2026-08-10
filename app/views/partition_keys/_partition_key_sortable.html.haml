@@ -1,0 +1,28 @@
+- hint = 'Drag and drop to change order'
+%tr{id: partition_key_sortable.id}
+  %td{class: 'text-center handle', title: hint}
+    %i.fa.fa-bars
+  %td{class: 'text-center handle', title: hint}
+    %i{class: "fa #{partition_key_sortable.icon}"}
+  - if order
+    %td{class: 'handle', title: hint}
+      - if partition_key_sortable.active
+        = "##{partition_key_sortable.order_formatted}"
+      - else
+        %em
+          = "##{partition_key_sortable.order_formatted}"
+  %td= partition_key_sortable.human_key_type
+  %td= partition_key_sortable.bits
+  %td= partition_key_sortable.fingerprint
+  %td= link_to partition_key_sortable.title, polymorphic_path(partition_key_sortable)
+  - if proxy
+    %td
+      - if partition_key_sortable.proxy_id
+        = link_to partition_key_sortable.proxy.name, partition_key_sortable.proxy
+      - else
+        = '-'
+  %td= partition_key_sortable.created_at
+  %td.text-center
+    = boolean_value(partition_key_sortable.active)
+  %td.text-right
+    = index_action_buttons(partition_key_sortable, { :destroy => is_active_controller('partition_keys', true) })

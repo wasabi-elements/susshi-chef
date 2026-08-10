@@ -1,0 +1,79 @@
+#
+# This file contains an example workflow for
+#   - Swift IP Caching
+#   - External Password verification, e.g. RADIUS
+#
+
+module Plugin::AuthHooks
+
+  require 'radius/dictionary'
+  require 'radius/packet'
+  require 'radius/auth'
+
+  #
+  # Overwrite hook_<name> methods with custom versions to provide hook in code
+  #
+  # Please refer to base/auth_hooks.rb and auth_hooks_example.rb for more details
+  #
+
+  CACHE_IDLE_TIME = ENV['IP_CACHE_IDLE_TIME'] || 7200
+  CACHE_MAX_TIME  = ENV['IP_CACHE_MAX_TIME'] || 28800
+  RADIUS_SECRET   = ENV['RADIUS_SECRET'] || 'secret'
+  RADIUS_SERVERS  = (ENV['RADIUS_SERVERS'].split(/, /).map(&:strip) rescue nil) || []
+
+  class Session
+    class Context < Plugin::Base::AuthHooks::Session::Context
+
+      #
+      # Check if we have a valid IP Cache entry otherwise return Keyboard-Interactive / Password Auth to suSSHi gateway
+      #
+
+      def hook_before_response_success
+        @response[:Configuration] ||= {}
+        @response[:Configuration].merge!({
+                                             'ClientGatewayAuthTitle'       => "2FA Gateway Authentication",
+                                             'ClientGatewayAuthInstruction' => "\nPlease use your 2FA token for authentication.\n",
+                                             'ClientGatewayAuthPrompt'      => "2FA OTP:"
+                                         })
+        unless SwiftIpCaching.lookup(source_ip: @params.client_ip, swift_susshi_user: @susshi_user,
+                                     cache_idle_time: CACHE_IDLE_TIME, max_cache_time: CACHE_MAX_TIME, refresh: true)
+          @response[:Configuration].merge!({ 'PreferredAuthentications' => %w(keyboard-interactive password) })
+        end
+        return true
+      end
+
+    end
+  end
+
+  class User
+    class Password  < Plugin::Base::AuthHooks::User::Password
+
+      #
+      # Validate Password against VASCO IDENTIKEY Server
+      #
+      def hook_validate_password(password, client_auth_set_id = nil)
+        begin
+          RADIUS_SERVERS.each do |server|
+            radius = Radius::Auth.new(server, nil, 3, Rails.root.join('config', 'radius', 'dictionary.rfc2865').to_s)
+            return true if (radius.check_passwd(@susshi_user.name, password, RADIUS_SECRET) rescue false)
+          end
+        rescue
+          return false
+        end
+        return false
+      end
+
+      #
+      # Create IP Caching Entry
+      #
+      def hook_before_response_success
+        SwiftIpCaching.create_entry(source_ip: @params.client_ip, swift_susshi_user: @susshi_user,
+                                    cache_idle_time: CACHE_IDLE_TIME, max_cache_time: CACHE_MAX_TIME)
+        return true
+      end
+
+    end
+  end
+
+end
+

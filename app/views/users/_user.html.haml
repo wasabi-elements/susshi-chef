@@ -1,0 +1,30 @@
+%tr
+  %td{style: "font-size: large;"}
+    %i.fa.fa-user-circle
+  %td{class: "text-#{user.get_role_color}"}= user.get_role_title
+  %td= link_to user.username, edit_user_path(user)
+  %td= user.fullname
+  %td= user.email
+  %td.text-center
+    = object_counter_badge(user.partitions, tooltip: false)
+  - if Preference.first.otp_active?
+    %td.text-center
+      - if user.otp_activation_token.blank?
+        %i.fa.fa-check.text-success{title: 'Active'}
+      - else
+        %i.fa.fa-power-off.text-warning{title: 'Activation pending'}
+  - if Subscription.instance.feature_audit_log_encryption?
+    %td.text-center
+      = boolean_value(!user.log_encryption_key.blank?, titles: ['Key set', 'No key set'])
+    %td.text-center
+      = boolean_value(user.lek_self_service || user.has_role_super?, titles: ['User is allowed to edit audit log encryption key', 'Restricted to Super Admin'])
+  %td.text-right
+    - if Preference.first.otp_active? && user.otp_activation_token.present?
+      - if Preference.action_mailer_setup? && user.email.present?
+        %a.btn.btn-xs.btn-white{href: user_send_activation_token_path(user), data: {confirm: "Send activation token to #{user.email}?"}}
+          %i.fa.fa-envelope
+      - else
+        - mail = ApplicationMailer.with(user: user).activation_token
+        = mail_to(user.email, subject: mail.subject, body: ApplicationMailer.with(user: user).activation_token.text_part.decoded, class: 'btn btn-xs btn-white', style: "margin-right: 5px") do
+          %i.fa.fa-envelope{title: 'Send activation code'}
+    = index_action_buttons(user, {destroy: is_active_controller('users', true) ? user.is_destroyable? : false})

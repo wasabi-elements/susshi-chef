@@ -1,0 +1,30 @@
+:css
+  /* Email styles need to be inline */
+
+  h2 {
+    font-weight: normal;
+  }
+
+%h2 Dear #{@username},
+
+%p you are receiving this email because of your suSSHi account.
+
+%br
+
+%p
+  To enhance the security of your account, two-factor authentication has been activated.
+  %br
+  Please login to your suSSHi Chef account and enter the activation code provided below when prompted:
+
+%p{style: "font-weight: bold;"}= @activation_token
+
+%p Afterwards, your personal TOTP secret will be created that can be scanned with your preferred authenticator app.
+
+%br
+
+%p If you have any questions, please contact our support team.
+
+%br
+
+%p Regards,
+%p suSSHi Chef Administrator

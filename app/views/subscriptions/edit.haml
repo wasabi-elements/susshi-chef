@@ -1,0 +1,78 @@
+- breadcrumb :subscription
+- subscription_content_for_navbar(@subscription)
+- load_errors ||= nil
+
+= panel do
+  .information-text
+    %h2 Thank You for Using Our Software
+    .hr-line-dashed
+
+    - if @subscription.errors.messages[:validity].blank?
+      %p You have a valid support subscription.
+      %p.bold Thank you for your support!
+    - else
+      %p WARNING
+
+  - if load_errors
+    = render partial: "load_errors", locals: { load_errors: }
+  - else
+
+    %br
+    %h2 Subscription details
+    .hr-line-dashed
+
+    = attributes_table do
+      = row_key_value 'Subscription for Company', @subscription.company, icon: 'fa-cube'
+      = row_key_value 'User', @subscription.user, icon: 'fa-user'
+      = row_key_value 'Installation ID', @subscription.installation_id, icon: 'fa-star'
+      = row_key_value_block 'Valid not before', icon: 'far fa-clock' do
+        - if @subscription.valid_not_before > Time.now
+          %span.btn.btn-xs.btn-danger= @subscription.valid_not_before
+        - else
+          = @subscription.valid_not_before
+      = row_key_value_block 'Valid not after', icon: 'far fa-clock' do
+        - if @subscription.valid_not_after < Time.now
+          %span.btn.btn-xs.btn-danger= @subscription.valid_not_after
+        - elsif @subscription.expires_soon?
+          %span.btn.btn-xs.btn-warning= @subscription.valid_not_after
+        - else
+          = @subscription.valid_not_after
+
+      = row_key_value 'Last Refresh', @subscription.activated_at, icon: 'fa-clock'
+
+      - list = [ ['Gateway Users', @subscription.users, @subscription.configured_users, 'fa-users'],
+                 ['Targets', @subscription.targets, @subscription.configured_targets, 'fa-server'] ]
+      - list.each do |name, lic, count, icon|
+        = row_key_value_block name, icon: icon do
+          %span
+          - if count > 0
+            - if lic == count
+              %span.btn.btn-xs.btn-warning= lic
+            - else
+              - if lic > count
+                %span.btn.btn-xs.btn-primary= lic
+              - else
+                %span.btn.btn-xs.btn-danger= lic
+          - else
+            %span.btn.btn-xs.btn-primary= lic
+          %span= "( #{count} in use )"
+
+      = row_key_value 'Features', @subscription.features.join(', '), icon: 'fa-star'
+      - if @subscription.errors.any?
+        = row_key_value_block 'Errors', icon: 'fa-bolt' do
+          %ul{ style: 'padding-left: 15px;' }
+            - @subscription.errors.messages.reject { |k,_| k == :subscription_key }.each do |message|
+              %li.text-danger.font-bold= message&.last&.last
+        -# raise "hell"
+
+    %p.text-center
+      = link_to "Refresh Subscription", subscription_path(@subscription.id), method: :patch, class: "btn btn-primary", style: "color: white;"
+
+      -# = link_to "Remove Subscription", subscription_path(@subscription.id), method: :delete, class: "btn btn-warning", style: "color: white;",
+      -#       data: { title: "Remove Subscription from installation", confirm: 'Are you sure?', commit: 'Sure!'}
+
+  %br
+  .information-text
+    %p.text-center
+      = render partial: "links"
+

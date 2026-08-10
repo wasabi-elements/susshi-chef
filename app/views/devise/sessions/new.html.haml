@@ -1,0 +1,14 @@
+%h3 Welcome to suSSHi Chef
+%p{style: "white-space: pre-line;"}= Preference.first.login_banner
+= form_for(resource, as: resource_name, url: session_path(resource_name), html: { role: 'form', class: 'm-t'}) do |f|
+  .form-group
+    = f.text_field :username, autofocus: true, class: 'form-control', :placeholder => "Username"
+  .form-group
+    = f.password_field :password, autocomplete: 'off', class: 'form-control', :placeholder => "Password"
+
+  = f.submit  'Log in', class: 'btn btn-primary block full-width m-b'
+
+  - if flash[:error]
+    %p.text-danger= flash[:error]
+
+  = render 'devise/shared/links'

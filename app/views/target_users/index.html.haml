@@ -1,0 +1,15 @@
+- breadcrumb :target_users
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-2
+        = f.select :type_eq, TargetUser.types_collection, include_blank: true, label: 'Type'
+      .col-sm-4
+        = f.text_field :name_cont, placeholder: 'contains', label: 'Name / Title'
+      .col-sm-3
+        = f.text_field :description_cont, placeholder: 'contains', label: 'Description'
+      .col-sm-3
+        = f.select :system_int_eq, TargetUser.sysint_collection, include_blank: true, label: 'Provider'
+
+= list_panel(:target_users, @target_users, @q)

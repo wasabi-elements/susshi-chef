@@ -1,0 +1,13 @@
+- breadcrumb :partitions
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-4
+        = f.text_field :name_cont, placeholder: 'contains', label: 'Name'
+      .col-sm-4
+        = f.text_field :comment_cont, placeholder: 'contains', label: 'Comment'
+      .col-sm-4
+        = f.select :users_id_eq, ransack_users_selection, :include_blank => true, label: 'Admin User'
+
+= list_panel(:partitions, @partitions, @q)

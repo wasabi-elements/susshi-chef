@@ -1,0 +1,17 @@
+- breadcrumb :users
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-2
+        = f.select :role_matches, ransack_user_roles_selection, :include_blank => true, label: 'Role'
+      .col-sm-2
+        = f.text_field :username_cont, placeholder: 'contains', label: 'Username'
+      .col-sm-3
+        = f.text_field :fullname_cont, placeholder: 'contains', label: 'Full Name'
+      .col-sm-2
+        = f.text_field :email_cont, placeholder: 'contains', label: 'eMail Address'
+      .col-sm-3
+        = f.select :partitions_id_eq, ransack_partitions_selection, :include_blank => true, label: 'Partition Assigned'
+
+= list_panel(:users, @users, @q)

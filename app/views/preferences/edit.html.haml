@@ -1,0 +1,18 @@
+- breadcrumb :preferences
+- content_for(:title, 'Preferences')
+
+= render 'form'
+
+:javascript
+  const error_divs = $('div.has-error');
+
+  if (error_divs.length > 0) {
+    const tab_id = $(error_divs[0])
+      .closest('div.tab-pane')
+      .attr('id');
+
+    $(error_divs[0])
+      .closest('div.tabs-container')
+      .find('a[href="#' + tab_id + '"]')
+      .click();
+  }

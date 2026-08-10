@@ -1,0 +1,172 @@
+- @active_tab ||= :ui
+
+= simple_form_for(@preference, url: update_preferences_path) do |f|
+  .tabs-container.margin-bottom-md
+    .tabs-top
+      %ul.nav.nav-tabs
+        %li{class: ('active' if @active_tab == :ui)}
+          %a{"data-toggle" => "tab", :href => "#tab-1"} Admin User Interface
+        %li{class: ('active' if @active_tab == :ssl)}
+          %a{"data-toggle" => "tab", :href => "#tab-2"} SSL Client Certificate Verification
+        %li{class: ('active' if @active_tab == :logging)}
+          %a{"data-toggle" => "tab", :href => "#tab-3"} System Events & Reports
+        %li{class: ('active' if @active_tab == :mail)}
+          %a{"data-toggle" => "tab", :href => "#tab-4"} E-Mail
+
+    .tab-content
+      #tab-1{class: "tab-pane #{'active' if @active_tab == :ui}"}
+        .panel-body
+          %h3 suSSHi Chef Admin Authentication Settings
+          .hr-line-dashed
+          = f.input_with_icon :admin_auth_method, collection: Preference.admin_auth_method_collection, label: 'Authentication Method:', icon: 'fa-sign-in-alt', include_blank: false
+          = f.input_with_icon :admin_auth_realm, label: 'Authentication Realm', icon: 'fa-sign-in-alt', hint: 'This label is used as a unique identifier in the generated TOTP URI / QR code, so that admin users can differentiate their OTP profiles.'
+          = f.input_with_icon :login_banner, label: 'Login banner', icon: 'fa-sign-in-alt'
+          %br
+          %h3 Password Strength & History
+          .hr-line-dashed
+          = f.input_with_icon :password_length, collection: Preference.password_length_collection, label: 'Minimum Password length:', icon: 'fa-key', include_blank: false
+          = f.input_with_icon :expire_password_after, collection: Preference.expire_password_after_collection, label: 'Expire Password after:', icon: 'fa-clock', include_blank: false
+          = f.input_with_icon :password_archiving_count, collection: Preference.password_archiving_count_collection, label: 'Password History:', icon: 'fa-clock', include_blank: false
+          %br
+          %h3 suSSHi Chef Admin User Interface Settings
+          .hr-line-dashed
+          = f.input_with_icon :max_idle_time, label: 'Max idle time (seconds)', icon: 'fa-clock'
+          = f.input_with_icon :max_session_time, label: 'Max session time (seconds)', icon: 'fa-clock'
+          .checkbox.checkbox-primary
+            = f.input :flat_access_policies, label: 'Disable dual list box selectors in the Access Policies'
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              .alert.alert-info
+                %p This setting disables the dual list box selectors in the Access Policy editing forms and allows object selection from drop-down lists.
+                %p With a very large number of objects such as Target Users, Targets etc. this lightens the browser's rendering load enormously.
+          - if Preference.frontend_totp_available?
+            %br
+            %h3 suSSHi Gateway User Authentication with Time-based OTP
+            .hr-line-dashed
+            = f.input_with_icon :frontend_totp_issuer, label: 'TOTP Issuer', icon: 'fa-sign-in-alt', hint: 'Please use a short label - this label is used as a unique identifier in the generated TOTP URI / QR code, so that gateway users can differentiate their OTP profiles.'
+            .checkbox.checkbox-primary
+              = f.input :frontend_totp_show_on_ui, label: 'Allow admin users to display TOTP URIs / QR codes and/or activation token for gateway users.'
+            .div.row
+              .div.col-sm-2
+              .div.col-sm-10
+                .alert.alert-info
+                  %p This setting allows suSSHi Chef admin users to see the TOTP URI / QR code and/or activation token of a gateway user.
+                  %p This might be considered a security issue in your organization, so you can disable it here.
+
+      #tab-2.tab-pane{class: "tab-pane #{'active' if @active_tab == :ssl}"}
+        .panel-body
+          %h3 SSL Client Certificate Verification
+          .hr-line-dashed
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              .alert.alert-info
+                %p
+                  This configuration allows to restrict access to clients with SSL Client Certificates signed by the following Certificate Authority.
+                  After configuration, the suSSHi Chef server must be restarted to make changes active.
+
+          .checkbox.checkbox-primary
+            = f.input :ui_ssl_client_cert_verify, label: 'Require SSL Client Certificate to access Admin User Interface and APIs'
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              .alert.alert-warning
+                %p
+                  Warning! After activating and restarting the server, the user interface can only be accessed with a valid SSL client certificate loaded into your browser.
+                  Also the Configuration API is then only accessible with a valid certificate loaded into the API client.
+          = f.input_with_icon :ui_ssl_client_cert_ca, label: 'Client Certificate CA', icon: 'fa-certificate', input_html: {rows: 8}, hint: 'Supported format is PEM.'
+          = f.input_with_icon :ui_ssl_client_cert_cn_pattern, label: 'Client Certificate CN Regex Pattern', icon: 'fa-asterisk', hint: 'The CN of the client certificates are matched against this regex pattern.'
+          = f.input_with_icon :ui_ssl_client_cert_verify_depth, collection: (1..10).to_a, label: 'Client Certificate CA Verification depth', icon: 'fa-level-down-alt', hint: 'Sets the verification depth in the client certificates chain.', include_blank: false
+
+      #tab-3.tab-pane{class: "tab-pane #{'active' if @active_tab == :logging}"}
+        .panel-body
+          %h3 Syslog Server
+          .hr-line-dashed
+          = f.input_with_icon :syslog_server1, label: 'Syslog Server 1', icon: 'fa-list'
+          = f.input_with_icon :syslog_server2, label: 'Syslog Server 2', icon: 'fa-list'
+          = f.input_with_icon :syslog_server3, label: 'Syslog Server 3', icon: 'fa-list'
+          = f.input_with_icon :syslog_server4, label: 'Syslog Server 4', icon: 'fa-list'
+          = f.input_with_icon :syslog_proto, label: 'Protocol', icon: 'fa-list', collection: [%w(UDP udp), %w(TCP tcp), ['RELP (over TCP)', 'relp']], include_blank: false
+          = f.input_with_icon :syslog_port, label: 'Port', icon: 'fa-list'
+          .hr-line-dashed
+          = f.input_with_icon :syslog_retention_days, collection: LogRetention.system_event_choices, label: 'Keep System Events for', icon: 'fa-clock', include_blank:  false
+          = f.input_with_icon :session_report_retention_days, collection: LogRetention.session_report_choices, label: 'Keep Reports for', icon: 'fa-clock', include_blank: 'Never purge reports'
+
+      #tab-4.tab-pane{class: "tab-pane #{'active' if @active_tab == :mail}"}
+        .panel-body.smtp-settings
+          %h3 General
+          .hr-line-dashed
+          = f.input_with_icon :smtp_address, label: 'Server', icon: 'fa-list'
+          = f.input_with_icon :smtp_port, label: 'Port', icon: 'fa-list', input_html: {value: (@preference.smtp_port if @preference.smtp_port != 25)}, placeholder: '25'
+          = f.input_with_icon :smtp_domain, label: 'Domain', icon: 'fa-globe', placeholder: 'example.com'
+          = f.input_with_icon :smtp_from, label: 'Sender', icon: 'fa-envelope', placeholder: 'suSSHi Chef <noreply@example.com>'
+          %h3 Authentication
+          .hr-line-dashed
+          = f.input_with_icon :smtp_authentication, label: 'Authentication', collection: [['Plain', :plain], ['Login', :login], ['CRAM-MD5', :cram_md5]], icon: 'fa-passport'
+          = f.input_with_icon :smtp_user_name, label: 'Username', icon: 'fa-user', hint: nil
+          = f.input_with_icon :smtp_password, label: 'Password', icon: 'fa-key', hint: nil, input_html: {value: @preference.smtp_password}
+          %h3 Security
+          .hr-line-dashed
+          = f.input_with_icon :smtp_encryption, label: 'Encryption', collection: ["STARTTLS (Opportunistic)", "STARTTLS (Mandatory)", "SSL/TLS", "None"], icon: 'fa-lock', include_blank: false
+          = f.input_with_icon :smtp_openssl_verify_mode, label: 'Verify Mode', collection: [["Peer", OpenSSL::SSL::VERIFY_PEER], ["None", OpenSSL::SSL::VERIFY_NONE]], icon: 'fa-search', include_blank: false
+
+          %br
+
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              - if current_user.email.blank?
+                .alert.alert-warning
+                  %p.font-bold
+                    Please update your account with a valid e-mail address to send a test e-mail.
+              - else
+                - unless @preference.smtp_address.blank?
+                  %p.smtp-actions
+                    .smtp-action-buttons
+                      - if current_user.email.present?
+                        = content_tag(:a, class: 'btn btn-white', href: preferences_send_test_mail_path, data: {remote: true, confirm: "Send test mail to #{current_user.email}?"}) do
+                          %i.fa.fa-envelope
+                          %span{style: 'padding-left: 5px;'} Test
+                      = content_tag(:a, class: 'btn btn-danger js-reset-mail-settings', data: {confirm: 'Are you sure?'}, style: 'margin-left: 10px') do
+                        %i.fa.fa-envelope
+                        %span{style: 'padding-left: 5px;'} Reset
+
+          :javascript
+            $(document).on("confirm:complete", "a.js-reset-mail-settings[data-confirm]", function() {
+              const inputElements = document.querySelectorAll("div.panel-body.smtp-settings input");
+              inputElements?.forEach(element => {
+                element.value = "";
+              })
+
+              const selectElements = document.querySelectorAll("div.panel-body.smtp-settings select");
+              selectElements?.forEach(element => {
+                element.selectedIndex = 0;
+                $(element).trigger("change");
+                $(element).trigger("chosen:updated");
+              })
+
+              return true;
+            });
+
+            const authenticationElement = document.getElementById("preference_smtp_authentication");
+            $(authenticationElement).change(function(event) {
+              const select = event.target;
+
+              const usernameElement = document.getElementById("preference_smtp_user_name");
+              const passwordElement = document.getElementById("preference_smtp_password");
+
+              usernameElement.disabled = select.selectedIndex === 0;
+              passwordElement.disabled = select.selectedIndex === 0;
+            });
+
+            authenticationElement.dispatchEvent(new Event("change"));
+
+            document.querySelectorAll("[id^=preference_smtp_]").forEach(element => {
+              $(element).change(function(event) {
+                const button = document.querySelector(".smtp-action-buttons");
+                button?.classList.add("hide");
+              });
+            });
+
+  = f.button :submit_cancel, 'Update', html: { class: 'btn-primary' }, cancel: :back

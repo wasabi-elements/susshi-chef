@@ -1,0 +1,326 @@
+- partition = current_user.partition
+- subscription = Subscription.instance
+
+:javascript
+  if (localStorage.getItem("mini-navbar") == "true") {
+    $("body").addClass("mini-navbar");
+  }
+
+%nav.navbar-default.navbar-static-side{:role => "navigation"}
+  .sidebar-collapse
+    %ul#side-menu.nav.metismenu
+      %li.nav-header.nav-border-bottom
+        .profile-element
+          .margin-bottom-xs
+            %img{:alt => "image", :src => "#{image_url 'susshi_logo_170.png'}"}/
+        .logo-element
+          Chef
+
+      %li.landing_link
+        = link_to main_app.root_path do
+          %span.nav-label suSSHi2 Administration
+
+      - if partition && partition.pending_swift_changes.any?
+        %li.pending_changes
+          = link_to main_app.changes_accesses_path do
+            .btn.btn-warning
+              %i.fa.fa-comment
+              %span.nav-label= "#{pluralize(partition.pending_swift_changes.count, 'change')} pending"
+
+      - dashboard_controllers = %w(dashboards subscriptions)
+      %li.nav-border-top{:class => "#{is_active_controller(dashboard_controllers)} #{is_active_controller_action('accesses', %w(changes changes_history))}"}
+        = link_to main_app.dashboards_overview_path do
+          %i.fa.fa-th-large
+          %span.nav-label Dashboards
+          %span.fa.arrow
+        %ul{:class => "nav nav-second-level collapse #{is_active_controller('dashboards', 'in')} #{is_active_controller_action('accesses', %w(changes changes_history))}"}
+          %li{:class => "#{is_active_action('overview')}"}
+            = link_to main_app.dashboards_overview_path do
+              %i.fa.fa-chart-pie
+              Overview
+          %li{:class => "#{is_active_action(is_active_controller('subscriptions', 'in'))}"}
+            = link_to main_app.subscriptions_path do
+              %i.fa.fa-certificate
+              Subscription
+
+          - if partition
+            %li{:class => "#{is_active_controller_action('accesses', 'changes')}"}
+              = link_to main_app.changes_accesses_path do
+                %i.far.fa-clock
+                Pending Changes
+            %li{:class => "#{is_active_controller_action('accesses','changes_history')}"}
+              = link_to main_app.changes_history_accesses_path do
+                %i.fa.fa-history
+                Changes History
+
+          %li
+            = link_to external_link_docs_url, target: :_blank do
+              %i.fa.fa-book
+              Documentation
+          %li
+            = link_to main_app.dashboards_api_manual_path, target: :_blank do
+              %i.fa.fa-book
+              API Manual
+
+      - if partition
+        - report_controllers = %w(session_reports system_events)
+        %li{:class => "#{is_active_controller(report_controllers)}"}
+          = link_to main_app.session_reports_path do
+            %i.fa.fa-chart-area
+            %span.nav-label Reports
+            %span.fa.arrow
+          %ul{:class => "nav nav-second-level collapse #{is_active_controller('session_reports', 'in')}"}
+            %li{:class => "#{is_active_controller_action('session_reports', 'index')}"}
+              = link_to main_app.session_reports_path do
+                %i.fa.fa-bullseye
+                Sessions
+            %li{:class => "#{is_active_controller_action('system_events', 'index')}"}
+              = link_to main_app.system_events_path do
+                %i.fa.fa-stethoscope
+                System Events
+
+        %li.nav-border-top{:class => "#{is_active_controller_action('accesses', %w(index new))}"}
+          = link_to main_app.accesses_path do
+            %i.fa.fa-gem
+            %span.nav-label Access Policies
+            %span.fa.arrow
+          %ul{:class => "nav nav-second-level collapse #{is_active_controller_action('accesses', %w(index new))}"}
+            %li{:class => "#{is_active_controller_action('accesses', 'index')}"}
+              = link_to main_app.accesses_path do
+                %i.fa.fa-list
+                List
+            %li{:class => "#{is_active_controller_action('accesses', 'new')}"}
+              = link_to main_app.new_access_path do
+                %i.fa.fa-plus-circle
+                New
+
+        - profile_controllers = %w(profiles client_auth_sets)
+        %li{:class => "#{is_active_controller(profile_controllers)}"}
+          = link_to main_app.profiles_path do
+            %i.fa.fa-toggle-on
+            %span.nav-label Access Profiles
+            %span.fa.arrow
+          %ul{:class => "nav nav-second-level collapse #{is_active_controller(profile_controllers, 'in')}"}
+            %li{:class => "#{is_active_controller_action('profiles', 'index')}"}
+              = link_to main_app.profiles_path do
+                %i.fa.fa-list
+                List
+            %li{:class => "#{is_active_controller_action('profiles', 'new')}"}
+              = link_to main_app.new_profile_path do
+                %i.fa.fa-plus-circle
+                New
+            %li{:class => "#{is_active_controller_action('client_auth_sets','index')}"}
+              = link_to main_app.client_auth_sets_path do
+                %i.fa.fa-magic
+                Client Auth Sets
+                %span.fa.arrow
+              %ul{:class => "nav nav-third-level collapse #{is_active_controller('client_auth_sets', 'in')}"}
+                %li{:class => "#{is_active_controller_action('client_auth_sets', 'new')}"}
+                  = link_to main_app.new_client_auth_set_path do
+                    %i.fa.fa-plus-circle
+                    New
+
+      - identity_controllers = %w(susshi_users susshi_user_logins susshi_user_groups)
+      %li{:class => "#{is_active_controller(identity_controllers)}"}
+        = link_to main_app.susshi_users_path do
+          %i.fa.fa-user
+          %span.nav-label Gateway Users
+          %span.fa.arrow
+        %ul{:class => "nav nav-second-level collapse #{is_active_controller(identity_controllers, 'in')}"}
+          %li{:class => "#{is_active_controller_action('susshi_users', 'index')}"}
+            = link_to main_app.susshi_users_path do
+              %i.fa.fa-list
+              List
+          %li{:class => "#{is_active_controller_action('susshi_user_logins', 'new')}"}
+            = link_to main_app.new_susshi_user_login_path do
+              %i.fa.fa-plus-circle
+              New User
+          %li{:class => "#{is_active_controller_action('susshi_user_groups', 'new')}"}
+            = link_to main_app.new_susshi_user_group_path do
+              %i.fa.fa-plus-circle
+              New Group
+
+        - source_controllers = %w(source_ips source_ip_nets source_ip_groups)
+        %li{:class => "#{is_active_controller(source_controllers)}"}
+          = link_to main_app.source_ips_path do
+            %i.fa.fa-globe
+            %span.nav-label Source IPs
+            %span.fa.arrow
+          %ul{:class => "nav nav-second-level collapse #{is_active_controller(source_controllers, 'in')}"}
+            %li{:class => "#{is_active_controller_action('source_ips', 'index')}"}
+              = link_to main_app.source_ips_path do
+                %i.fa.fa-list
+                List
+            %li{:class => "#{is_active_controller_action('source_ips', 'new_net')}"}
+              = link_to main_app.new_net_source_ips_path do
+                %i.fa.fa-plus-circle
+                New Network
+            %li{:class => "#{is_active_controller_action('source_ips', 'new_group')}"}
+              = link_to main_app.new_group_source_ips_path do
+                %i.fa.fa-plus-circle
+                New Group
+
+        - target_controllers = %w(targets target_hosts target_domains target_dynamics target_networks target_groups target_host_keys)
+        %li{:class => "#{is_active_controller(target_controllers)}"}
+          = link_to main_app.targets_path do
+            %i.fa.fa-server
+            %span.nav-label Targets
+            %span.fa.arrow
+          %ul{:class => "nav nav-second-level collapse #{is_active_controller(target_controllers, 'in')}"}
+            %li{:class => "#{is_active_controller_action('targets', 'index')}"}
+              = link_to main_app.targets_path do
+                %i.fa.fa-list
+                List
+            %li{:class => "#{is_active_controller_action('target_hosts', 'new')}"}
+              = link_to main_app.new_target_host_path do
+                %i.fa.fa-plus-circle
+                New Static
+            %li{:class => "#{is_active_controller_action('target_networks', 'new')}"}
+              = link_to main_app.new_target_network_path do
+                %i.fa.fa-plus-circle
+                New Network
+            %li{:class => "#{is_active_controller_action('target_dynamics', 'new')}"}
+              = link_to main_app.new_target_dynamic_path do
+                %i.fa.fa-plus-circle
+                New Dynamic
+            %li{:class => "#{is_active_controller_action('target_domains', 'new')}"}
+              = link_to main_app.new_target_domain_path do
+                %i.fa.fa-plus-circle
+                New Domain
+            %li{:class => "#{is_active_controller_action('target_groups', 'new')}"}
+              = link_to main_app.new_target_group_path do
+                %i.fa.fa-plus-circle
+                New Group
+            %li{:class => "#{is_active_controller_action('target_hosts', 'scan')}"}
+              = link_to main_app.scan_target_hosts_path do
+                %i.fa.fa-search
+                Scan Network
+            %li{:class => "#{is_active_controller_action('target_host_keys', 'index')}"}
+              = link_to main_app.target_host_keys_path do
+                %i.fa.fa-list
+                Target Hostkeys
+
+        - target_user_controllers = %w(target_users)
+        %li{:class => "#{is_active_controller(target_user_controllers)}"}
+          = link_to main_app.target_users_path do
+            %i.far.fa-user
+            %span.nav-label Target Users
+            %span.fa.arrow
+          %ul{:class => "nav nav-second-level collapse #{is_active_controller(target_user_controllers, 'in')}"}
+            %li{:class => "#{is_active_controller_action('target_users', 'index')}"}
+              = link_to main_app.target_users_path do
+                %i.fa.fa-list
+                List
+            %li{:class => "#{is_active_controller_action('target_users', 'new_login')}"}
+              = link_to main_app.new_login_target_users_path do
+                %i.fa.fa-plus-circle
+                New Login
+            %li{:class => "#{is_active_controller_action('target_users', 'new_regex')}"}
+              = link_to main_app.new_regex_target_users_path do
+                %i.fa.fa-plus-circle
+                New Regex
+            %li{:class => "#{is_active_controller_action('target_users', 'new_mapping')}"}
+              = link_to main_app.new_mapping_target_users_path do
+                %i.fa.fa-plus-circle
+                New Mapping
+            %li{:class => "#{is_active_controller_action('target_users', 'new_group')}"}
+              = link_to main_app.new_group_target_users_path do
+                %i.fa.fa-plus-circle
+                New Group
+
+        = render_partial_if_exists "layouts/ee/navigation/fusions", locals: {partition: partition, subscription: subscription}
+        = render_partial_if_exists "layouts/ee/navigation/proxies", locals: {partition: partition, subscription: subscription}
+
+        %li.nav-border-top
+
+        - if current_user.has_role_read_partition?(partition)
+          - partition_controllers = %w(partition_settings partition_keys gateways)
+          %li{:class => "#{is_active_controller(partition_controllers)}"}
+            = link_to main_app.gateways_path do
+              %i.fa.fa-cube
+              %span.nav-label Partition
+              %span.fa.arrow
+            %ul{:class => "nav nav-second-level collapse #{is_active_controller(partition_controllers, 'in')}"}
+              %li{:class => "#{is_active_controller_action('gateways','index')}"}
+                = link_to main_app.gateways_path do
+                  %i.fa.fa-dungeon
+                  Gateways
+                  %span.fa.arrow
+                %ul{:class => "nav nav-third-level collapse #{is_active_controller('gateways', 'in')}"}
+                  %li{:class => "#{is_active_controller_action('gateways', 'new')}"}
+                    = link_to main_app.new_gateway_path do
+                      %i.fa.fa-plus-circle
+                      New
+              %li{:class => "#{is_active_controller_action('partition_settings', 'show')}"}
+                = link_to main_app.partition_setting_path(id: partition.partition_setting.id) do
+                  %i.fa.fa-search
+                  Partition Settings
+                  %span.fa.arrow
+                %ul{:class => "nav nav-third-level collapse #{is_active_controller('partition_settings', 'in')}"}
+                  %li{:class => "#{is_active_controller_action('partition_settings','edit')}"}
+                    = link_to main_app.edit_partition_setting_path(id: partition.partition_setting.id) do
+                      %i.fa.fa-pencil-alt
+                      Edit
+              %li{:class => "#{is_active_controller_action('partition_keys','index')}"}
+                = link_to main_app.partition_keys_path do
+                  %i.fa.fa-key
+                  Partition Keys
+                  %span.fa.arrow
+                %ul{:class => "nav nav-third-level collapse #{is_active_controller('partition_keys', 'in')}"}
+                  %li{:class => "#{is_active_controller_action('partition_keys', 'new_host_key')}"}
+                    = link_to main_app.new_hostkey_partition_keys_path do
+                      %i.fa.fa-plus-circle
+                      New Host Key
+                  %li{:class => "#{is_active_controller_action('partition_keys', 'new_auth_key')}"}
+                    = link_to main_app.new_authkey_partition_keys_path do
+                      %i.fa.fa-plus-circle
+                      New Auth Key
+
+      - if current_user.has_role_super?
+        - system_controllers = %w(users preferences partitions api_tokens)
+        %li{:class => "#{is_active_controller(system_controllers)}"}
+          %a.prevent-default{:href => "#"}
+            %i.fa.fa-cog
+            %span.nav-label System
+            %span.fa.arrow
+          %ul{:class => "nav nav-second-level collapse #{is_active_controller(system_controllers, 'in')}"}
+            %li{:class => "#{is_active_controller_action('users','index')}"}
+              = link_to main_app.users_path do
+                %i.fa.fa-user-circle
+                Admin Users
+                %span.fa.arrow
+              %ul{:class => "nav nav-third-level collapse #{is_active_controller('users', 'in')}"}
+                %li{:class => "#{is_active_controller_action('users', 'new')}"}
+                  = link_to main_app.new_user_path do
+                    %i.fa.fa-plus-circle
+                    New
+            %li{:class => "#{is_active_controller_action('partitions','index')}"}
+              = link_to main_app.partitions_path do
+                %i.fa.fa-cube
+                Partitions
+                %span.fa.arrow
+              %ul{:class => "nav nav-third-level collapse #{is_active_controller('partitions', 'in')}"}
+                %li{:class => "#{is_active_controller_action('partitions', 'new')}"}
+                  = link_to main_app.new_partition_path do
+                    %i.fa.fa-plus-circle
+                    New
+            %li{:class => "#{is_active_controller_action('api_tokens','index')}"}
+              = link_to main_app.api_tokens_path do
+                %i.fa.fa-wrench
+                API Tokens
+                %span.fa.arrow
+              %ul{:class => "nav nav-third-level collapse #{is_active_controller('api_tokens', 'in')}"}
+                %li{:class => "#{is_active_controller_action('api_tokens', 'new')}"}
+                  = link_to main_app.new_api_token_path do
+                    %i.fa.fa-plus-circle
+                    New
+            %li{:class => "#{is_active_controller_action('preferences', 'edit')}"}
+              = link_to main_app.edit_preferences_path do
+                %i.fa.fa-cog
+                Preferences
+                %span.fa.arrow
+              %ul{:class => "nav nav-third-level collapse #{is_active_controller('preferences', 'in')}"}
+                %li{:class => "#{is_active_controller_action('preferences', 'server_ssl')}"}
+                  = link_to main_app.server_ssl_preferences_path do
+                    %i.fa.fa-plus-circle
+                    Server Certificate

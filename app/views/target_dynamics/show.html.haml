@@ -1,0 +1,21 @@
+- breadcrumb @target_dynamic
+
+= panel do
+  = attributes_table do
+    = row_key_value 'Partition', @target_dynamic.partition.name, icon: 'fa-cube'
+    = row_key_value 'Hostname', @target_dynamic.name, icon: @target_dynamic.icon
+    = row_key_value_block 'Active', icon: 'fa-lightbulb' do
+      = boolean_value(@target_dynamic.active)
+    = row_key_values 'Memberships', @target_dynamic.target_groups.collect {|t| link_to t.name, t }, icon: 'fa-layer-group'
+    - if @target_dynamic.target_fusions.any?
+      = row_key_values 'Target Fusions', @target_dynamic.target_fusions.collect {|fusion| link_to fusion.display_name, fusion}, icon: 'fa-link'
+
+  - k = @target_dynamic.target_host_keys
+  - if k.any?
+    = render partial: 'shared/target_host_keys', locals: { title: 'System-wide Hostkeys', target_host_keys: k }
+
+  - k = @target_dynamic.target_user_host_keys
+  - if k.any?
+    = render partial: 'shared/target_host_keys', locals: { title: 'User-individual Hostkeys', target_host_keys: k }
+
+  = show_action_buttons(@target_dynamic, { :destroy => @target_dynamic.is_destroyable? })

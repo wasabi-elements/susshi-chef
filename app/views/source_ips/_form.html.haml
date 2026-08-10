@@ -1,0 +1,23 @@
+= simple_form_for(@source_ip, remote: request.xhr?) do |f|
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @source_ip.partition.name }, label: 'Partition'
+
+  - case @source_ip.type
+
+  - when 'SourceIpNet'
+    = f.input_with_icon :name, icon: 'fa-desktop', label: 'Name'
+    = f.input_with_icon :ip_address, icon: 'fa-cloud', label: 'IP Address'
+    = f.input_with_icon :description, icon: 'fa-info'
+    .hr-line-dashed
+    = f.input_dual :source_ip_group_ids, collection: SourceIpGroup.where(partition_id: @source_ip.partition.id).order("LOWER(name) ASC").all, label: 'Memberships'
+
+  - when 'SourceIpGroup'
+    = f.input_with_icon :name, icon: 'fa-globe', label: 'Group Name'
+    = f.input_with_icon :description, icon: 'fa-info'
+    .hr-line-dashed
+    = f.input_dual :source_ip_net_ids, collection: SourceIpNet.where(partition_id: @source_ip.partition.id).order("LOWER(name) ASC").all, label: 'Members'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

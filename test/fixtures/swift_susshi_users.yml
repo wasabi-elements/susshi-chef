@@ -1,0 +1,6 @@
+oliver:
+  partition: the_partition
+  name: "oliver"
+anonymous:
+  partition: the_partition
+  name: "anonymous"

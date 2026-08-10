@@ -1,0 +1,22 @@
+- breadcrumb @target_host
+
+= panel do
+  = attributes_table do
+    = row_key_value "Partition", @target_host.partition.name, icon: 'fa-cube'
+    = row_key_value 'Hostname', @target_host.name, icon: 'fa-server'
+    = row_key_value_block 'Active', icon: 'fa-lightbulb' do
+      = boolean_value(@target_host.active)
+    = row_key_values 'IP Addresses', @target_host.target_sockets.collect {|s| s.ip_address.split('/').first }, icon: 'fa-cloud'
+    = row_key_values 'Memberships', @target_host.target_groups.collect {|t| link_to t.name, t }, icon: 'fa-layer-group'
+    - if @target_host.target_fusions.any?
+      = row_key_values 'Target Fusions', @target_host.target_fusions.collect {|fusion| link_to fusion.display_name, fusion}, icon: 'fa-link'
+
+  - k = @target_host.target_host_keys
+  - if k.any?
+    = render partial: 'shared/target_host_keys', locals: { title: 'System-wide Hostkeys', target_host_keys: k }
+
+  - k = @target_host.target_user_host_keys
+  - if k.any?
+    = render partial: 'shared/target_host_keys', locals: { title: 'User-individual Hostkeys', target_host_keys: k }
+
+  = show_action_buttons(@target_host, { :destroy => @target_host.is_destroyable? })

@@ -1,0 +1,25 @@
+%tr.text-nowrap
+  %td.text-center
+    %i{class: "fa #{partition_key.icon}"}
+  - if order
+    %td
+      - if partition_key.active
+        = "##{partition_key.order_formatted}"
+      - else
+        %em
+          = "##{partition_key.order_formatted}"
+  %td= partition_key.human_key_type
+  %td= partition_key.bits
+  %td= partition_key.fingerprint
+  %td= link_to partition_key.title, polymorphic_path(partition_key)
+  - if proxy
+    %td
+      - if partition_key.proxy_id
+        = link_to partition_key.proxy.name, partition_key.proxy
+      - else
+        = '-'
+  %td= partition_key.created_at
+  %td.text-center
+    = boolean_value(partition_key.active)
+  %td.text-right
+    = index_action_buttons(partition_key, { :destroy => is_active_controller('partition_keys', true) })

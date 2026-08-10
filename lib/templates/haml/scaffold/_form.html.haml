@@ -1,0 +1,9 @@
+= simple_form_for(@<%= singular_table_name %>) do |f|
+  = f.error_notification
+
+  .form-inputs
+  <%- attributes.each do |attribute| -%>
+    = f.<%= attribute.reference? ? :association : :input_with_icon %> :<%= attribute.name %>, icon: 'fa-star-o'
+  <%- end -%>
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

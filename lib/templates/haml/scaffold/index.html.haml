@@ -1,0 +1,11 @@
+- breadcrumb :<%= plural_table_name %>
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+<% attributes.each do |attribute| -%>
+      .col-sm-1
+        = f.text_field :<%= attribute.name %>, placeholder: 'contains', label: '<%= attribute.human_name %>'
+<% end -%>
+
+= list_panel(:<%= plural_table_name %>, @<%= plural_table_name %>, @q)

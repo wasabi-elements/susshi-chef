@@ -1,0 +1,34 @@
+- breadcrumb :accesses
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    = f.fields_for :assist, OpenStruct.new(@assist) do |a|
+      .row
+        .col-sm-2
+          = f.text_field :name_cont, placeholder: 'contains', label: 'Policy Title'
+        .col-sm-2
+          = a.text_field :source_ip, placeholder: 'contains', label: 'Source'
+        .col-sm-2
+          = a.text_field :susshi_user_name, placeholder: 'contains', label: 'Gateway User'
+        .col-sm-2
+          = a.text_field :target_user_name, placeholder: 'contains', label: 'Target User'
+        .col-sm-2
+          = f.select :profile_id_eq, Profile.all_collection, include_blank: true, label: 'Profile'
+        .col-sm-1
+          = f.select :active_eq, Access.active_collection, include_blank: true, label: 'Active'
+        .col-sm-1
+          = f.select :debug_level_gteq, [['Debug active', 1]], include_blank: true, label: 'Debug'
+      .row
+        .col-sm-1
+          = a.text_field :position, placeholder: 'greater or equal', label: 'Position'
+        .col-sm-1
+          = f.text_field :id_eq, placeholder: 'equals', label: 'ID'
+        .col-sm-4
+        .col-sm-2
+          = a.text_field :target, placeholder: 'contains', label: 'Target'
+        .col-sm-2
+          = f.select :last_use_at_gteq, Access.last_use_at_collection, include_blank: true, label: 'Last use'
+        .col-sm-2
+          = f.text_field :description_cont, placeholder: 'contains', label: 'Description'
+
+= list_panel(:accesses, @accesses, @q)

@@ -1,0 +1,5 @@
+= simple_form_for @access do |f|
+  = f.input_with_icon :position, collection: @positions, icon: 'fa-map-marker-alt', label: "New Position", include_blank: false
+  %br
+  = f.button :submit_cancel, 'Move Rule', html: { class: 'btn-primary' }, cancel: :back
+

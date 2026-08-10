@@ -1,0 +1,69 @@
+!!!
+%html
+  %head
+    %meta{content: "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
+    :css
+      /* Email styles need to be inline */
+
+      body {
+        background-image: url('#{@background_image}');
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        font-family: "Helvetica Neue", sans-serif;
+      }
+
+      .container.headline {
+        border-bottom: 1px solid #555555;
+        padding-top: 15px;
+        padding-bottom: 25px;
+
+        .content {
+          background-image: url('#{@logo}');
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: auto;
+
+          font-weight: lighter;
+
+          margin-left: auto;
+          margin-right: auto;
+          width: 200px;
+
+          .headline {
+            font-size: xxx-large;
+            text-align: center;
+          }
+
+          .sub-headline {
+            font-size: medium;
+            text-align: center;
+          }
+        }
+      }
+
+      footer {
+        font-size: smaller;
+        border-top: 1px solid #555555;
+        padding-top: 20px;
+      }
+
+  %body
+
+    .container.headline
+      .content
+        .headline
+          suSSHi
+        .sub-headline
+          Secure Shell Gateway
+
+    = yield
+
+  %footer{style: "color: #555555"}
+    The content of this message is confidential.
+    If you have received it by mistake, please inform us and then delete the message.
+    It is forbidden to copy, forward, or in any way reveal the contents of this message to anyone.
+    The integrity and security of this email cannot be guaranteed.
+    Therefore, the sender will not be held liable for any damage caused by the message.

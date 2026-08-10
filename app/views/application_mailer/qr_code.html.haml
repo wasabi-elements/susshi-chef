@@ -1,0 +1,36 @@
+:css
+  /* Email styles need to be inline */
+
+  h2.title {
+    font-weight: normal;
+  }
+
+  p.qr_code {
+    padding: 20px 20px 20px 0;
+
+    img {
+      border: 1px solid #555555;
+      border-radius: 20px;
+    }
+  }
+
+%h2.title Dear #{@username},
+
+%p you are receiving this email because of your suSSHi account.
+
+%br
+
+%p
+  To enhance the security of your account, please enable two-factor authentication using your mobile authenticator app.
+  %br
+  Please scan the QR code below using your authenticator app:
+
+  %p.qr_code
+    = image_tag @qr_code, alt: "TOTP Secret: #{@totp_secret}", title: "TOTP Secret: #{@totp_secret}"
+
+%p If you have any questions, please contact our support team.
+
+%br
+
+%p Regards,
+%p suSSHi Chef Administrator

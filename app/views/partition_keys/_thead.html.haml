@@ -1,0 +1,15 @@
+%tr.text-nowrap
+  - if sortable
+    %th
+  %th
+  - unless (order_title rescue nil).blank?
+    %th= order_title
+  %th Key-Type
+  %th Key length (bits)
+  %th Fingerprint
+  %th Title
+  - if proxy
+    %th suSSHi Proxy
+  %th Created at
+  %th.text-center Active
+  %th.text-right Action

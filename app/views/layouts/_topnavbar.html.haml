@@ -1,0 +1,22 @@
+.row.border-bottom
+  %nav.navbar.navbar-static-top{:role => "navigation", :style => "margin-bottom: 0"}
+    .navbar-header
+      %a.navbar-minimalize.minimalize-styl-2.btn.btn-primary{:href => "#"}
+        %i.fa.fa-bars
+    %ul.nav.navbar-top-links.navbar-right
+      = render 'layouts/partition'
+      - if content_for(:navbar_subscription)
+        %li
+          - icon = content_for(:navbar_subscription_icon) || "fa fa-bell bell-icon ringing"
+          = link_to main_app.subscriptions_path do
+            %i{class: icon}
+            = content_for(:navbar_subscription)
+      %li
+        = link_to main_app.edit_user_profile_path(User.current_user) do
+          %i.fa.fa-user
+          Edit Profile
+      %li
+        = link_to main_app.destroy_user_session_path, :method => 'delete',
+                  data: { title: "Logout", confirm: 'Are you sure?', commit: 'Sure!'} do
+          %i.fa.fa-sign-out-alt
+          Log out

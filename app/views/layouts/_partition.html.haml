@@ -1,0 +1,45 @@
+%li.dropdown
+  - unless %w(users preferences partitions).include?(params[:controller])
+    - count = current_user.partitions.count
+    - if count > 0
+      - if count > 1
+        - current_partition = current_user.partition
+        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+          %i.fa.fa-cube
+          %span= current_partition.name
+        %ul.dropdown-menu.dropdown-alerts
+          %li
+            - if count > 1
+              = "You are assigned to #{count} partitions. You may change into another partition from here:"
+            - else
+              You are assigned to one partition. Please ask your administrator if this is incorrect.
+          %li.divider
+          %li
+            - current_user.partitions.each do |partition|
+              - if partition == current_partition
+                %a{href: '#'}
+                  %i.fas.fa-check-circle
+                  = partition.name
+              - else
+                %a{href: main_app.user_change_partition_path(user_id: current_user.id, partition_id: partition.id)}
+                  %i.far.fa-circle
+                  = partition.name
+
+    - else
+      %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+        %i.fa.fa-cube
+        %span (Partition missing)
+      %ul.dropdown-menu.dropdown-alerts
+        %li
+          You have to be assigned to at least one partition. Please ask your administrator if you can't fix this on your own.
+
+  - else
+    %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+      %i.fa.fa-cube
+      %span - Not applicable -
+    %ul.dropdown-menu.dropdown-alerts
+      %li
+        %i.fa.fa-warning
+        In this view, partitions are not applicable. If you move on to other non-system menus, selected partition will reappear.
+
+

@@ -1,0 +1,71 @@
+- breadcrumb @profile
+
+= panel do
+  %h3 Profile settings
+  = attributes_table do
+    = row_key_value 'Partition', @profile.partition.name, icon: 'fa-cube'
+    = row_key_value 'Name', @profile.name, icon: 'fa-toggle-on'
+    = row_key_value 'Description', @profile.description, icon: 'fa-info'
+    = row_key_value 'Max Session Time', @profile.MaxSessionSeconds, icon: 'fa-clock'
+    = row_key_value 'Max Idle Time', @profile.MaxSessionIdleSeconds, icon: 'fa-clock'
+    = row_key_value 'Client Authentication Set', @profile.client_auth_set.name, icon: 'fa-key'
+    = row_key_value 'Target Hostkey Learning', @profile.TargetHostKeyLearning_human, icon: 'fa-graduation-cap'
+
+  %h3 Target Authentication
+  = attributes_table do
+    - target_auths = @profile.TargetPreferredAuthentications.join(', ')
+    - target_auths = 'System Default' if target_auths.empty?
+    = row_key_value 'Target Authentications', target_auths, icon: 'fa-key'
+    = row_key_value 'Target Password Source', @profile.TargetPasswordSource_human, icon: 'fa-key'
+    - if %w(static dotp).include?(@profile.TargetPasswordSource) and not @profile.TargetUser.blank?
+      = row_key_value 'Overwrite Target User', @profile.TargetUser, icon: 'fa-user'
+    - if @profile.TargetPasswordSource == 'dotp'
+      = row_key_value 'Target Password Length', @profile.TargetPasswordLength, icon: 'fa-hashtag'
+      = row_key_value 'Max Password Validity Time', @profile.TargetPasswordValidSeconds, icon: 'fa-clock'
+      = row_key_value_block 'Check Target Identity', icon: "fa-toggle-#{@profile.TargetPasswordCheckIdentity ? 'on':'off'}" do
+        = boolean_value(@profile.TargetPasswordCheckIdentity)
+    - if %w(preserve static dotp).include?(@profile.TargetPasswordSource)
+      = row_key_value_block 'Continue with Dialog Auth', icon: "fa-toggle-#{@profile.TargetPasswordContinue ? 'on':'off'}" do
+        = boolean_value(@profile.TargetPasswordContinue)
+
+  %h3 Permissions
+  = attributes_table do
+    = row_key_value_block 'Interactive Session', icon: "fa-toggle-#{@profile.SSHInteractive ? 'on':'off'}" do
+      = boolean_value(@profile.SSHInteractive)
+    = row_key_value_block 'Secure Copy (SCP)', icon: "fa-toggle-#{@profile.SSHSecureCopy ? 'on':'off'}"  do
+      = boolean_value(@profile.SSHSecureCopy)
+    = row_key_value_block 'Secure File Transfer (SFTP)', icon: "fa-toggle-#{@profile.SSHSecureFileTransfer ? 'on':'off'}"  do
+      = boolean_value(@profile.SSHSecureFileTransfer)
+    = row_key_value_block 'Agent Forwarding', icon: "fa-toggle-#{@profile.SSHAgentForward ? 'on':'off'}"  do
+      = boolean_value(@profile.SSHAgentForward)
+    = row_key_value_block 'X11 Forwarding', icon: "fa-toggle-#{@profile.SSHX11Forward ? 'on':'off'}"  do
+      = boolean_value(@profile.SSHX11Forward)
+    = row_key_value_block 'Allow SSH session over TCP forward', icon: "fa-toggle-#{@profile.SSHTcpForwardSsh ? 'on':'off'}"  do
+      = boolean_value(@profile.SSHTcpForwardSsh)
+    = row_key_value_block 'Unix Domain Socket Forwarding', icon: "fa-toggle-#{@profile.SSHSocketForward ? 'on':'off'}"  do
+      = boolean_value(@profile.SSHSocketForward)
+    = row_key_values 'Subsystems', @profile.SSHSessionSubsystems, icon: 'fa-subway'
+    = row_key_values 'Local Forwards', @profile.SSHLocalForwards, icon: 'fa-share'
+    = row_key_values 'Remote Forwards', @profile.SSHRemoteForwards, icon: 'fa-reply'
+    = row_key_values 'Command Execs', @profile.SSHCommandExecs, icon: 'fa-terminal'
+
+  %h3 Logging Mask
+  = attributes_table do
+    = row_key_value_block 'Session Logging', icon: "fa-toggle-#{@logging_mask[:session] ? 'on':'off'}" do
+      = boolean_value(@logging_mask[:session])
+    = row_key_value_block 'Client Input (keystrokes)', icon: "fa-toggle-#{@logging_mask[:tr_client] ? 'on':'off'}" do
+      = boolean_value(@logging_mask[:tr_client])
+    = row_key_value_block 'Target Output (screen output)', icon: "fa-toggle-#{@logging_mask[:tr_target] ? 'on':'off'}" do
+      = boolean_value(@logging_mask[:tr_target])
+    = row_key_value_block 'File Transfer details', icon: "fa-toggle-#{@logging_mask[:filetransfer] ? 'on':'off'}" do
+      = boolean_value(@logging_mask[:filetransfer])
+    = row_key_value_block 'Port Forwardings (.pcap)', icon: "fa-toggle-#{@logging_mask[:portforward] ? 'on':'off'}" do
+      = boolean_value(@logging_mask[:portforward])
+    = row_key_value_block 'X11 Logging (.pcap)', icon: "fa-toggle-#{@logging_mask[:x11] ? 'on':'off'}" do
+      = boolean_value(@logging_mask[:x11])
+    = row_key_value_block 'Auth Agent Logging', icon: "fa-toggle-#{@logging_mask[:agent] ? 'on':'off'}" do
+      = boolean_value(@logging_mask[:agent])
+    = row_key_value_block 'Unix Domain Socket Forwarding', icon: "fa-toggle-#{@logging_mask[:socket] ? 'on':'off'}" do
+      = boolean_value(@logging_mask[:socket])
+
+  = show_action_buttons(@profile, { :destroy => @profile.is_destroyable? })

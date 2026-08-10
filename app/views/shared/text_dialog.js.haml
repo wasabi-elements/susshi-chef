@@ -1,0 +1,1 @@
+$('#dialog_panel').html("#{escape_javascript render(:partial => 'shared/text_dialog', :formats => [:html], :locals => {:text => text || '', :level => (level || :warning)})}").dialog({title: "#{title || 'Error  xxx'}", resizable: true, modal: true, width: 400});

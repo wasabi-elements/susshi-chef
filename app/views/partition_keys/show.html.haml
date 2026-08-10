@@ -1,0 +1,10 @@
+- breadcrumb @partition_key
+
+= attributes_panel do
+  = row_key_value 'Type', @partition_key.human_type, icon: @partition_key.icon
+  = row_key_value 'Title', @partition_key.title, icon: @partition_key.icon
+  = row_key_value 'Key-Type', @partition_key.human_key_type, icon: 'fa-key'
+  = row_key_value 'Key length (bits)', @partition_key.bits, icon: 'fa-expand'
+  = row_key_value 'Fingerprint', @partition_key.fingerprint, icon: 'fa-fingerprint'
+  = row_key_value_block 'Download', icon: 'fa-download' do
+    = link_to "Download Public Key", partition_key_path(@partition_key, format: [:pub])

@@ -1,0 +1,75 @@
+%tr
+  %td.text-center
+    - if session_report.crash
+      %i.fa.fa-exclamation-triangle.text-warning{title: 'This report is marked as incomplete. See details for more information.'}
+    - else
+      %i{class: "fa #{session_report.icon}"}
+  %td.text-nowrap= link_to session_report.susshi_uniqid, session_report_path(session_report)
+  %td{style: 'width: 75px !important;', class: 'text-center'}
+    = link_to session_report do
+      - case session_report.session_state
+      - when 'new'
+        %span.btn.btn-xs.btn-block.btn-success New
+      - when 'active'
+        %span.btn.btn-xs.btn-block.btn-success Active
+      - when 'finished'
+        %span.btn.btn-xs.btn-block.btn-primary
+          Finished
+      - when 'denied'
+        %span.btn.btn-xs.btn-block.btn-danger Denied
+      - when 'failed'
+        %span.btn.btn-xs.btn-block.btn-warning Failed
+  %td= session_report.susshi_user
+  %td.text-right= "#{session_report.get_client_socket}"
+  %td.text-nowrap
+    %i.fa.fa-arrow-right
+    = raw session_report.get_target
+  %td.text-nowrap
+    - unless session_report.proxy_realm.blank?
+      %i.fa.fa-plug
+      =session_report.proxy_realm
+  - if %w(denied failed).include?(session_report.session_state)
+    %td= session_report.message
+  - else
+    %td.text-nowrap
+      - case session_report.operation_mode
+      - when 0
+        = session_feature((session_report.int_accept || 0) > 0, 'I', 'Interactive')
+        = session_feature((session_report.cmd_accept || 0) > 0, 'E', 'Cmd Exec')
+        = session_feature((session_report.agent_accept || 0) > 0, 'A', 'Agent Forward')
+        = session_feature((session_report.scp_sessions || 0) > 0, 'C', 'SCP')
+        = session_feature((session_report.sftp_sessions || 0) > 0, 'F', 'SFTP')
+        = session_feature((session_report.lf_accept || 0) > 0, 'L', 'Local Port Forward')
+        = session_feature((session_report.rf_accept || 0) > 0, 'R', 'Remote Port Forward')
+        = session_feature((session_report.x11_accept || 0) > 0, 'X', 'X11')
+        = session_feature(session_report.client_comp || session_report.target_comp, 'C', 'Compression')
+      - when 1
+        = session_feature(false, 'I', 'Interactive')
+        = session_feature(false, 'E', 'Cmd Exec')
+        = session_feature(false, 'A', 'Agent Forward')
+        = session_feature(false, 'C', 'SCP')
+        = session_feature(false, 'F', 'SFTP')
+        = session_feature((session_report.lf_accept || 0) > 0, 'L', 'Local Port Forward')
+        = session_feature(false, 'R', 'Remote Port Forward')
+        = session_feature(false, 'X', 'X11')
+        = session_feature(session_report.client_comp || session_report.target_comp, 'Z', 'Compression')
+  %td.text-nowrap= session_report.session_start.try(:utc)
+  - if session_report.crash
+    - session_end = session_report.updated_at.try(:utc) + @period
+    %td.text-nowrap= "Up to #{session_end}"
+    %td.text-nowrap= "Up to #{distance_of_time_in_words(session_report.session_start.utc - session_end) rescue ''}"
+  - else
+    %td.text-nowrap
+      = %w(finished denied failed).include?(session_report.session_state) ? (session_report.session_end.try(:utc) || '-') : 'still logged in'
+    %td.text-nowrap
+      - if %w(denied failed).include?(session_report.session_state)
+        0 seconds (no session)
+      - else
+        = distance_of_time_in_words(session_report.session_time) unless session_report.session_time.blank?
+  %td.text-right.text-nowrap
+    - if %w(new active).include?(session_report.session_state)
+      = link_to terminate_session_path(session_report), class: 'btn btn-xs btn-white', title: 'Terminate session',
+        data: { confirm: "This will terminate the running session '#{session_report.susshi_uniqid}' and disconnect the user immediately."} do
+        %i.fa.fa-stop-circle
+
+    = index_action_buttons(session_report, { :edit => false, :destroy => false })

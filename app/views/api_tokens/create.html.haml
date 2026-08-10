@@ -1,0 +1,11 @@
+- breadcrumb @api_token
+
+= message_panel 'You have successfully created an API access token', type: :primary, icon: 'info-circle' do
+  Please copy the API access token to the clipboard and store the token in a safe location.
+
+= attributes_panel @title do
+  = row_key_value 'Partition', @api_token.partition.name, icon: 'fa-cube'
+  = row_key_value 'Application', @api_token.application, icon: 'fa-bolt'
+  = row_key_value 'Description', @api_token.description, icon: 'fa-info-circle'
+  = row_key_value 'Comment', @api_token.comment, icon: 'fa-info'
+  = row_key_value 'API Token', @api_token_hex, icon: 'fa-key'

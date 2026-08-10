@@ -1,0 +1,16 @@
+= simple_form_for(@partition_key) do |f|
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @partition_key.partition.name }, label: 'Partition'
+
+  = f.input_with_icon :title, label: 'Title', icon: 'fa-info-circle'
+
+  = f.input_with_icon :key_type, disabled: true, collection: SshKey.ssh_key_type_collection, label: 'Key Type', icon: 'fa-key'
+  = f.input_with_icon :bits, disabled: true, label: 'Key length (bits)', icon: 'fa-key'
+
+  .checkbox.checkbox-primary
+    = f.input :active, label: 'Key is active'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

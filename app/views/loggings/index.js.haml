@@ -1,0 +1,7 @@
+$('#loggings_thead').html('#{escape_javascript render(:partial => 'thead', :locals => {:download => true})}');
+$('#loggings_body').html('#{escape_javascript render(:partial => 'logging', :collection => @loggings, :locals => {:download => true})}');
+$('#paginator_pager').html('#{escape_javascript(paginate(@loggings, :remote => true).to_s)}');
+$('#paginator_info').html('#{escape_javascript((page_entries_info @loggings).to_s)}');
+$('#load_indicator').hide()
+jQuery(".best_in_place").best_in_place();
+registerMultiSelect();

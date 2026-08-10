@@ -1,0 +1,11 @@
+- breadcrumb :client_auth_sets
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-6
+        = f.text_field :name_cont, placeholder: 'contains', label: 'Name'
+      .col-sm-6
+        = f.text_field :description_cont, placeholder: 'contains', label: 'Description'
+
+= list_panel(:client_auth_sets, @client_auth_sets, @q)

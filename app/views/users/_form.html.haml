@@ -1,0 +1,32 @@
+= simple_form_for(@user) do |f|
+
+  = f.input_with_icon :username, required: true, icon: 'fa-user-circle'
+  = f.input_with_icon :fullname, required: true, icon: 'fa-address-book', label: 'Full Name'
+  = f.input_with_icon :email, label: "Email Address", required: true, icon: 'fa-at'
+  = f.input_with_icon :role, collection: User.roles_collection, include_blank: false, label: 'Role', icon: 'fa-star'
+  = f.input_with_icon :description, icon: 'fa-info-circle'
+  = f.input_with_icon :comment, icon: 'fa-comment'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :password, required: (action_name == 'new' ? true : false), icon: 'fa-key',
+                      hint: "At least #{@user.minimum_password_length} characters, at least 1 digit, at least 1 lowercase alphabet, at least 1 uppercase alphabet, at least 1 special char." + (action_name != 'edit' ?  ' Leave empty to keep password.' : '')
+  = f.input_with_icon :password_confirmation, label: 'Password Confirmation', icon: 'fa-key', required: (action_name == 'new' ? true : false)
+
+  - if Subscription.instance.feature_audit_log_encryption?
+    .hr-line-dashed
+
+    = f.input_with_icon :log_encryption_key, required: false, icon: 'fa-key', label: "Audit Log Encryption Key",
+                        hint: "Optional ED25519 public key for audit log encryption. If set for at least one user, all session logs are encrypted."
+
+    - unless @user.has_role_super?
+      = f.input 'User permission' do
+        .checkbox.checkbox-primary
+          = f.input :lek_self_service, as: :boolean, wrapper: :no_deco, label: 'Allow user to change user key for audit log encryption in their profile'
+
+  .hr-line-dashed
+
+  = f.input_dual :partition_ids, collection: Partition.all, label: 'Partitions'
+  = f.input_with_icon :default_partition_id, collection: Partition.all, label: 'Default Partition', icon: 'fa-cube'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

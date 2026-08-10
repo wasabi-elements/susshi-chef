@@ -1,0 +1,4 @@
+- breadcrumb :accesses, 'New'
+
+= panel do
+  = render Preference.first.flat_access_policies ? 'form_flat' : 'form'

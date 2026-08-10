@@ -1,0 +1,52 @@
+- breadcrumb :swift_changes
+
+= panel do
+  #vertical-timeline.vertical-container.dark-timeline.center-orientation
+
+    .vertical-timeline-block
+      .vertical-timeline-icon.blue-bg
+        %i.fa.fa-wrench
+      .vertical-timeline-content
+        - if @swift_changes.count > 0
+          - if @problems == false
+            %h3= "#{pluralize(@swift_changes.count, 'change')} pending in total."
+            %span.vertical-date Now
+            %p= link_to 'Activate', activate_accesses_path, class: 'btn btn-warning', data: {confirm: 'Are you sure?<br/><br/>Depending on the number of objects, the activation could take some time.<br/><br/>Stay calm!' }
+          - else
+            %h3 Keys missing!
+            %p You have to provide at least one 'active' Partition Host Key and one Partition Authentication Key.
+            %p= link_to 'Follow link to fix it ...', partition_keys_path, class: 'btn btn-info'
+        - else
+          %h3= "No changes pending."
+          %span.vertical-date Now
+
+    - @swift_changes.each do |change|
+      - ago = "#{distance_of_time_in_words_to_now(change.created_at)} ago."
+      - date = "#{change.created_at}"
+      - icon = change.klass.constantize.try(:icon) || 'fa-globe'
+      .vertical-timeline-block
+        .vertical-timeline-icon.yellow-bg
+          %i.fa.fa-wrench
+        .vertical-timeline-content
+          %h3= "Changed #{change.whodunit =~ /API.*/ ? 'via': 'by'} #{change.whodunit}."
+          %span.vertical-date= ago
+          %br/
+          %small= date
+          %p
+            %span= "#{pluralize(change.change_trail.count, 'change')} in:"
+            %ul.fa-ul
+              - change.change_trail.each do |trail|
+                %li
+                  %i{class: "fa-li fa #{icon}"}
+                  = trail
+
+    - if @last_activation
+      - ago = "#{distance_of_time_in_words_to_now(@last_activation.created_at)} ago."
+      .vertical-timeline-block
+        .vertical-timeline-icon.navy-bg
+          %i.fa.fa-check
+        .vertical-timeline-content
+          %h3= "Activated by #{@last_activation.whodunit}."
+          %span.vertical-date= ago
+          %br/
+          %small= @last_activation.created_at

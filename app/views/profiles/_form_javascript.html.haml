@@ -1,0 +1,158 @@
+:javascript
+
+  function UpdateFormOnPrefAuthChange(){
+    selected = $("#profile_TargetPreferredAuthentications_0 option:selected").val();
+
+    if (selected == '') {
+       $('#profile_TargetPreferredAuthentications_optional').fadeOut(0);
+       $("label[for='profile_TargetPreferredAuthentications_0']").text("Pref. Target Authentication");
+       $('#profile_TargetPreferredAuthentications_optional * select').removeAttr("selected");
+       $('#profile_TargetPreferredAuthentications_optional * select').trigger("chosen:updated");
+       $('#agent-auth-hint').fadeOut(0);
+    } else {
+       var found = false;
+       var warning = false;
+       $("label[for='profile_TargetPreferredAuthentications_0']").text("Pref. Target Authentication #1");
+       $('#profile_TargetPreferredAuthentications_optional').fadeIn("slow");
+       $('#profile_TargetPreferredAuthentications_optional * select').Chosen({disable_search: true});
+       $("#auth_selections select option:selected").each(function(index, item) {
+            if ((found) && (($(item).val() == 'password') || ($(item).val() == 'keyboard-interactive'))) {
+                warning = true;
+            }
+            if ($(item).val() == 'publickey-ssh-agent') {
+               found = true;
+            }
+       });
+       if (warning) {
+          $('#agent-auth-hint').fadeIn("slow");
+       } else {
+          $('#agent-auth-hint').fadeOut(0);
+       }
+    }
+
+  }
+
+  function UpdateFormOnTargetSourceChange(){
+    selected = $("#profile_TargetPasswordSource option:selected").val();
+
+    switch(selected) {
+       case "dialog":
+          $("#target_selections_static").fadeOut(0);
+          $("#target_selections_dotp").fadeOut(0);
+          //$("#target_selections_user").fadeOut(0);
+          $("#target_selections_continue").fadeOut(0);
+          break;
+       case "preserve":
+          $("#target_selections_static").fadeOut(0);
+          $("#target_selections_dotp").fadeOut(0);
+          //$("#target_selections_user").fadeOut(0);
+          $("#target_selections_continue").fadeIn("slow");
+          break;
+       case "static":
+          $("#target_selections_static").fadeIn("slow");
+          $("#target_selections_dotp").fadeOut(0);
+          //$("#target_selections_user").fadeIn("slow");
+          $("#target_selections_continue").fadeIn("slow");
+          break;
+       case "dotp":
+          $("#target_selections_static").fadeOut(0);
+          $("#target_selections_dotp").fadeIn("slow");
+          //$("#target_selections_user").fadeIn("slow");
+          $("#target_selections_continue").fadeIn("slow");
+          break;
+       }
+  }
+
+  $("#profile_TargetPreferredAuthentications_optional * select").change(function() {
+     UpdateFormOnPrefAuthChange();
+  });
+
+  $("#profile_TargetPreferredAuthentications_0").change(function() {
+     UpdateFormOnPrefAuthChange();
+  });
+
+  $("#profile_TargetPasswordSource").change(function() {
+     UpdateFormOnTargetSourceChange();
+  });
+
+  UpdateFormOnPrefAuthChange();
+  UpdateFormOnTargetSourceChange();
+
+
+  function UpdateFormOnPrefAuthChange(){
+    selected = $("#profile_TargetPreferredAuthentications_0 option:selected").val();
+
+    if (selected == '') {
+       $('#profile_TargetPreferredAuthentications_optional').fadeOut(0);
+       $("label[for='profile_TargetPreferredAuthentications_0']").text("Pref. Target Authentication");
+       $('#profile_TargetPreferredAuthentications_optional * select').removeAttr("selected");
+       $('#profile_TargetPreferredAuthentications_optional * select').trigger("chosen:updated");
+       $('#agent-auth-hint').fadeOut(0);
+    } else {
+       var found = false;
+       var warning = false;
+       $("label[for='profile_TargetPreferredAuthentications_0']").text("Pref. Target Authentication #1");
+       $('#profile_TargetPreferredAuthentications_optional').fadeIn("slow");
+       $('#profile_TargetPreferredAuthentications_optional * select').Chosen({disable_search: true});
+       $("#auth_selections select option:selected").each(function(index, item) {
+            if ((found) && (($(item).val() == 'password') || ($(item).val() == 'keyboard-interactive'))) {
+                warning = true;
+            }
+            if ($(item).val() == 'publickey-ssh-agent') {
+               found = true;
+            };
+       });
+       if (warning) {
+          $('#agent-auth-hint').fadeIn("slow");
+       } else {
+          $('#agent-auth-hint').fadeOut(0);
+       };
+    }
+
+  };
+
+  function UpdateFormOnTargetSourceChange(){
+    selected = $("#profile_TargetPasswordSource option:selected").val();
+
+    switch(selected) {
+       case "dialog":
+          $("#target_selections_static").fadeOut(0);
+          $("#target_selections_dotp").fadeOut(0);
+          //$("#target_selections_user").fadeOut(0);
+          $("#target_selections_continue").fadeOut(0);
+          break;
+       case "preserve":
+          $("#target_selections_static").fadeOut(0);
+          $("#target_selections_dotp").fadeOut(0);
+          //$("#target_selections_user").fadeOut(0);
+          $("#target_selections_continue").fadeIn("slow");
+          break;
+       case "static":
+          $("#target_selections_static").fadeIn("slow");
+          $("#target_selections_dotp").fadeOut(0);
+          //$("#target_selections_user").fadeIn("slow");
+          $("#target_selections_continue").fadeIn("slow");
+          break;
+       case "dotp":
+          $("#target_selections_static").fadeOut(0);
+          $("#target_selections_dotp").fadeIn("slow");
+          //$("#target_selections_user").fadeIn("slow");
+          $("#target_selections_continue").fadeIn("slow");
+          break;
+       }
+  };
+
+  $("#profile_TargetPreferredAuthentications_optional * select").change(function() {
+     UpdateFormOnPrefAuthChange();
+  });
+
+  $("#profile_TargetPreferredAuthentications_0").change(function() {
+     UpdateFormOnPrefAuthChange();
+  });
+
+  $("#profile_TargetPasswordSource").change(function() {
+     UpdateFormOnTargetSourceChange();
+  });
+
+  UpdateFormOnPrefAuthChange();
+  UpdateFormOnTargetSourceChange();

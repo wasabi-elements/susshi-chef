@@ -1,0 +1,49 @@
+%tr
+  %td.text-center
+    %i.fa{class: target_user.icon, title: target_user.title}
+  %td.text-nowrap
+    - if target_user.system_int
+      = target_user.name
+    - else
+      = link_to target_user.name, polymorphic_path(target_user, { action: 'edit' })
+  %td.text-nowrap
+    - case target_user.type
+    - when 'TargetUserGroup'
+      Group with
+      = object_counter_badge(u = target_user.target_users, color: :default, color_zero: :default, type: :pill, zero_value: 0)
+      = "member".pluralize(u.size)
+    - when 'TargetUserLogin'
+      Regular user login
+    - when 'TargetUserMapping'
+      Match Gateway User on
+      %span.label.label-xs.label-primary= "^#{target_user.regex}$"
+      translate into
+      %span.label.label-xs.label-primary= target_user.translate
+      and match target user with
+      %span.label.label-xs.label-success=  "^#{target_user.regex_target_user}$"
+    - when 'TargetUserRegex'
+      Match Target User on
+      %span.label.label-xs.label-primary= "^#{target_user.regex}$"
+  %td= target_user.description
+  %td.text-center
+    - if target_user.is_a?(TargetUserGroup)
+      = object_counter_badge(target_user.target_users, type: :pill, tooltip: false)
+    - else
+      = object_counter_badge(target_user.target_user_groups, color: :default, tooltip: false, zero_value: "-", zero_blank: true)
+  %td.text-center
+    :ruby
+      accesses = [target_user.accesses, target_user.try(:group_accesses)].compact
+      target_fusions = target_user.try(:target_fusions) || []
+      options = {type: target_user.is_a?(TargetGroup) ? :label : :badge}
+      options.merge!(zero_value: '-', zero_blank: true) if accesses.any?(&:any?) || target_fusions.any?
+    = object_counter_badge(accesses, **options)
+  %td.text-center
+    - if target_user.is_a?(TargetUserLogin)
+      = object_counter_badge(target_fusions, **options)
+    - else
+      = '-'
+  %td.text-center.text-nowrap
+    - if target_user.system_int
+      %span.badge.badge-xs.badge-default System Provided
+  %td.text-right.text-nowrap
+    = index_action_buttons(target_user, {edit: target_user.system_int ? false : true, destroy: is_active_controller('target_users', true) ? target_user.is_destroyable? : false})

@@ -1,0 +1,11 @@
+- breadcrumb @target_group
+
+= panel do
+  = attributes_table do
+    = row_key_value "Partition", @target_group.partition.name, icon: 'fa-cube'
+    = row_key_value 'Group name', @target_group.name, icon: 'fa-star'
+    = row_key_value_block 'Active', icon: 'fa-lightbulb' do
+      = boolean_value(@target_group.active)
+    = row_key_values 'Members', @target_group.targets.collect {|t| link_to t.name, t }, icon: 'fa-server'
+
+  = show_action_buttons(@target_group, { :destroy => @target_group.is_destroyable? })

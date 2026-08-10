@@ -1,0 +1,4 @@
+.row.vcenter
+  .col-sm-11.text-right.m-t-sm
+    %div{:id => ("#{id_prefix}_paginator_pager" rescue "paginator_pager"), class: 'paginator_pager'}
+      = paginate objects, :remote => true, :params => (paginate_params rescue {}), views_prefix: 'layouts'

@@ -1,0 +1,64 @@
+module(load="imrelp" tls.tlslib="openssl")
+module(load="ompgsql")
+<%- if target_module == "omrelp" -%>
+module(load="omrelp" tls.tlslib="openssl")
+<%- end -%>
+
+$template SusshiPostgresFormat,"insert into SystemEvents (Message, Facility, FromHost, Priority, DeviceReportedTime, ReceivedAt, InfoUnitID, SysLogTag) values ('%msg%', %syslogfacility%, '%HOSTNAME%', %syslogpriority%, '%timereported:::date-rfc3339%', '%timegenerated:::date-rfc3339%', %iut%, '%syslogtag%')",STDSQL
+
+template(name="SusshiRemoteForwardFormat" type="list") {
+  constant(value="<")
+  property(name="pri")
+  constant(value=">")
+  property(name="timereported" dateFormat="rfc3339")
+  constant(value=" ")
+  property(name="hostname" position.from="6")
+  constant(value=" ")
+  property(name="syslogtag" position.from="1" position.to="32")
+  property(name="msg" spifno1stsp="on" )
+  property(name="msg")
+}
+
+ruleset(name="relp") {
+  if $syslogtag startswith 'susshid' then {
+    action(
+      type="ompgsql"
+      server="<%= db_config[:host] %>"
+      port="<%= db_config[:port] %>"
+      db="<%= db_config[:database] %>"
+      user="<%= db_config[:username] %>"
+      pwd="<%= db_config[:password] %>"
+      template="SusshiPostgresFormat"
+      queue.type="LinkedList"
+      queue.maxDiskSpace="100M"
+      queue.timeoutEnqueue="0"
+    )
+<%- targets.each do |target| -%>
+    action(
+      type="<%= target_module %>"
+      target="<%= target %>"
+      <%- if target_module == "omfwd" -%>
+      protocol="<%= preference.syslog_proto %>"
+      <%- end -%>
+      port="<%= target_port %>"
+      template="SusshiRemoteForwardFormat"
+      queue.type="LinkedList"
+      queue.maxDiskSpace="100M"
+      queue.timeoutEnqueue="0"
+    )
+<%- end -%>
+  }
+}
+
+input(
+  type="imrelp"
+  port="6514"
+  tls="on"
+  tls.caCert="<%= SSL_DIR %>/ca.pem"
+  tls.myCert="<%= SSL_DIR %>/api.crt"
+  tls.myPrivKey="<%= SSL_DIR %>/api.key"
+  tls.authMode="name"
+  tls.permittedPeer=[<%= tls_permitted_peers %>]
+  ruleset="relp"
+  keepalive="on"
+)

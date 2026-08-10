@@ -1,0 +1,238 @@
+.wrapper.wrapper-content
+  .container
+    %script#dashboard-data{ type: "application/json" }
+      != @chart_data.to_json
+
+    - if @subscription.valid?
+      - subscription_content_for_navbar(@subscription)
+      - unless @subscription.expired?
+        - if @subscription.expires_soon?
+          - days = @subscription.expires_in_days
+          = message_panel 'Your subscription will expire soon', type: :warning, icon: 'exclamation-triangle' do
+            = "Your subscription will expire #{days == 0 ? "today" : "in #{days} day#{"s" if days > 1}"}."
+
+    - else
+      - content_for(:navbar_subscription, "No Subscription")
+
+    .row
+      .col-md-12
+        %h2 Welcome to suSSHi Chef
+
+    .row
+      .col-md-12
+        .tabs-container.margin-bottom-md
+          %ul.nav.nav-tabs
+            %li{class: 'active'}
+              %a{"data-toggle" => "tab", :href => "#tab-1"} Session distribution over 24 hours
+            %li
+              %a{"data-toggle" => "tab", :href => "#tab-2"} Session distribution over 7 days
+          .tab-content
+            #tab-1.tab-pane.active
+              .panel-body
+                .row
+                  .col-sm-9
+                    .flot-chart
+                      #flot-dashboard-chart.flot-chart-content
+                    .row.text-left
+                      .col-xs-2
+                        %span.h4.font-bold.m-t.block.text-primary= Access.count_by_time("true", true)
+                        %small.text-muted.m-b.block Sessions total
+                      .col-xs-2
+                        %span.h4.font-bold.m-t.block.text-success= Access.count_by_time("(session_state = 'active') OR (session_state = 'new')", true)
+                        %small.text-muted.m-b.block Sessions active
+                      .col-xs-2
+                        %span.h4.font-bold.m-t.block.text-info= Access.count_by_time("session_state = 'finished'", true)
+                        %small.text-muted.m-b.block Sessions finished
+                      .col-xs-2
+                        %span.h4.font-bold.m-t.block.text-warning= Access.count_by_time("session_state = 'failed'", true)
+                        %small.text-muted.m-b.block Sessions failed
+                      .col-xs-4
+                        %span.h4.font-bold.m-t.block.text-danger= Access.count_by_time("session_state = 'denied'", true)
+                        %small.text-muted.m-b.block Sessions denied
+                  .col-sm-3
+                    %h2 24 hours
+                    %table.table
+                      %tr
+                        %td
+                          %span.label.label-default T
+                        %td Sessions total
+                      %tr
+                        %td
+                          %span.label.label-primary A
+                        %td Sessions active
+                      %tr
+                        %td
+                          %span.label.label-info T
+                        %td Sessions finished
+                      %tr
+                        %td
+                          %span.label.label-warning F
+                        %td Sessions failed
+                      %tr
+                        %td
+                          %span.label.label-danger D
+                        %td Sessions denied
+
+            #tab-2.tab-pane
+              .panel-body
+                .row
+                  .col-sm-9
+                    .flot-chart
+                      #flot-dashboard-chart-7days.flot-chart-content
+                    .row.text-left
+                      .col-xs-2
+                        %span.h4.font-bold.m-t.block.text-primary= Access.count_by_time_7days("true", true)
+                        %small.text-muted.m-b.block Sessions total
+                      .col-xs-2
+                        %span.h4.font-bold.m-t.block.text-success= Access.count_by_time_7days("(session_state = 'active') OR (session_state = 'new')", true)
+                        %small.text-muted.m-b.block Sessions active
+                      .col-xs-2
+                        %span.h4.font-bold.m-t.block.text-info= Access.count_by_time_7days("session_state = 'finished'", true)
+                        %small.text-muted.m-b.block Sessions finished
+                      .col-xs-2
+                        %span.h4.font-bold.m-t.block.text-warning= Access.count_by_time_7days("session_state = 'failed'", true)
+                        %small.text-muted.m-b.block Sessions failed
+                      .col-xs-4
+                        %span.h4.font-bold.m-t.block.text-danger= Access.count_by_time_7days("session_state = 'denied'", true)
+                        %small.text-muted.m-b.block Sessions denied
+                  .col-sm-3
+                    %h2 7 days
+                    %table.table
+                      %tr
+                        %td
+                          %span.label.label-default T
+                        %td Sessions total
+                      %tr
+                        %td
+                          %span.label.label-primary A
+                        %td Sessions active
+                      %tr
+                        %td
+                          %span.label.label-info T
+                        %td Sessions finished
+                      %tr
+                        %td
+                          %span.label.label-warning F
+                        %td Sessions failed
+                      %tr
+                        %td
+                          %span.label.label-danger D
+                        %td Sessions denied
+
+  - if current_user.partition
+    .container
+      .row
+        .col-md-6
+          .ibox.float-e-margins
+            .ibox-content
+              .row
+                - ap_act = Access.count_for_partition(true)
+                - ap_ina = Access.count_for_partition(false)
+                .col-md-6.text-center
+                  %canvas#doughnut_accesses{:height => "170", :style => "margin: 18px auto 0", :width => "170"}
+                  %h5= "#{ap_act + ap_ina} Total"
+                .col-md-6
+                  %h2 Access Policies
+                  %table.table
+                    %tr
+                      %td
+                        %span.label.label-primary= ap_act
+                      %td Active policies
+                    %tr
+                      %td
+                        %span.label.label-warning= ap_ina
+                      %td Inactive policies
+
+        .col-md-6
+          .ibox.float-e-margins
+            .ibox-content
+              .row
+                .col-md-6.text-center
+                  %canvas#doughnut_gateway_users{:height => "170", :style => "margin: 18px auto 0", :width => "170"}
+                  %h5= "#{SusshiUser.count_for_partition} Total"
+                .col-md-6
+                  %h2 Gateway Users
+                  %table.table
+                    %tr
+                      %td
+                        %span.label.label-primary= SusshiUserLogin.count_for_partition
+                      %td Login Users
+                    %tr
+                      %td
+                        %span.label.label-success= SusshiUserGroup.count_for_partition
+                      %td Login Groups
+
+      .row
+        .col-md-6
+          .ibox.float-e-margins
+            .ibox-content
+              .row
+                .col-md-6.text-center
+                  %canvas#doughnut_target_users{:height => "170", :style => "margin: 18px auto 0", :width => "170"}
+                  %h5= "#{TargetUser.count_for_partition} Total"
+                .col-md-6
+                  %h2 Target Users
+                  %table.table
+                    %tr
+                      %td
+                        %span.label.label-primary= TargetUserLogin.count_for_partition
+                      %td Login
+                    %tr
+                      %td
+                        %span.label.label-default= TargetUserRegex.count_for_partition
+                      %td Regex
+                    %tr
+                      %td
+                        %span.label.label-warning= TargetUserMapping.count_for_partition
+                      %td Mapping
+                    %tr
+                      %td
+                        %span.label.label-success= TargetUserGroup.count_for_partition
+                      %td Groups
+                    %tr.align-target-users-and-targets
+                      %td{colspan: 2, style: 'border-top: 1px solid white;'}
+                        &nbsp;
+        .col-md-6
+          .ibox.float-e-margins
+            .ibox-content
+              .row
+                .col-md-6.text-center
+                  %canvas#doughnut_targets{:height => "170", :style => "margin: 18px auto 0", :width => "170"}
+                  %h5= "#{Target.count_for_partition} Total"
+                .col-md-6
+                  %h2 Targets
+                  %table.table
+                    %tr
+                      %td
+                        %span.label.label-primary= TargetHost.count_for_partition
+                      %td Statics
+                    %tr
+                      %td
+                        %span.label.label-default= TargetDynamic.count_for_partition
+                      %td Dynamics
+                    %tr
+                      %td
+                        %span.label.label-warning= TargetDomain.count_for_partition
+                      %td Domains
+                    %tr
+                      %td
+                        %span.label.label-danger= TargetNetwork.count_for_partition
+                      %td Networks
+                    %tr
+                      %td
+                        %span.label.label-success= TargetGroup.count_for_partition
+                      %td Groups
+
+:css
+  #tab-2 {
+    width: 0;
+    display: grid;
+    visibility:hidden;
+    height: 0;
+  }
+
+  #tab-2.active {
+    width:100%;
+    height:100%;
+    visibility:visible;
+  }

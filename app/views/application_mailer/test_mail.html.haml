@@ -1,0 +1,25 @@
+:css
+  /* Email styles need to be inline */
+
+  h2, h3 {
+    font-weight: normal;
+  }
+
+  div.mailbox {
+    text-align: center;
+    width: fit-content;
+  }
+
+%h2 Congratulations!
+%br
+
+%div.mailbox
+  %img{src: @mailbox}
+  %br
+  %br
+  %h3 You successfully completed the setup!
+
+%br
+
+%p Regards,
+%p suSSHi Chef Administrator

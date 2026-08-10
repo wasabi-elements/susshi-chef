@@ -1,0 +1,19 @@
+- breadcrumb @source_ip
+
+= panel do
+  - case @source_ip.type
+  - when 'SourceIpNet'
+    = attributes_table do
+      = row_key_value "Partition", @source_ip.partition.name, icon: 'fa-cube'
+      = row_key_value 'Type', 'Network', icon: 'fa-network-wired'
+      = row_key_value 'Description', @source_ip.description, icon: 'fa-info'
+      = row_key_value 'Ip address', @source_ip.ip_address, icon: 'fa-network-wired'
+      = row_key_values 'Memberships', @source_ip.source_ip_groups.collect {|group| link_to "#{group.name}", group}, icon: 'fa-globe'
+  - when 'SourceIpGroup'
+    = attributes_table do
+      = row_key_value "Partition", @source_ip.partition.name, icon: 'fa-cube'
+      = row_key_value 'Type', 'Group', icon: 'fa-globe'
+      = row_key_value 'Description', @source_ip.description, icon: 'fa-info'
+      = row_key_values 'Members', @source_ip.source_ip_nets.collect {|net| link_to "#{net.name} [#{net.ip_address}]", net}, icon: 'fa-network-wired'
+
+  = show_action_buttons(@source_ip, { :edit => !@source_ip.system_int, :destroy => @source_ip.is_destroyable? })

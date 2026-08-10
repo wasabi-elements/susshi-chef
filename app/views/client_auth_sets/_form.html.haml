@@ -1,0 +1,72 @@
+= simple_form_for(@client_auth_set, remote: request.xhr?) do |f|
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @client_auth_set.partition.name }, label: 'Partition'
+
+  = f.input_with_icon :name, icon: 'fa-magic'
+  = f.input_with_icon :description, icon: 'fa-info'
+  = f.input_with_icon :comment, icon: 'fa-comment'
+  = f.input_with_icon :auth_logic, icon: 'fa-sign-in-alt', collection: ClientAuthSet.auth_logic_collection,
+                      label: 'Required Methods', include_blank: false
+
+  %fieldset
+    %legend Public Key Authentication
+    = f.simple_fields_for :publickey_client_auth do |c|
+      = c.input :id, as: :hidden
+      = c.input :_destroy, as: :hidden, input_html: {value: ''}
+      = c.input_with_icon :type, label: 'Method', icon: 'fa-key', collection: ClientAuth.publickey_types_collection,
+        include_blank: 'No Public Key Authentication'
+      .publickey_auth_settings
+
+  %fieldset
+    %legend Interactive Authentication
+    = f.simple_fields_for :interactive_client_auth do |c|
+      = c.input :id, as: :hidden
+      = c.input :_destroy, as: :hidden, input_html: {value: ''}
+      = c.input_with_icon :type, label: 'Method', icon: 'fa-key', collection: ClientAuth.interactive_types_collection,
+        include_blank: 'No Interactive Authentication'
+
+      .interactive_auth_settings
+        - ClientAuth.interactive_types.each do |interactive_type|
+          = content_tag :div, id: interactive_type.name, class: :interactive_auth_type_settings do
+            - if interactive_type.const_defined? 'PROPERTIES'
+              - interactive_type.const_get('PROPERTIES').each do |property, options|
+                - next if options.blank?
+
+                - if options[:as] == :password
+                  - (options[:input_html] ||= {}).merge!(value: @client_auth_set.interactive_client_auth.try(property) || options[:default])
+                - if options[:as] == :boolean
+                  - (options[:input_html] ||= {}).merge!(checked: @client_auth_set.interactive_client_auth.try(property) || options[:default] || false)
+                  = f.input options[:title] do
+                    .checkbox.checkbox-primary
+                      = c.input property, wrapper: :no_deco, **options
+                  %br
+                - else
+                  = c.input_with_icon property, **options
+            - if lookup_context.template_exists?(interactive_type.partial_name, 'client_auth_sets', true)
+              = render partial: interactive_type.partial_name, locals: {c: c}
+
+  %fieldset
+    %legend IP Session Cache
+    = f.input 'Caching' do
+      .checkbox.checkbox-primary
+        = f.input :cache_enabled, wrapper: :no_deco, label: 'Enable IP Caching', as: :boolean
+
+    .cache_settings
+      = f.input_with_icon :max_cache_time, label: 'Max. Cache Time', icon: 'fa-clock'
+      = f.input 'Refresh Idle Timer' do
+        .checkbox.checkbox-primary
+          = f.input :cache_refresh, wrapper: :no_deco, label: 'Refresh idle timer on subsequent successful user authentications', as: :boolean
+      #cache_idle_settings
+        = f.input_with_icon :cache_idle_time, label: 'Cache Idle Time', icon: 'fa-clock'
+      = f.input_with_icon :auth_logic_cached, icon: 'fa-sign-in-alt', collection: ClientAuthSet.auth_logic_collection,
+                          label: 'Required Methods (when in cache)', include_blank: false
+      = f.input_with_icon :cache_whitelist_text, label: 'Whitelist', icon: 'fa-network-wired', as: :text,
+        hint: 'Caching is always returning "cached" for source IP addresses matching this list. The entries can be separated by whitespaces or commas.',
+        :input_html => { rows: @client_auth_set.cache_whitelist.try(:count).to_i + 3 }
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back
+
+= render partial: "form_javascript"

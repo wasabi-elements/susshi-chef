@@ -1,0 +1,7 @@
+%tr{:class => cycle('odd','even')}
+  %td= logging.created_at.strftime("%Y/%m/%d %H:%M:%S")
+  %td= logging.severity.try(:capitalize)
+  %td= logging.facility_class.gsub('::', ' / ') rescue '-'
+  %td= logging.logged_type.nil? ? '-' : (link_to logging.logged_name, logging.logged)
+  %td= logging.text
+  %td= logging.user.try(:fullname) || '( Chef System )'

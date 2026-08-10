@@ -1,0 +1,88 @@
+- subscription = Subscription.instance
+- permissions_preset = ["Full Permissions"]
+- permissions_preset << "Dynamic OTP Validation Permissions" if subscription.feature_dynamic_otp?
+- permissions_preset << "Sous Chef Permissions"
+
+= simple_form_for(@api_token) do |f|
+  %h3 General
+  .hr-line-dashed
+  - if %w(new create).include?(params[:action])
+    = f.input_with_icon :partition_id, collection: Partition.all, include_blank: false, label: 'Partition', icon: 'fa-cube'
+    = f.input_with_icon :application, required: true, icon: 'fa-bolt', label: 'Application Name', hint: 'This could not be changed once the token has been created!'
+    = f.fields_for :assist, OpenStruct.new do |a|
+      - a.input_with_icon :permissions_preset, collection: permissions_preset, include_blank: true, label: 'Permissions Preset', icon: 'fa-list'
+  - else
+    = f.input_with_icon :partition_name, disabled: true, input_html: { value: @api_token.partition.name }, label: 'Partition', icon: 'fa-cube'
+    = f.input_with_icon :application, disabled: true, icon: 'fa-bolt'
+    = f.input_with_icon :description, icon: 'fa-info-circle'
+    = f.input_with_icon :comment, icon: 'fa-info'
+
+  %h3 Config API Permissions
+  .hr-line-dashed
+  = f.fields_for :permissions, OpenStruct.new(@api_token.permissions) do |k|
+    - ApiToken.permissions.each do |role, title|
+      - next if %w(operations healths).include?(role)
+      .form-group.boolean.optional
+        = k.label role, required: false, class: 'col-sm-2 control-label string optional', label: title
+        - accesses = @api_token.permissions[role] || ApiToken.default_accesses
+        = k.fields_for role, OpenStruct.new(accesses) do |a|
+          .col-sm-1.checkbox-info
+            = a.input :create, as: :boolean, label: 'Create', required: false, input_html: { class: 'checkbox-warning' }
+          .col-sm-1.checkbox-success
+            = a.input :read, as: :boolean, label: 'Read', required: false
+          .col-sm-1.checkbox-warning
+            = a.input :update, as: :boolean, label: 'Update', required: false
+          .col-sm-1.checkbox-danger
+            = a.input :destroy, as: :boolean, label: 'Delete', required: false
+          - if role == 'susshi_users' && Preference.frontend_totp_available?
+            .col-sm-1.checkbox-success
+              = a.input :totp, as: :boolean, label: 'Include TOTP attributes', required: false
+
+  %h3 Operations API Permissions
+  .hr-line-dashed
+  = f.fields_for :permissions, OpenStruct.new(@api_token.permissions) do |k|
+    .form-group.boolean.optional
+      = k.label :operations, required: false, class: 'col-sm-2 control-label string optional', label: 'Permissions'
+      - accesses = @api_token.permissions['operations'] || ApiToken.default_accesses
+      = k.fields_for 'operations', OpenStruct.new(accesses) do |a|
+        .col-sm-1.checkbox-warning
+          = a.input :update, as: :boolean, label: 'Activate', required: false
+        .col-sm-1.checkbox-success
+          = a.input :read, as: :boolean, label: 'Read', required: false
+
+  %h3 Healths API Permissions
+  .hr-line-dashed
+  = f.fields_for :permissions, OpenStruct.new(@api_token.permissions) do |k|
+    .form-group.boolean.optional
+      = k.label :healths, required: false, class: 'col-sm-2 control-label string optional', label: 'Permissions'
+      - accesses = @api_token.permissions['healths'] || ApiToken.default_accesses
+      = k.fields_for 'healths', OpenStruct.new(accesses) do |a|
+        .col-sm-1.checkbox-success
+          = a.input :read, as: :boolean, label: 'Request', required: false
+
+  %h3 OpenID Connect Integration API Permissions
+  .hr-line-dashed
+  = f.fields_for :permissions, OpenStruct.new(@api_token.permissions) do |k|
+    .form-group.boolean.optional
+      = k.label :healths, required: false, class: 'col-sm-2 control-label string optional', label: 'Permissions'
+      - accesses = @api_token.permissions['oidc'] || ApiToken.default_accesses
+      = k.fields_for 'oidc', OpenStruct.new(accesses) do |a|
+        .col-sm-1.checkbox-success
+          = a.input :read, as: :boolean, label: 'Validate', required: false
+        .col-sm-1.checkbox-warning
+          = a.input :destroy, as: :boolean, label: 'Back-Channel Logout', required: false
+
+  - if subscription.feature_dynamic_otp?
+    %h3 Dynamic OTP Target Authentication API Permissions
+    .hr-line-dashed
+    = f.fields_for :permissions, OpenStruct.new(@api_token.permissions) do |k|
+      .form-group.boolean.optional
+        = k.label :healths, required: false, class: 'col-sm-2 control-label string optional', label: 'Permissions'
+        - accesses = @api_token.permissions['dotp'] || ApiToken.default_accesses
+        = k.fields_for 'dotp', OpenStruct.new(accesses) do |a|
+          .col-sm-1.checkbox-success
+            = a.input :read, as: :boolean, label: 'Validate', required: false
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back
+
+= render partial: "form_javascript"

@@ -1,0 +1,15 @@
+- breadcrumb :api_tokens
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-3
+        = f.select :partition_id_eq, ransack_partitions_selection, :include_blank => true, label: 'Partition'
+      .col-sm-3
+        = f.text_field :application_cont, placeholder: 'contains', label: 'Application Name'
+      .col-sm-3
+        = f.text_field :comment_cont, placeholder: 'contains', label: 'Comment'
+      .col-sm-3
+        = f.text_field :description_cont, placeholder: 'contains', label: 'Description'
+
+= list_panel(:api_tokens, @api_tokens, @q)

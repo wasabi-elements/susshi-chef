@@ -1,0 +1,41 @@
+- breadcrumb :swift_changes_history
+
+= panel do
+  .row
+    = simple_form_for :swift_changes, url: changes_history_accesses_path, :html=> { class: 'auto_submit_on_change' } do |f|
+      = f.input_with_icon :version, collection: SwiftChange.activations_collection, include_blank: true, icon: 'fa-stethoscope', selected: @version
+
+- unless @changes_history.blank?
+  = panel do
+    #vertical-timeline.vertical-container.dark-timeline.center-orientation
+
+      - @changes_history.each do |change|
+        - ago = "#{distance_of_time_in_words_to_now(change.created_at)} ago."
+        - date = "#{change.created_at}"
+        - if change.klass == 'Activation'
+          - ago = "#{distance_of_time_in_words_to_now(change.created_at)} ago."
+          .vertical-timeline-block
+            .vertical-timeline-icon.navy-bg
+              %i.fa.fa-check
+            .vertical-timeline-content
+              %h3= "#{change.change_trail.join(',')}."
+              %span.vertical-date= ago
+              %br/
+              %small= change.created_at
+        - else
+          - icon = change.klass.constantize.try(:icon) || 'fa-globe'
+          .vertical-timeline-block
+            .vertical-timeline-icon.yellow-bg
+              %i.fa.fa-wrench
+            .vertical-timeline-content
+              %h3= "Changed #{change.whodunit =~ /API.*/ ? 'via': 'by'} #{change.whodunit}."
+              %span.vertical-date= ago
+              %br/
+              %small= date
+              %p
+                %span= "#{pluralize(change.change_trail.count, 'change')} in:"
+                %ul.fa-ul
+                  - change.change_trail.each do |trail|
+                    %li
+                      %i{class: "fa-li fa #{icon}"}
+                      = trail

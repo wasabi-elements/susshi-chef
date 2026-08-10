@@ -1,0 +1,15 @@
+= simple_form_for(@susshi_user_group, remote: request.xhr?) do |f|
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @susshi_user_group.partition.name }, label: 'Partition'
+
+  = f.input_with_icon :groupname, required: true, icon: 'fa-users', label: 'Group Name'
+  = f.input_with_icon :description, required: false, icon: 'fa-info', label: 'Description'
+
+  .checkbox.checkbox-primary
+    = f.input :active, label: 'Group is active'
+
+  .hr-line-dashed
+  = f.input_dual :susshi_user_login_ids, collection: SusshiUserLogin.duallist_collection(@susshi_user_group.partition.id), label: 'Members'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

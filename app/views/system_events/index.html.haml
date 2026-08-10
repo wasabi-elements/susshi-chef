@@ -1,0 +1,28 @@
+- breadcrumb :system_events
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    = f.fields_for :assist, OpenStruct.new(@assist) do |a|
+      .row
+        .col-sm-2
+          = f.select :priority_lteq, SystemEvent.log_level_classes, include_blank: true, label: 'Max. Log Level'
+        .col-sm-2
+          = a.text_field :daterange, placeholder: 'between', label: 'Date Range', id: :daterangepicker, value: @daterange
+        .col-sm-2
+          = a.text_field :session_id_cont, placeholder: 'contains', label: 'Session ID', value: @search_session_id
+        .col-sm-3
+          = f.text_field :message_cont, placeholder: 'contains', label: 'Message'
+        .col-sm-2
+          = f.select :fromhost_start, @gateways, include_blank: true, label: 'Gateway / System'
+        .col-sm-1
+          = a.text_field :pid, placeholder: 'equals', label: 'PID', value: @search_pid
+
+= list_panel(:system_events, @system_events, @q)
+
+:javascript
+  $('#daterangepicker').daterangepicker({
+    opens: 'right'
+  }, function(start, end, label) {
+    $('system_event_search#form').submit();
+    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+  });

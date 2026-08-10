@@ -1,0 +1,263 @@
+#!/usr/bin/env bash
+
+SCRIPT=$(basename $0)
+
+# Environment
+
+if [[ $(uname) == "Linux" ]]; then
+  INSTALL_DIR=/opt/wasabi/susshi-chef
+  BUNDLE=/usr/local/rbenv/shims/bundle
+  CRON=/usr/sbin/cron
+  NGINX=/usr/sbin/nginx
+  eval "$(rbenv init -)"
+else
+  INSTALL_DIR=.
+  BUNDLE=bundle
+  NGINX=nginx
+fi
+
+# Usage
+
+usage() {
+  printf "\nUsage:\t$SCRIPT [-D] [-i][ -- (Puma-parameters) ] \n\n\
+\t$SCRIPT backup\n\
+\t$SCRIPT list-backups\n\
+\t$SCRIPT restore-backup <file>\n\n\
+\t$SCRIPT reset-admin-user\n\
+\t$SCRIPT ssl-client-cert-off\n\n\
+\t$SCRIPT -h\n
+\t -D\tremove and recreate database.yml file if exists.\n\
+\t -i\tSetup and initialize database only. Do not create any default objects.\n\
+\t -h\tThis help text.\n\n"
+}
+
+usage_env() {
+  printf "\nENV variables supported: \n\n\
+\t DB_SERVER\t- Hostname or IP address of PostgreSQL database server
+\t DB_DATABASE\t- Name of database, default is chef_production
+\t DB_USERNAME\t- Database user
+\t DB_PASSWORD\t- Database user password\n\n"
+}
+
+prepare_server() {
+  # Create database.yml
+
+  if [[ ! -f config/database.yml ]]; then
+    if [[ -z "$DB_SERVER" || -z "$DB_USERNAME" ]]; then
+      echo "=> You have to specify at least DB_SERVER and DB_USERNAME in env."
+      usage_env
+      exit 1
+    else
+      [[ -z "$DB_DATABASE" ]] && DB_DATABASE="chef_production"
+      [[ -z "$DB_PORT" ]] && DB_PORT=5432
+      [[ -z "$DB_POOL" ]] && DB_POOL=5
+      [[ -z "$DB_TIMEOUT" ]] && DB_TIMEOUT=3000
+
+      {
+        echo "$RAILS_ENV:"
+        echo "  adapter: postgresql"
+        echo "  encoding: unicode"
+        echo "  database: $DB_DATABASE"
+        echo "  host: $DB_SERVER"
+        echo "  port: $DB_PORT"
+        echo "  username: $DB_USERNAME"
+        echo "  password: $DB_PASSWORD"
+        echo "  pool: $DB_POOL"
+        echo "  timeout: $DB_TIMEOUT"
+      } > config/database.yml
+    fi
+  else
+    if [[ -z $CMD ]]; then
+      echo "=> Found database.yml file - using it ..."
+    fi
+  fi
+
+  # Prepare directories
+  mkdir -p $INSTALL_DIR/config/ssl $INSTALL_DIR/log/nginx/api $INSTALL_DIR/log/nginx/sic $INSTALL_DIR/log/nginx/ui
+  chmod 755 $INSTALL_DIR/config/ssl $INSTALL_DIR/log/nginx/api $INSTALL_DIR/log/nginx/sic $INSTALL_DIR/log/nginx/ui
+  chown susshi:susshi $INSTALL_DIR/config/ssl $INSTALL_DIR/log/nginx/api $INSTALL_DIR/log/nginx/sic $INSTALL_DIR/log/nginx/ui
+}
+
+fix_log_permissions() {
+  # Fix directories to be owned by unprivileged user
+  touch $INSTALL_DIR/tmp/puma.pid $INSTALL_DIR/log/$RAILS_ENV.log
+  for p in $INSTALL_DIR/log $INSTALL_DIR/log/$RAILS_ENV.log $INSTALL_DIR/log/nginx $INSTALL_DIR/tmp/puma.pid; do
+    u=$(stat --format '%U' $p 2>/dev/null)
+    if [[ -n "$u" && "$u" != "susshi" ]]; then
+      echo "=> $p is not owned by user 'susshi'. Trying to fix this."
+      chown -R susshi:susshi $p
+      if [[ $(stat --format '%U' $p) == "susshi" ]]; then
+        echo "=> Successfully fixed $p."
+      else
+        echo "=> Failed to fixed $p. Please fix manually."
+      fi
+    fi
+  done
+
+}
+
+# Guards
+
+if [[ ! "$CHEF_MASTER_KEY" =~ ^[A-Za-z0-9]{64}$ ]]; then
+  echo "=> Environment variable 'CHEF_MASTER_KEY' is missing or does not contain exactly 64 alphanumeric characters!"
+  echo "=>   * For example, use 'openssl rand -hex 32' to generate a valid key."
+  exit 1
+fi
+
+# CA Certificates
+
+CA_CERTS_DIR="/usr/local/share/ca-certificates"
+if [[ -d "$CA_CERTS_DIR" && $(ls -A "$CA_CERTS_DIR") ]]; then
+  update-ca-certificates
+fi
+
+cd $INSTALL_DIR
+
+# Rails environment
+[[ -z $RAILS_ENV ]] && export RAILS_ENV=production
+
+if [[ $SCRIPT != "susshi-chef" ]]; then
+  CMD=$SCRIPT
+else
+  CMD=$1
+  [[ $CMD = "restore-backup" ]] && shift
+fi
+
+prepare_server
+fix_log_permissions
+
+# Rails Tasks
+
+case $CMD in
+  "backup")
+        $BUNDLE exec rails chef:backup_db
+        exit $?
+        ;;
+  "list-backups")
+        $BUNDLE exec rails chef:backup_db_list
+        exit $?
+        ;;
+  "restore-backup")
+        [[ -z "${1}" ]] && echo "Please specify a file to be recovered from." && exit 1
+        $BUNDLE exec rails chef:restore_db file=${1}
+        exit $?
+        ;;
+  "ssl-client-cert-off")
+        $BUNDLE exec rails chef:ssl_client_cert_off
+        exit $?
+        ;;
+  "reset-admin-user")
+        $BUNDLE exec rails chef:reset_admin_user
+        exit $?
+        ;;
+esac
+
+while getopts hdDi opt
+do
+    case $opt in
+	  "h")
+        usage
+        exit 0
+		;;
+    "D")
+        echo "Removing database.yml ..."
+        rm config/database.yml 2>/dev/null
+        ;;
+    "d")
+        if [[ -z $LOG_LEVEL ]]; then
+          export LOG_LEVEL=info
+        else
+          export LOG_LEVEL=debug
+        fi
+        ;;
+    "i")
+        SETUP_ONLY="yes"
+        ;;
+    *)
+        usage
+        exit 1
+    		;;
+    esac
+done
+
+shift $(expr $OPTIND - 1)
+PUMAPARAMS=$*
+
+if [[ -z $LOG_LEVEL ]]; then
+  # Log to STDOUT in Container setup
+  export RAILS_LOG_TO_STDOUT=true
+fi
+
+if [[ -n $SETUP_ONLY ]]; then
+  echo "=> Setting up database and exiting."
+  su -s /bin/bash susshi -c "$BUNDLE exec rails chef:db_setup"
+  exit 0
+fi
+
+if [[ -n $LOG_LEVEL ]]; then
+  echo "=> Enabled logging to $INSTALL_DIR/log/$RAILS_ENV.log with Log-Level set to '$LOG_LEVEL'."
+fi
+
+# suSSHi Chef Setup
+su -s /bin/bash susshi -c "$BUNDLE exec rails chef:setup"
+[[ $? -ne 0 ]] && echo "Chef setup failed, aborting. Please collect all logs for a support case." && exit 1
+
+# Prepare /etc/protocols and /etc/services for RADIUS
+grep -qF "# suSSHi Chef |" /etc/protocols 2>/dev/null || cat <<EOF >>/etc/protocols
+udp     17      UDP             # suSSHi Chef | User Datagram [RFC768,JBP]
+EOF
+
+grep -qF "# suSSHi Chef  |" /etc/services 2>/dev/null || cat <<EOF >>/etc/services
+radius          1812/tcp                        # suSSHi Chef | RADIUS [RFC2865]
+radius          1812/udp                        # suSSHi Chef | RADIUS [RFC2865]
+radius-acct     1813/tcp                        # suSSHi Chef | RADIUS Accounting [RFC2866]
+radius-acct     1813/udp                        # suSSHi Chef | RADIUS Accounting [RFC2866]
+EOF
+
+# Fix log permissions (again) if anything is logged by rake tasks so far
+fix_log_permissions
+
+# Services
+
+echo "=> Starting CRON ..."
+$CRON
+[[ $? -ne 0 ]] && echo "... failed. Aborting" && exit 1
+su -s /bin/bash susshi -c "RAILS_ENV=$RAILS_ENV $BUNDLE exec whenever --update-cron >/dev/null" # config/schedule.rb
+
+echo "=> Starting NGINX ..."
+cat <<EOF >/opt/wasabi/susshi-chef/config/nginx/conf.d/ui-ssl-proto.conf
+    ssl_protocols       ${NGINX_SSL_PROTOCOLS:-TLSv1.2 TLSv1.3};
+    ssl_ciphers         ${NGINX_SSL_CIPHERS:-ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384};
+EOF
+$NGINX
+[[ $? -ne 0 ]] && echo "... failed. Aborting" && exit 1
+
+echo "=> Starting PUMA ..."
+export RAILS_SERVE_STATIC_FILES=true
+[[ -z $PUMAPARAMS ]] && PUMAPARAMS="-w 3 --preload"
+su -s /bin/bash susshi -c "RAILS_ENV=$RAILS_ENV $BUNDLE exec puma --pidfile $INSTALL_DIR/tmp/puma.pid $PUMAPARAMS" &
+[[ $? -ne 0 ]] && echo "... failed. Aborting" && exit 1
+
+# Health Monitoring
+
+while /bin/true; do
+  sleep 30
+
+  pgrep nginx >/dev/null
+  if [[ $? -ne 0 ]]; then
+    echo "!!! NGINX terminated !!!"
+    exit 1
+  fi
+
+  pgrep -f puma >/dev/null
+  if [[ $? -ne 0 ]]; then
+    echo "!!! PUMA terminated !!!"
+    exit 1
+  fi
+
+  pgrep cron >/dev/null
+  if [[ $? -ne 0 ]]; then
+    echo "!!! CRON terminated !!!"
+    exit 1
+  fi
+done

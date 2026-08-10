@@ -1,0 +1,2 @@
+$("#modal-dialog").html("#{escape_javascript(modal("Move Access Rule ##{@access.id} (#{@access.name.blank? ? 'no policy title given' : @access.name})") do render(partial: 'form_move_dialog') end)}");
+registerDynamics();

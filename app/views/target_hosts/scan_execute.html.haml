@@ -1,0 +1,36 @@
+- breadcrumb :target_hosts, 'Scan Results'
+
+= panel("Scan results for #{@ip.network.to_string}") do
+  = simple_form_for :target_hosts, url: process_scan_target_hosts_path do |f|
+    - @results.each_with_index do |result,index|
+      = f.simple_fields_for "#{index}" do |i|
+        = attributes_table do
+          = i.input :host_id, as: :hidden, input_html: { value: result[:host_id] }
+          = row_key_value 'Hostname', result[:hostname], icon: 'fa-globe'
+          = i.input :hostname, as: :hidden, input_html: { value: result[:hostname] }
+
+          = row_key_value 'IP Address', result[:ip], icon: 'fa-globe'
+          = i.input :ip, as: :hidden, input_html: { value: result[:ip] }
+
+          - unless result[:proxy].blank?
+            = row_key_value 'Via Proxy', result[:proxy].human_name, icon: 'fa-globe'
+            = i.input :proxy_id, as: :hidden, input_html: { value: result[:proxy].id }
+
+          = i.simple_fields_for 'keys' do |k|
+            - result[:keys].each do |key, value|
+              = row_key_value "#{key}", "#{value['fingerprint']}", icon: 'fa-key'
+              = k.input key, as: :hidden, input_html: { value: value['base64'] }
+          - if result[:changed]
+            = row_key_value_block (result[:host_id] ? 'Update' : 'Create') do
+              .checkbox.checkbox-primary
+                = i.input :create, as: :boolean, wrapper: :no_deco, label: result[:host_id] ? 'Update existing host' : 'Create new host', boolean_style: :inline, input_html: { checked: true }
+          - else
+            = row_key_value 'Unchanged', "Neither the host name nor the host keys have changed.", icon: 'fa-globe'
+
+    .hr-line-dashed
+
+    = f.simple_fields_for 'group' do |g|
+      = g.input_dual :ids, collection: TargetGroup.duallist_collection(current_user.partition.id), label: 'Add to existing groups'
+      = g.input :name, label: 'Create a new group', hint: 'If non-empty, a group with given name will be created containing all hosts of this scan.'
+
+    = f.button :submit_cancel, 'Create & Update hosts!', html: { class: 'btn-primary' }, cancel: scan_target_hosts_path

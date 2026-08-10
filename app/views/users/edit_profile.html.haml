@@ -1,0 +1,22 @@
+- breadcrumb @user
+
+= panel("Edit Profile of '#{@user.username}'") do
+  = simple_form_for(@user, url: update_user_profile_path, method: :put)  do |f|
+
+    = f.input_with_icon :default_partition_id, collection: @user.partitions, label: 'Default Partition', icon: 'fa-cube'
+
+    = f.input_with_icon :email, label: "Email Address", required: true, icon: 'fa-at'
+
+    .hr-line-dashed
+
+    = f.input_with_icon :password, required: false, icon: 'fa-key',
+                        hint: "At least #{@user.minimum_password_length} characters, at least 1 digit, at least 1 lowercase alphabet, at least 1 uppercase alphabet, at least 1 special char."
+    = f.input_with_icon :password_confirmation, label: 'Password Confirm', icon: 'fa-key', required: false
+
+    - if @user.lek_self_service || @user.has_role_super?
+      .hr-line-dashed
+
+      = f.input_with_icon :log_encryption_key, required: false, icon: 'fa-key', label: "Audit Log Encryption Key",
+                          hint: "Optional ED25519 public key for audit log encryption. If set for at least one user, all session logs are encrypted."
+
+    = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

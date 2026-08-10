@@ -1,0 +1,31 @@
+%tr
+  %td.text-center
+    %i.fa{class: source_ip.icon, title: source_ip.title}
+  %td.text-nowrap
+    - if source_ip.system_int
+      = source_ip.name
+    - else
+      = link_to source_ip.name, polymorphic_path(source_ip, {action: 'edit'})
+  %td= source_ip.ip_address
+  %td= source_ip.description
+  %td.text-center
+    = source_ip.respond_to?(:version_label) ? source_ip.version_label : '-'
+  %td.text-center
+    - if source_ip.is_a?(SourceIpGroup)
+      = object_counter_badge(source_ip.source_ip_nets, type: :pill, tooltip: false)
+    - else
+      = object_counter_badge(source_ip.source_ip_groups, color: :default, tooltip: false, zero_value: '-', zero_blank: true)
+  %td.text-center
+    :ruby
+      accesses = [source_ip.accesses, source_ip.try(:group_accesses)].compact
+      bastions = [source_ip.bastions, source_ip.try(:group_bastions)].compact
+      options = {type: source_ip.is_a?(SourceIpGroup) ? :label : :badge}
+      options.merge!(zero_value: '-', zero_blank: true) if accesses.any?(&:any?) || bastions.any?(&:any?)
+    = object_counter_badge(accesses, **options)
+  %td.text-center
+    = object_counter_badge(bastions, **options)
+  %td.text-center.text-nowrap
+    - if source_ip.system_int
+      %span.badge.badge-xs.badge-default System Provided
+  %td.text-right.text-nowrap
+    = index_action_buttons(source_ip, {edit: !source_ip.system_int, destroy: is_active_controller('source_ips', true) ? source_ip.is_destroyable? : false})

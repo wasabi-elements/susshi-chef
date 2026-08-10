@@ -1,0 +1,50 @@
+%tr
+  %td.text-center
+    %i.fa{class: target.icon, title: target.title}
+  %td.text-nowrap= link_to target.name, polymorphic_path(target, {action: 'edit'})
+  - if @any_proxy
+    %td= value_not_blank(target.proxy.try(:human_name))
+  - case target.type
+    - when 'TargetHost'
+      %td
+        = target.target_sockets.collect {|s| s.ip_address}.join(', ')
+    - when 'TargetDomain'
+      %td
+        = "*.#{target.name}"
+    - when 'TargetNetwork'
+      %td
+        = target.network
+    - else
+      %td -
+  %td= target.description
+  %td.text-center
+    - if %w[TargetDynamic TargetHost].include?(target.type)
+      = object_counter_badge(target.target_host_keys, color_zero: :default)
+    - else
+      = "-"
+  %td.text-center
+    - if %w[TargetDomain TargetDynamic TargetHost TargetNetwork].include?(target.type)
+      = object_counter_badge(target.target_user_host_keys, color_zero: :default)
+    - else
+      = "-"
+  %td.text-center
+    - if target.is_a?(TargetGroup)
+      = object_counter_badge(target.members, type: :pill, tooltip: false)
+    - else
+      = object_counter_badge(target.memberships, color: :default, tooltip: false, zero_value: "-", zero_blank: true)
+  %td.text-center
+    :ruby
+      accesses = [target.accesses, target.try(:group_accesses)].compact
+      target_fusions = target.try(:target_fusions) || []
+      options = {type: target.is_a?(TargetGroup) ? :label : :badge}
+      options.merge!(zero_value: '-', zero_blank: true) if accesses.any?(&:any?) || target_fusions.any?
+    = object_counter_badge(accesses, **options)
+  %td.text-center
+    - if target.is_a?(TargetGroup)
+      = '-'
+    - else
+      = object_counter_badge(target_fusions, **options)
+  %td.text-center
+    = boolean_value(target.active)
+  %td.text-right.text-nowrap
+    = index_action_buttons(target, {destroy: is_active_controller('targets', true) ? target.is_destroyable? : false})

@@ -1,0 +1,17 @@
+- breadcrumb :source_ips
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-2
+        = f.select :type_eq, SourceIp.types_collection, include_blank: true, label: 'Type'
+      .col-sm-4
+        = f.text_field :name_cont, placeholder: 'contains', label: 'Name'
+      .col-sm-2
+        = f.text_field :ip_address_cont, placeholder: 'contains', label: 'IP Address'
+      .col-sm-2
+        = f.text_field :description_cont, placeholder: 'contains', label: 'Description'
+      .col-sm-2
+        = f.select :version_eq, SourceIp.versions_collection, include_blank: true, label: 'Version'
+
+= list_panel(:source_ips, @source_ips, @q)

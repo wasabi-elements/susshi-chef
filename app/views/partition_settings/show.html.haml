@@ -1,0 +1,110 @@
+- breadcrumb @partition_setting
+
+= panel do
+  %h3 Information
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value 'Partition', @partition_setting.partition.name, icon: 'fa-cube'
+
+  %h3 Network Settings
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value 'Address family', @partition_setting.AddressFamily, icon: 'fa-globe'
+    = row_key_values 'Listening Ports', @partition_setting.ListenPorts, icon: 'fa-ship'
+    = row_key_values 'DNS search domains', @partition_setting.DnsSearchDomains, icon: 'fa-globe'
+    = row_key_value 'Embryonic throttle start', @partition_setting.MaxEmbryonics_start, icon: 'fa-hashtag'
+    = row_key_value 'Embryonic throttle rate', @partition_setting.MaxEmbryonics_rate, icon: 'fa-percent'
+    = row_key_value 'Embryonic throttle max', @partition_setting.MaxEmbryonics_max, icon: 'fa-hashtag'
+    = row_key_value 'Embryonic gracetime', @partition_setting.EmbryonicGraceTime, icon: 'fa-clock'
+    = row_key_values 'Forbidden Target IPs', @partition_setting.DenyTargetAddresses, icon: 'fa-plug'
+
+  %h3 Logging & Reporting
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value 'System logfile', @partition_setting.SystemLogFile, icon: 'fa-file-alt'
+    = row_key_value 'System log facility', @partition_setting.SystemLogFacility, icon: 'fa-water'
+    = row_key_value 'Session logfile', @partition_setting.SessionLogFile, icon: 'fa-file-alt'
+    = row_key_value 'Session log facility', @partition_setting.SessionLogFacility, icon: 'fa-water'
+    = row_key_value 'Audit logfile', @partition_setting.AuditLogFile, icon: 'fa-file-alt'
+    = row_key_values 'Exec log stop-pattern', @partition_setting.ExecLogStopPatterns, icon: 'fa-asterisk'
+    = row_key_value 'Exec log max-size', @partition_setting.ExecLogFileMaxsize, icon: 'fa-expand'
+    = row_key_value 'Report period', @partition_setting.ReportPeriod, icon: 'fa-clock'
+
+  %h3 User Key Types
+  .hr-line-dashed
+  = attributes_table do
+    - key_types = SshKey.ssh_key_type_with_len_collection.select{|c| @partition_setting.AllowedUserKeyTypes.include?(c.second)}.map{|c| c.first}
+    = row_key_values 'Allowed User Key Types', key_types, icon: 'fa-key'
+
+  %h3 Public Key Algorithms
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_values 'Allowed Public Key Algorithms', @partition_setting.PublicKeyAlgorithms, icon: 'fa-key'
+
+  %h3 Client Settings
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value 'Login grace-time', @partition_setting.LoginGraceTime, icon: 'fa-clock'
+    = row_key_value 'Max. interactive authentication failures', @partition_setting.MaxAuthFails, icon: 'fa-ban'
+    = row_key_value 'Authentication block duration', "#{@partition_setting.BlockAuthSeconds} seconds", icon: 'fa-clock'
+    = row_key_value_block 'Login banner', icon: 'fa-sign-in-alt' do
+      %pre
+        %code
+          = @partition_setting.Banner
+    = row_key_values 'Preferred Authentications', @partition_setting.PreferredAuthentications, icon: 'fa-key'
+    = row_key_value 'Password Split-String', @partition_setting.PasswordSplitString, icon: 'fa-divide'
+    = row_key_value_block 'Client compression' do
+      = boolean_value(@partition_setting.ClientCompression)
+    = row_key_value_block 'Client TCP keepalive' do
+      = boolean_value(@partition_setting.ClientTcpKeepalive)
+    = row_key_value_block 'Client Hostkey update' do
+      = boolean_value(@partition_setting.ClientHostKeyUpdate)
+    = row_key_value_block 'Verbose Disconnect Messages' do
+      = boolean_value(@partition_setting.VerboseDisconnect)
+
+  %h3 Target Settings
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_value 'Login grace-time', @partition_setting.LoginGraceTime, icon: 'fa-clock'
+    = row_key_value 'Target connection timeout', @partition_setting.TargetConnectionTimeout, icon: 'fa-clock'
+    = row_key_value_block 'Preserve client banner' do
+      = boolean_value(@partition_setting.PreserveClientBanner)
+    = row_key_values 'Preferred Authentications', @partition_setting.TargetPreferredAuthentications, icon: 'fa-key'
+    = row_key_value 'Target pref. address family', @partition_setting.TargetPreferredAddressFamily, icon: 'fa-globe'
+    = row_key_value_block 'Target compression' do
+      = boolean_value(@partition_setting.TargetCompression)
+    = row_key_value_block 'Target TCP keepalive' do
+      = boolean_value(@partition_setting.TargetTcpKeepAlive)
+    = row_key_value_block 'Set suSSHi environment variables on target' do
+      = boolean_value(@partition_setting.TargetPassSusshiInformation)
+
+  %h3 Packet Ciphers
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_values 'Client Ciphers', @partition_setting.ClientCiphers, icon: 'fa-key'
+    = row_key_values 'Target Ciphers (by preference)', @partition_setting.TargetCiphers, icon: 'fa-key'
+
+  %h3 Packet Hash Algorithms
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_values 'Client Hash Algorithms', @partition_setting.ClientHmacs, icon: 'fa-signature'
+    = row_key_values 'Target Hash Algorithms', @partition_setting.TargetHmacs, icon: 'fa-signature'
+
+  %h3 KEX Algorithms
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_values 'Client Side KEX Algorithms', @partition_setting.ClientKexAlgorithms, icon: 'fa-key'
+    = row_key_values 'Target Side KEX Algorithms (by preference)', @partition_setting.TargetKexAlgorithms, icon: 'fa-key'
+
+  %h3 Hostkey Algorithms
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_values 'Client Side Hostkey Algorithms', @partition_setting.ClientHostkeyAlgorithms, icon: 'fa-key'
+    = row_key_values 'Target Side Hostkey Algorithms (by preference)', @partition_setting.TargetHostkeyAlgorithms, icon: 'fa-key'
+
+  %h3 Proxy Settings
+  .hr-line-dashed
+  = attributes_table do
+    = row_key_values 'Gateway Addresses', @partition_setting.GatewayAddresses, icon: 'fa-plug'
+
+  = show_action_buttons(@partition_setting, destroy: false)

@@ -1,0 +1,38 @@
+= simple_form_for(@target_user, remote: request.xhr?) do |f|
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @target_user.partition.name }, label: 'Partition'
+
+  - case @target_user.type
+
+  - when 'TargetUserLogin'
+    = f.input_with_icon :name, icon: 'fa-user', label: 'Username'
+    = f.input_with_icon :description, icon: 'fa-info'
+    .hr-line-dashed
+    = f.input_dual :target_user_group_ids, collection: TargetUserGroup.duallist_collection(@target_user.partition.id), label: 'Memberships'
+
+  - when 'TargetUserRegex'
+    = f.input_with_icon :name, icon: 'fa-user', label: 'Title'
+    = f.input_with_icon :description, icon: 'fa-info'
+    = f.input_with_icon :regex, icon: 'fa-percent', label: 'Match Pattern'
+    .hr-line-dashed
+    = f.input_dual :target_user_group_ids, collection: TargetUserGroup.duallist_collection(@target_user.partition.id), label: 'Memberships'
+
+  - when 'TargetUserMapping'
+    = f.input_with_icon :name, icon: 'fa-user', label: 'Title'
+    = f.input_with_icon :description, icon: 'fa-info'
+    = f.input_with_icon :regex, icon: 'fa-percent', label: 'Gateway User Match Pattern', hint: 'PCRE regular expression syntax.'
+    = f.input_with_icon :translate, icon: 'fa-percent', label: 'Translation', hint: 'Translation pattern references to Gateway User match pattern with back-references like $1 ....'
+    = f.input_with_icon :regex_target_user, icon: 'fa-percent', label: 'Target User Match', hint: 'Please use %translated% to insert the translated and escaped gateway user string into pattern.'
+    .hr-line-dashed
+    = f.input_dual :target_user_group_ids, collection: TargetUserGroup.duallist_collection(@target_user.partition.id), label: 'Memberships'
+
+  - when 'TargetUserGroup'
+    = f.input_with_icon :name, icon: 'fa-users', label: 'Group Name'
+    = f.input_with_icon :description, icon: 'fa-info'
+    .hr-line-dashed
+    = f.input_dual :target_user_ids, collection: TargetUser.where(partition_id: @target_user.partition.id).where.not(type: 'TargetUserGroup').order(:name).all.pluck(:name, :id), label: 'Members'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

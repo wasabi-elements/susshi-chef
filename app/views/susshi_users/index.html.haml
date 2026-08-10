@@ -1,0 +1,21 @@
+- breadcrumb :susshi_users
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-2
+        = f.select :type_eq, SusshiUser.types_collection, include_blank: true, label: 'Type'
+      .col-sm-2
+        = f.text_field :name_cont, placeholder: 'contains', label: 'Name'
+      .col-sm-2
+        = f.text_field :fullname_cont, placeholder: 'contains', label: 'Full Name / Description'
+      .col-sm-2
+        = f.text_field :email_cont, placeholder: 'contains', label: 'eMail Address'
+      .col-sm-2
+        = f.select :active_eq, SusshiUser.active_collection, include_blank: true, label: 'Active'
+      .col-sm-1
+        = f.select :last_use_at_gteq, SusshiUser.last_use_at_collection, include_blank: true, label: 'Last access'
+      .col-sm-1
+        = f.select :password_present, SusshiUser.password_collection, include_blank: true, label: 'Password'
+
+= list_panel(:susshi_users, @susshi_users, @q)

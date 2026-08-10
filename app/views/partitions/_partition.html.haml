@@ -1,0 +1,13 @@
+%tr
+  %td
+    %i.fa.fa-cube
+  %td= link_to partition.name, edit_partition_path(partition)
+  %td= partition.comment
+  %td.text-center
+    = object_counter_badge(partition.users, tooltip: false)
+  %td.text-center
+    = object_counter_badge(partition.pending_swift_changes, tooltip: false, color: :warning, zero_blank: true, zero_value: "-")
+  %td.text-right.text-nowrap
+    = index_action_buttons(partition, {destroy: false})
+    - if is_active_controller('partitions', true)
+      = index_action_buttons(partition, {edit: false, show: false, data: {confirm: 'Are you sure?', verify: 'yes', verify_text: 'This will delete the partition with all its settings, gateways, profiles and reports. This cannot be undone. Type "yes" to confirm.'}})

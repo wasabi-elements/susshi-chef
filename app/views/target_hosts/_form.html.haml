@@ -1,0 +1,47 @@
+= simple_form_for(@target_host, remote: request.xhr?) do |f|
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @target_host.partition.name }, label: 'Partition'
+
+  = f.input_with_icon :hostname, icon: 'fa-server', label: 'Object Name'
+  = f.input_with_icon :description, icon: 'fa-info'
+
+  - if Proxy.any?
+    = f.input_with_icon :proxy_id, collection: Proxy.all_collection,
+               icon: 'fa-plug', label: 'Proxy', include_blank: true
+
+  .checkbox.checkbox-primary
+    = f.input :active, label: 'Target is active'
+
+  .hr-line-dashed
+
+  = f.simple_fields_for :target_sockets, dynamic: true do |s|
+    = s.input_with_icon :ip_address, icon: 'fa-cloud', label: 'IP Address'
+    = remove_fields_link_helper s, 'Remove'
+
+  = add_fields_link_helper f, :target_sockets, 'Add Target IP address'
+
+  .hr-line-dashed
+
+  = f.simple_fields_for :target_host_keys, dynamic: true do |k|
+    = k.input :public_blob, label: 'Public Hostkey', input_html: {rows: 8}, hint: "Supported formats are PKCS1 (e.g. openSSH's knownhosts file), PKCS8 and SSH Public Key File Format (RFC4716)."
+    = remove_fields_link_helper k, 'Remove'
+
+  = add_fields_link_helper f, :target_host_keys, 'Add Hostkey'
+
+  .row
+    .col-sm-10.col-sm-offset-2.margin-bottom-sm#host_key_errors
+
+  .row
+    .col-sm-10.col-sm-offset-2.margin-bottom-sm
+      = link_to 'Gather public SSH Hostkey from Target', 'javascript:GatherHostkey()', class: 'btn btn-default'
+
+  .hr-line-dashed
+
+  = f.input_dual :target_group_ids, collection: TargetGroup.duallist_collection(@target_host.partition.id), label: 'Memberships'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back
+
+= render(:partial => 'form_javascript')

@@ -1,0 +1,13 @@
+%tr
+  %th
+  %th= sortable_link query, :susshi_uniqid, 'Session ID'
+  %th= sortable_link query, :session_state, 'State'
+  %th= sortable_link query, :susshi_user, 'User'
+  %th.text-right= sortable_link query, :client_ip, 'Client'
+  %th= sortable_link query, :target_ip, 'Target'
+  %th.text-nowrap= sortable_link query, :proxy, 'Proxy Realm'
+  %th Features / Message
+  %th= sortable_link query, :session_start, 'Start'
+  %th= sortable_link query, :session_end, 'End'
+  %th= sortable_link query, :session_time, 'Duration'
+  %th.text-right Action

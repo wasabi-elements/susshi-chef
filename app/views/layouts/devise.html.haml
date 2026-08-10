@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %title= strip_tags(content_for?(:title) ? 'suSSHi Chef - '+yield(:title) : 'suSSHi Chef by Wasabi Elements GmbH')
+    = javascript_include_tag "application"
+    = csrf_meta_tag
+    = raw javascript_include_view_js
+    = yield :javascripts
+    = stylesheet_link_tag 'application'
+
+  %body.md-skin.login
+    #wrapper{:class => "#{controller_name}.#{action_name}"}
+      .row
+        .col-md-12.margin-bottom-lg
+        .col-md-12.margin-bottom-lg
+      .middle-box.text-center.loginscreen.animated.fadeInDown.margin-bottom-lg
+        %img{:alt => "susshi", :src => "#{image_url 'susshi_logo_login.png'}", :style => 'opacity: 1.0', width: "200px"}
+        = yield
+        %h4 Copyright &copy #{CHEF_CONFIG['copyright']}

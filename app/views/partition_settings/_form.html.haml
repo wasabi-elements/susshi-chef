@@ -1,0 +1,317 @@
+= simple_form_for(@partition_setting) do |f|
+  = f.error_notification
+  .tabs-container.margin-bottom-md
+    .tabs-top
+      %ul.nav.nav-tabs
+        %li.active
+          %a{"data-toggle" => "tab", :href => "#tab-1"} Network
+        %li
+          %a{"data-toggle" => "tab", :href => "#tab-2"} Logging & Reporting
+        %li
+          %a{"data-toggle" => "tab", :href => "#tab-3"} User Key Types
+        %li
+          %a{"data-toggle" => "tab", :href => "#tab-4"} Public Key Algorithms
+        %li
+          %a{"data-toggle" => "tab", :href => "#tab-5"} Client Sessions
+        %li
+          %a{"data-toggle" => "tab", :href => "#tab-6"} Target Sessions
+        %li
+          %a{"data-toggle" => "tab", :href => "#tab-7"} Ciphers
+        %li
+          %a{"data-toggle" => "tab", :href => "#tab-8"} Hash Algorithms
+        %li
+          %a{"data-toggle" => "tab", :href => "#tab-9"} KEX Algorithms
+        %li
+          %a{"data-toggle" => "tab", :href => "#tab-10"} Hostkey Algorithms
+        - if Subscription.instance.feature_proxies?
+          %li
+            %a{"data-toggle" => "tab", :href => "#tab-11"} Proxy Settings
+    .tab-content
+      #tab-1.tab-pane.active
+        .panel-body
+          %h3 General Network Settings
+          .hr-line-dashed
+          = f.input_with_icon :AddressFamily, collection: PartitionSetting.af_collection, label: 'Address family', icon: 'fa-globe'
+          = f.input_with_icon :ListenPorts, label: 'Listening Ports', as: :array, input_html: { type: :integer }, icon: 'fa-ship'
+          = f.input :DnsSearchDomainsBlob, as: :text, label: 'DNS search domains', :input_html => { rows: @partition_setting.DnsSearchDomains.count + 3 },
+            icon: 'fa-globe', hint: 'Enter one DNS domain per line or a list either comma or space separated. Mixed is also supported.'
+
+          %br
+          %h3 Denial-of-service Protection
+          .hr-line-dashed
+          = f.input_with_icon :MaxEmbryonics_start, label: 'Embryonic throttle start', icon: 'fa-hashtag'
+          = f.input_with_icon :MaxEmbryonics_rate, label: 'Embryonic throttle rate', icon: 'fa-percent'
+          = f.input_with_icon :MaxEmbryonics_max, label: 'Embryonic throttle max', icon: 'fa-hashtag'
+          = f.input_with_icon :EmbryonicGraceTime, label: 'Embryonic gracetime', icon: 'fa-clock'
+
+          %br
+          %h3 Infrastructure Protection
+          .hr-line-dashed
+          = f.input :DenyTargetAddresses, label: 'Forbidden Target IPs', as: :array, hint: "All addresses listed here are inaccessible for the gateway. Use this parameter to protect your suSSHi infrastructure. This also filters target objects for allowed and reachable IP addresses.", input_html: { type: :string }
+
+      #tab-2.tab-pane
+        .panel-body
+          %h3 Session Reporting
+          .hr-line-dashed
+          = f.input_with_icon :ReportPeriod, label: 'Report period (in seconds)', icon: 'fa-clock'
+
+          %br
+          %h3 Exec Logging
+          .hr-line-dashed
+          = f.input_with_icon :ExecLogStopPatterns, label: 'Exec log stop-pattern', as: :array, input_html: { min: 1, max: 100 }, icon: 'fa-asterisk', hint: 'PCRE regular expression syntax.'
+          = f.input_with_icon :ExecLogFileMaxsize, label: 'Exec log max-size', icon: 'fa-expand', hint: '(in bytes). If the field is left empty, a default of 200MB is set.'
+
+
+          %br
+          %h3 System Log Facilities
+          .hr-line-dashed
+          = f.input_with_icon :SystemLogFacility, collection: PartitionSetting.log_facility_collection, label: 'System log facility', icon: 'fa-water'
+          = f.input_with_icon :SessionLogFacility, collection: PartitionSetting.log_facility_collection, label: 'Session log facility', icon: 'fa-water'
+
+      #tab-3.tab-pane
+        .panel-body
+          %h3 Allowed User Key Types
+          .hr-line-dashed
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              %p The list of User Key types allowed to be added to suSSHi Chef either through the UI or the API.
+          %br
+          = f.input_dual :AllowedUserKeyTypes, collection: SshKey.ssh_key_type_with_len_collection, label: 'Allowed User Key Types'
+
+      #tab-4.tab-pane
+        .panel-body
+          %h3 Public Key Algorithms
+          .hr-line-dashed
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              %p The list of permitted Public Key algorithms for public keys. It is recommended to remove weaker algorithms such as DSA/DSS from the list.
+              %p
+              %p Deselecting individual algorithms can lead to sessions no longer working for users with the corresponding key material or with servers or clients that are only configured for these algorithms.
+          %br
+          = f.input_dual :PublicKeyAlgorithms, collection: PartitionSetting.ssh_public_key_algorithms_collection, label: 'Allowed Public Key Algorithms'
+
+      #tab-5.tab-pane
+        .panel-body
+
+          %h3 Client Authentication Methods
+          .hr-line-dashed
+          - for c in (0..2)
+            = f.input_with_icon :PreferredAuthentications, collection: PartitionSetting.client_authentication_collection, label: "Pref. Authentication ##{c+1}",
+                                input_html: { name: "partition_setting[PreferredAuthentications][]"}, include_blank: true,
+                                selected: @partition_setting.PreferredAuthentications[c], icon: 'fa-key'
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              .alert.alert-warning
+                %p Any change to this list means that only the authentication methods listed here will be offered to the client in this order. If a method is no longer permitted, it can no longer be used despite explicit use in an access profile.
+
+          %br
+          %h3 Password Split String
+          .hr-line-dashed
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              %p suSSHi allows a user to provide the password for an authentication at the target during an authentication at the gateway at the same time by specifying the two passwords separated from each other by the specified split-string: 'gateway_pw''split-string''target_pw'.
+              %p It is important not to choose a string that is too simple or too short (e.g. only @), as the selected combination must not occur in any password. The default is therefore set to '::@::'.
+
+          = f.input_with_icon :PasswordSplitString, label: 'Password Split-String', icon: 'fa-divide'
+
+          %br
+          %h3 Client Hostkey Update
+          .hr-line-dashed
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              %p
+                suSSHi supports the OpenSSH 'Hostkey update and rotation' protocol extension allowing a server to inform a client of all its host keys after user-authentication has completed.
+                With this option enabled, the client get's a list of all configured host keys of the suSSHi Gateway and can thus update it's own list of known host keys.
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              .alert.alert-info
+                %p
+                  With this option, all supporting SSH clients can learn new key types they have not encountered before, allowing them to potentially upgrade from weaker key algorithms
+                  to better ones. It also supports graceful key rotation, as the Gateway may offer multiple keys of the same type for a period of time (to allow customers to learn them
+                  with this enhancement) before the obsolete key is removed from those offered.
+
+          .checkbox.checkbox-primary
+            = f.input :ClientHostKeyUpdate, label: 'Client hostkey update'
+
+          %br
+          %h3 Client (& Target) Disconnect messages
+          .hr-line-dashed
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              %p
+                If the request is rejected or errors occur during an ongoing session, suSSHi disconnects from the client (and the target) and sends a message to inform the user of the
+                reason for the disconnection/rejection.  In normal operation, the messages are short and do not contain too much information for a potential attacker about what went
+                wrong or why the session was rejected.
+              %p
+                You have the option to enable more detailed messages.
+              %p
+                As an example: In normal mode a user would receive a <code> Authentication failed - invalid username </code>
+                while in verbose mode she will receive <code>Invalid username. Please try again with gwuser@targetuser@target[@proxy_realm]</code> on supplying the wrong syntax for the user string.
+              %p
+                So we would strongly recommend to only activate verbose messages in a protected environment if you want to help your users with more verbose messages. You should not activate
+                this settings in an environment where for example the suSSHi Gateway is exposed to the Internet.
+
+          .checkbox.checkbox-primary
+            = f.input :VerboseDisconnect, label: 'Verbose disconnect messages'
+
+          %br
+          %h3 Interactive Authentication Failure Protection
+          .hr-line-dashed
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              %p If a user fails to authenticate on the gateway repeatedly, suSSHi can temporarily block further login attempts for that user.
+              %p For example, if the limit is set to 5 authentication failures with a block duration of 600 seconds, suSSHi will block the user for 10 minutes after the 5th consecutive failed login.
+          = f.input_with_icon :MaxAuthFails, label: 'Max. Authentication Failures', icon: 'fa-ban'
+          = f.input_with_icon :BlockAuthSeconds, label: 'Block Duration (in seconds)', icon: 'fa-clock'
+
+          %br
+          %h3 Other Client Settings
+          .hr-line-dashed
+          = f.input_with_icon :LoginGraceTime, label: 'Login Grace Time', icon: 'fa-clock'
+
+          = f.input :Banner, label: 'Login Banner', icon: 'fa-sign-in', input_html: { rows: 5, style: "font-family: monospace;" }
+
+          .checkbox.checkbox-primary
+            = f.input :ClientCompression, label: 'Client compression'
+            = f.input :ClientTcpKeepalive, label: 'Client TCP keepalive'
+
+      #tab-6.tab-pane
+        .panel-body
+
+          %h3 Target Authentication Methods
+          .hr-line-dashed
+          - errors = @partition_setting.errors['TargetPreferredAuthentications']
+          - if errors.any?
+            .div.row
+              .div.col-sm-2
+              .div.col-sm-10
+                .alert.alert-danger
+                  %p=errors.join(',')
+
+          #auth_selections
+            - for c in (0..3)
+              = f.input_with_icon :TargetPreferredAuthentications, collection: PartitionSetting.target_authentication_collection, label: "Pref. Authentication ##{c+1}",
+                                  input_html: { name: "partition_setting[TargetPreferredAuthentications][]"}, include_blank: true,
+                                  selected: @partition_setting.TargetPreferredAuthentications[c], icon: 'fa-key', :error => false
+
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              .alert.alert-info
+                %p Any change to this list means that only the authentication methods listed here will be offered to the target server in this order. If a method is no longer permitted, it can no longer be used despite explicit use in an access profile.
+
+          #agent-auth-hint.div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              .alert.alert-warning
+                %p * Please note that the "Public Key - User SSH Auth Agent Forwarding" method sets the authentication phase with the client to a state in which none of the authentication methods password and keyboard-interactive with the client are possible anymore. If the server offers a public key authentication and this does not lead to success with a key, further authentications are no longer possible.
+
+          %br
+          %h3 Other Client Settings
+          .hr-line-dashed
+          = f.input_with_icon :TargetPreferredAddressFamily, collection: PartitionSetting.af_collection, label: 'Target pref. address family', icon: 'fa-globe'
+          = f.input_with_icon :TargetConnectionTimeout, label: 'Target connection timeout', icon: 'fa-clock'
+          .checkbox.checkbox-warning
+            = f.input :PreserveClientBanner, label: 'Preserve client banner'
+          .checkbox.checkbox-primary
+            = f.input :TargetCompression, label: 'Target compression'
+            = f.input :TargetTcpKeepAlive, label: 'Target TCP keepalive'
+            = f.input :TargetPassSusshiInformation, label: 'Set suSSHi environment variables on target'
+
+      #tab-7.tab-pane
+        .panel-body
+          %h3 Client Side Packet Ciphers
+          .hr-line-dashed
+          - for c in (1..PartitionSetting.ciphers_collection.count)
+            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.ciphers_collection, label: (c == 1 ? 'Allowed Client Cipher ':'')+"##{c}",
+                                input_html: { name: "partition_setting[ClientCiphers][]"}, include_blank: true,
+                                selected: @partition_setting.ClientCiphers[c-1], icon: 'fa-key'
+
+          %br
+          %h3 Target Side Ciphers
+          .hr-line-dashed
+          - for c in (1..PartitionSetting.ciphers_collection.count)
+            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ciphers_collection, label: (c == 1 ? 'Preferred Target Cipher ':'')+"##{c}",
+                                input_html: { name: "partition_setting[TargetCiphers][]"}, include_blank: true,
+                                selected: @partition_setting.TargetCiphers[c-1], icon: 'fa-key'
+
+      #tab-8.tab-pane
+        .panel-body
+          %h3 Client Side Hash Algorithms
+          .hr-line-dashed
+          - for c in (1..PartitionSetting.hmacs_collection.count)
+            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.hmacs_collection, label: (c == 1 ? 'Allowed Client Hash ':'')+"##{c}",
+                                input_html: { name: "partition_setting[ClientHmacs][]"}, include_blank: true,
+                                selected: @partition_setting.ClientHmacs[c-1], icon: 'fa-signature'
+
+          %br
+          %h3 Target Side Hash Algorithms
+          .hr-line-dashed
+          - for c in (1..PartitionSetting.hmacs_collection.count)
+            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.hmacs_collection, label: (c == 1 ? 'Preferred Target Hash ':'')+"##{c}",
+                                input_html: { name: "partition_setting[TargetHmacs][]"}, include_blank: true,
+                                selected: @partition_setting.TargetHmacs[c-1], icon: 'fa-signature'
+      #tab-9.tab-pane
+        .panel-body
+          %h3 Client Side KEX Algorithms
+          .hr-line-dashed
+          - for c in (1..PartitionSetting.ssh_kex_algorithms_collection.count)
+            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.ssh_kex_algorithms_collection, label: (c == 1 ? 'Allowed KEX Algorithm ':'')+"##{c}",
+                                input_html: { name: "partition_setting[ClientKexAlgorithms][]"}, include_blank: true,
+                                selected: @partition_setting.ClientKexAlgorithms[c-1], icon: 'fa-key'
+
+          %br
+          %h3 Target Side KEX Algorithms
+          .hr-line-dashed
+          - for c in (1..PartitionSetting.ssh_kex_algorithms_collection.count)
+            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ssh_kex_algorithms_collection, label: (c == 1 ? 'Pref. KEX Algorithm ':'')+"##{c}",
+                                input_html: { name: "partition_setting[TargetKexAlgorithms][]"}, include_blank: true,
+                                selected: @partition_setting.TargetKexAlgorithms[c-1], icon: 'fa-key'
+
+      #tab-10.tab-pane
+        .panel-body
+          %h3 Client Side Hostkey Algorithms
+          .hr-line-dashed
+          - for c in (1..PartitionSetting.ssh_hostkey_type_collection.count)
+            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.ssh_hostkey_type_collection, label: (c == 1 ? 'Allowed Hostkey Algorithm ':'')+"##{c}",
+                                input_html: { name: "partition_setting[ClientHostkeyAlgorithms][]"}, include_blank: true,
+                                selected: @partition_setting.ClientHostkeyAlgorithms[c-1], icon: 'fa-key'
+
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              .alert.alert-info
+                %p Any change to this list could result in Clients being unable to connect or being prompted to accept a different Host Key for the Gateway(s).
+
+          %br
+          %h3 Target Side Hostkey Algorithms
+          .hr-line-dashed
+          - for c in (1..PartitionSetting.ssh_hostkey_type_collection.count)
+            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ssh_hostkey_type_collection, label: (c == 1 ? 'Pref. Hostkey Algorithm ':'')+"##{c}",
+                                input_html: { name: "partition_setting[TargetHostkeyAlgorithms][]"}, include_blank: true,
+                                selected: @partition_setting.TargetHostkeyAlgorithms[c-1], icon: 'fa-key'
+
+          .div.row
+            .div.col-sm-2
+            .div.col-sm-10
+              .alert.alert-info
+                %p Any change to this list may result in the gateway being unable to connect to target server that do not support any of the listed host key types. It may also be necessary to update the host keys of the targets concerned again.
+
+      - if Subscription.instance.feature_proxies?
+        #tab-11.tab-pane
+          .panel-body
+            %h3 Trusted Gateway Addresses
+            .hr-line-dashed
+            = f.input :GatewayAddresses, label: 'Gateway Addresses', as: :array, input_html: { min: 1, type: :string }
+
+  = f.button :submit_cancel, 'Update Preferences', html: { class: 'btn-primary' }, cancel: :back
+
+= render(:partial => 'form_javascript')

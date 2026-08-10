@@ -1,0 +1,33 @@
+- breadcrumb :target_hosts, 'Scan Hosts'
+
+= message_panel 'Note', type: :primary, icon: 'info-circle' do
+  For security reasons, the number of host scanned within a network is limited to 4094.
+  Hence, please do not specify a network larger than /20 for IPv4 or /116 for IPv6.
+  %br
+  Depending on the size of the network, the scanning process may take several minutes.
+  Stay calm after pressing the "Start Scan" button.
+
+= panel do
+  = simple_form_for :scan, url: execute_scan_target_hosts_path do |f|
+
+    - if @error_message
+      .div.row
+        .div.col-sm-2
+        .div.col-sm-10
+          = message_box nil, type: :warning, icon: 'info-circle' do
+            = @error_message
+
+    .form-inputs
+      = f.input_with_icon :network, icon: 'fa-barcode', :input_html => { :value => @ip_input }, placeholder: 'Network / CIDR'
+      = f.input_with_icon :gateway_id, collection: @gateways, icon: 'fa-dungeon', include_blank: false, label: 'Scanning Gateway'
+    - if @proxies.any?
+      = f.input_with_icon :proxy_id, collection: @proxies, icon: 'fa-plug', include_blank: true, label: 'Via Proxy Server', :selected => @proxy_input
+
+    .checkbox.checkbox-primary
+      = f.input :include_known, as: :boolean, label: 'Include already known and unchanged hosts in result.', :input_html => { :checked => true }
+
+    .checkbox.checkbox-primary
+      = f.input :use_shortnames, as: :boolean, label: 'Use short names instead of FQDN for hostnames found in DNS.'
+
+    = f.button :submit_cancel, 'Start scan!', html: { class: 'btn-primary' }, cancel: scan_target_hosts_path
+

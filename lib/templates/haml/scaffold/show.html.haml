@@ -1,0 +1,6 @@
+- breadcrumb @<%= singular_table_name %>
+
+= attributes_panel @title do
+  <% attributes.each do |attribute| -%>
+  = row_key_value '<%= attribute.human_name %>', @<%= singular_table_name %>.<%= attribute.name %>
+  <% end -%>

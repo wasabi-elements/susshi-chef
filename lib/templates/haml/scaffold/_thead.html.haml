@@ -1,0 +1,6 @@
+%tr
+  %th
+  <%- attributes.each do |attribute| -%>
+  %th= sortable_link query, :<%= attribute.name %>
+  <%- end -%>
+  %th.text-right Action

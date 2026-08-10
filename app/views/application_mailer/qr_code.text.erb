@@ -1,0 +1,16 @@
+Dear <%= @username %>,
+
+you are receiving this email because of your suSSHi account.
+
+
+To enhance the security of your account, please enable two-factor authentication using your mobile authenticator app.
+Please scan the QR code below using your authenticator app or enter the TOTP secret manually if you cannot scan the QR code:
+
+<%= @totp_secret %>
+
+If you have any questions, please contact our support team.
+
+
+Regards,
+
+suSSHi Chef Administrator

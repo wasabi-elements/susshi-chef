@@ -1,0 +1,7269 @@
+{
+	"info": {
+		"name": "suSSHi Chef Config API",
+		"_postman_id": "suSSHi Chef Config API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/docs/index.html"
+	},
+	"item": [
+		{
+			"name": "API Usage",
+			"item": [
+				{
+					"name": "API Root",
+					"item": [
+						{
+							"name": "Retrieve the entire Config",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Accesses",
+			"item": [
+				{
+					"name": "Accesses",
+					"item": [
+						{
+							"name": "List all Accesses",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/accesses"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a new Access",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/accesses"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Intranet Access 01\",\n  \"description\": \"Intranet Access\",\n  \"active\": true,\n  \"position\": 11,\n  \"position_before\": 12,\n  \"position_after\": 11,\n  \"source_ip_members\": [\n    \"Any IPv4\"\n  ],\n  \"susshi_user_members\": [\n    \"oliver\",\n    \"jens\",\n    \"alexander\"\n  ],\n  \"target_user_members\": [\n    \"Admin-Users\"\n  ],\n  \"target_members\": [\n    \"Intranet Servers\"\n  ],\n  \"access_profile\": \"Full access\",\n  \"debug_level\": 0\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Access - Single Object",
+					"item": [
+						{
+							"name": "Show an Access",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/accesses/:id|:access_name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "access_name"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update an Access",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/accesses/:id|:access_name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "access_name"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Intranet Access 01\",\n  \"description\": \"Intranet Access\",\n  \"active\": true,\n  \"position\": 11,\n  \"position_before\": 12,\n  \"position_after\": 11,\n  \"source_ip_members\": [\n    \"Any IPv4\"\n  ],\n  \"susshi_user_members\": [\n    \"oliver\",\n    \"jens\",\n    \"alexander\"\n  ],\n  \"target_user_members\": [\n    \"Admin-Users\"\n  ],\n  \"target_members\": [\n    \"Intranet Servers\"\n  ],\n  \"access_profile\": \"Full access\",\n  \"debug_level\": 0\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Relationships to/from an Access",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/accesses/:id|:access_name/:operation",
+									"variable": [
+										{
+											"key": "access_name",
+											"value": "Intranet Access 01",
+											"description": "Name of access"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove network to/from group"
+										},
+										{
+											"key": "id",
+											"value": "5",
+											"description": "Identifier"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"source_ip_members\": [\n    \"Intranet\",\n    \"DevNet\"\n  ],\n  \"susshi_user_members\": [\n    \"oliver\"\n  ],\n  \"target_user_members\": [\n    \"root\",\n    \"dbadmin\"\n  ],\n  \"target_members\": [\n    \"server011.intra.susshi.io\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete an Access",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/accesses/:id|:access_name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "access_name"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Access Profiles",
+			"item": [
+				{
+					"name": "Access Profiles",
+					"item": [
+						{
+							"name": "List all Access Profiles",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/profiles"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a new Access Profile",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/profiles"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Full access\",\n  \"description\": \"Full access and logging\",\n  \"client_auth_set_id\": 22,\n  \"LoggingMask\": 127,\n  \"MaxSessionIdleSeconds\": 43200,\n  \"MaxSessionSeconds\": 86400,\n  \"SSHAgentForward\": true,\n  \"SSHCommandExecs\": [\n    \".*\"\n  ],\n  \"SSHInteractive\": true,\n  \"SSHSecureCopy\": true,\n  \"SSHSecureFileTransfer\": true,\n  \"SSHLocalForwards\": [\n    \"localhost:*\"\n  ],\n  \"SSHRemoteForwards\": [\n    \"localhost:*\"\n  ],\n  \"SSHSessionSubsystems\": [\n    \"subsystem\"\n  ],\n  \"SSHSocketForward\": false,\n  \"SSHTcpForwardSsh\": false,\n  \"SSHX11Forward\": false,\n  \"TargetHostKeyLearning\": \"prompt\",\n  \"TargetPreferredAuthentications\": [\n    \"keyboard-interactive\",\n    \"password\",\n    \"publickey\",\n    \"publickey-ssh-agent\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Access Profile - Single Object",
+					"item": [
+						{
+							"name": "Show a Access Profile",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/profiles/:id|:profilename",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "profilename"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Access Profile",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/profiles/:id|:profilename",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "profilename"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Full access\",\n  \"description\": \"Full access and logging\",\n  \"client_auth_set_id\": 22,\n  \"LoggingMask\": 127,\n  \"MaxSessionIdleSeconds\": 43200,\n  \"MaxSessionSeconds\": 86400,\n  \"SSHAgentForward\": true,\n  \"SSHCommandExecs\": [\n    \".*\"\n  ],\n  \"SSHInteractive\": true,\n  \"SSHSecureCopy\": true,\n  \"SSHSecureFileTransfer\": true,\n  \"SSHLocalForwards\": [\n    \"localhost:*\"\n  ],\n  \"SSHRemoteForwards\": [\n    \"localhost:*\"\n  ],\n  \"SSHSessionSubsystems\": [\n    \"subsystem\"\n  ],\n  \"SSHSocketForward\": false,\n  \"SSHTcpForwardSsh\": false,\n  \"SSHX11Forward\": false,\n  \"TargetHostKeyLearning\": \"prompt\",\n  \"TargetPreferredAuthentications\": [\n    \"keyboard-interactive\",\n    \"password\",\n    \"publickey\",\n    \"publickey-ssh-agent\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Access Profile",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/profiles/:id|:profilename",
+									"variable": [
+										{
+											"key": "profilename"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Source IPs",
+			"item": [
+				{
+					"name": "Source IP Networks and Groups",
+					"item": [
+						{
+							"name": "List all Source IP objects",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Source IP Networks",
+					"item": [
+						{
+							"name": "List all Networks",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/nets"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Network",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/nets"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"DevNet\",\n  \"ip_address\": \"192.168.25.0/24\",\n  \"description\": \"Developers network\",\n  \"memberships\": [\n    \"intranet\",\n    \"Developers\"\n  ],\n  \"read_only\": false\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Source IP Network - Single Object",
+					"item": [
+						{
+							"name": "Show a Network",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/nets/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Network",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/nets/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"DevNet\",\n  \"ip_address\": \"192.168.25.0/24\",\n  \"description\": \"Developers network\",\n  \"memberships\": [\n    \"intranet\",\n    \"Developers\"\n  ],\n  \"read_only\": false\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups to/from a Network",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/nets/:id|:name/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "23",
+											"description": "Identifier"
+										},
+										{
+											"key": "name",
+											"value": "DevNet",
+											"description": "Name of network"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove network to/from group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"Intranet\",\n    \"Developers\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Network",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/nets/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Source IP Groups",
+					"item": [
+						{
+							"name": "List all Groups",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/groups"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/groups"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Intranet\",\n  \"description\": \"Our Internet\",\n  \"members\": [\n    \"DevNet\"\n  ],\n  \"read_only\": false\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Source IP Group - Single Object",
+					"item": [
+						{
+							"name": "Show a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/groups/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/groups/:id|:name",
+									"variable": [
+										{
+											"key": "name"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Intranet\",\n  \"description\": \"Our Internet\",\n  \"members\": [\n    \"DevNet\"\n  ],\n  \"read_only\": false\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Networks to/from a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/groups/:id|:name/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "29",
+											"description": "Identifier"
+										},
+										{
+											"key": "name",
+											"value": "Intranet",
+											"description": "Name of group"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove members from a group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"members\": [\n    \"DevNet\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/source_ips/groups/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "suSSHi Users",
+			"item": [
+				{
+					"name": "suSSHi Login Users and Groups",
+					"item": [
+						{
+							"name": "List all Users and Groups",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "suSSHi User Logins",
+					"item": [
+						{
+							"name": "List all Login Users",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/logins"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Login User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/logins"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"oliver\",\n  \"fullname\": \"Oliver Rauscher\",\n  \"email\": \"oliver@susshi.io\",\n  \"active\": true,\n  \"totp_state\": \"inactive\",\n  \"totp_secret\": \"RCL3DOARSN4QHSBHHZ56CDUO7QK76562\",\n  \"totp_activation_token\": \"FIC6ISAZPFSB5RXEGCPAHLYTPLEYCTY3\",\n  \"memberships\": [\n    \"developers\",\n    \"testers\"\n  ],\n  \"susshi_user_keys\": [\n    {\n      \"title\": \"RSA Key\",\n      \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n    }\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "suSSHi User Login - Single Object",
+					"item": [
+						{
+							"name": "Show a Login User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/logins/:id|:username",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "username"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Login User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/logins/:id|:username",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "username"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"oliver\",\n  \"fullname\": \"Oliver Rauscher\",\n  \"email\": \"oliver@susshi.io\",\n  \"active\": true,\n  \"totp_state\": \"inactive\",\n  \"totp_secret\": \"RCL3DOARSN4QHSBHHZ56CDUO7QK76562\",\n  \"totp_activation_token\": \"FIC6ISAZPFSB5RXEGCPAHLYTPLEYCTY3\",\n  \"memberships\": [\n    \"developers\",\n    \"testers\"\n  ],\n  \"susshi_user_keys\": [\n    {\n      \"title\": \"RSA Key\",\n      \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n    }\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups \u0026 suSSHi User Public-Keys to/from a User Login",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/logins/:id|:username/:operation",
+									"variable": [
+										{
+											"key": "username",
+											"value": "oliver",
+											"description": "User name of user"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove user to/from group"
+										},
+										{
+											"key": "id",
+											"value": "13",
+											"description": "Identifier"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"developers\"\n  ],\n  \"susshi_user_keys\": [\n    {\n      \"title\": \"RSA Key\",\n      \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n    }\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Login User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/logins/:id|:username",
+									"variable": [
+										{
+											"key": "username"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "suSSHi User Groups",
+					"item": [
+						{
+							"name": "List all User Groups",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/groups"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a User Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/groups"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groupname\": \"developers\",\n  \"description\": \"The Developers\",\n  \"active\": true,\n  \"members\": [\n    \"oliver\",\n    \"jens\",\n    \"alexander\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "suSSHi User Group - Single Object",
+					"item": [
+						{
+							"name": "Show a User Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/groups/:id|:groupname",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "groupname"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a User Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/groups/:id|:groupname",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "groupname"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groupname\": \"developers\",\n  \"description\": \"The Developers\",\n  \"active\": true,\n  \"members\": [\n    \"oliver\",\n    \"jens\",\n    \"alexander\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Login Users to/from a User Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/groups/:id|:groupname/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "17",
+											"description": "Identifier"
+										},
+										{
+											"key": "groupname",
+											"value": "developers",
+											"description": "Name of group"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove members to/from a group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"members\": [\n    \"oliver\",\n    \"jens\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a User Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_users/groups/:id|:groupname",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "groupname"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "suSSHi User Keys",
+			"item": [
+				{
+					"name": "suSSHi User Keys",
+					"item": [
+						{
+							"name": "List all suSSHi User Keys",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_user_keys"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a new suSSHi User Key",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_user_keys"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"RSA Key\",\n  \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\",\n  \"username\": \"oliver\"\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "suSSHi User Keys - Single Object",
+					"item": [
+						{
+							"name": "Show a suSSHi User key",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_user_keys/:id",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a suSSHi User Key",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_user_keys/:id",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"RSA Key\",\n  \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a suSSHi User Key",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/susshi_user_keys/:id",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Target Users",
+			"item": [
+				{
+					"name": "Target Users and Groups",
+					"item": [
+						{
+							"name": "List all Users and Groups",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Login Users",
+					"item": [
+						{
+							"name": "List all Login Users",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/logins"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Login User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/logins"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"root\",\n  \"description\": \"Admin User\",\n  \"memberships\": [\n    \"Admin-Users\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Login User - Single Object",
+					"item": [
+						{
+							"name": "Show a Login User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/logins/:id|:username",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "username"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Login User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/logins/:id|:username",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "username"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"root\",\n  \"description\": \"Admin User\",\n  \"memberships\": [\n    \"Admin-Users\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups to/from a Login User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/logins/:id|:username/:operation",
+									"variable": [
+										{
+											"key": "username",
+											"value": "root",
+											"description": "Name of target user"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove target user to/from group"
+										},
+										{
+											"key": "id",
+											"value": "47",
+											"description": "Identifier"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"Admin-Users\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Login User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/logins/:id|:username",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "username"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Regex Users",
+					"item": [
+						{
+							"name": "List all Regex Users",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/regexes"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Regex User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/regexes"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Any\",\n  \"regex\": \".*\",\n  \"description\": \"Any user on target\",\n  \"memberships\": [\n    \"Funny Users\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Regex User - Single Object",
+					"item": [
+						{
+							"name": "Show a Regex User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/regexes/:id|:name",
+									"variable": [
+										{
+											"key": "name"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Regex User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/regexes/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Any\",\n  \"regex\": \".*\",\n  \"description\": \"Any user on target\",\n  \"memberships\": [\n    \"Funny Users\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups to/from a Regex User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/regexes/:id|:username/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "49",
+											"description": "Identifier"
+										},
+										{
+											"key": "username",
+											"value": "Any",
+											"description": "Name of regex target user"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove regex target user to/from group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"Funny Users\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Regex User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/regexes/:id|:name",
+									"variable": [
+										{
+											"key": "name"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Mapping Users",
+					"item": [
+						{
+							"name": "List all Mapping Users",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/mappings"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Mapping User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/mappings"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Gateway-Username\",\n  \"regex\": \"(.*)\",\n  \"translate\": \"$1\",\n  \"regex_target_user\": \"%translated%\",\n  \"description\": \"Same Username used for gateway authentication\",\n  \"memberships\": [\n    \"Funny Users\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Mapping User - Single Object",
+					"item": [
+						{
+							"name": "Show a Mapping",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/mappings/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Mapping",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/mappings/:id|:name",
+									"variable": [
+										{
+											"key": "name"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Gateway-Username\",\n  \"regex\": \"(.*)\",\n  \"translate\": \"$1\",\n  \"regex_target_user\": \"%translated%\",\n  \"description\": \"Same Username used for gateway authentication\",\n  \"memberships\": [\n    \"Funny Users\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups to/from a Mapping User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/mappings/:id|:name/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "55",
+											"description": "Identifier"
+										},
+										{
+											"key": "name",
+											"value": "Gateway",
+											"description": "Username (string, required) - Name of mapping target user"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove mapping target user to/from group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"Funny Users\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Mapping User",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/mappings/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target User Groups",
+					"item": [
+						{
+							"name": "List all User Groups",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/groups"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a User Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/groups"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groupname\": \"Admin-Users\",\n  \"description\": \"Nothing else matters\",\n  \"members\": [\n    \"root\",\n    \"admin\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target User Group - Single Object",
+					"item": [
+						{
+							"name": "Show a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/groups/:id|:groupname",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "groupname"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/groups/:id|:groupname",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "groupname"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groupname\": \"Admin-Users\",\n  \"description\": \"Nothing else matters\",\n  \"members\": [\n    \"root\",\n    \"admin\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Users to/from a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/groups/:id|:groupname/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "20",
+											"description": "Identifier"
+										},
+										{
+											"key": "groupname",
+											"value": "Admin-Users",
+											"description": "Name of target user group"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove members to/from a target user group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"members\": [\n    \"root\",\n    \"admin\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_users/groups/:id|:groupname",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "groupname"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Targets",
+			"item": [
+				{
+					"name": "suSSHi Targets and Groups",
+					"item": [
+						{
+							"name": "List all Targets and Groups",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Domains",
+					"item": [
+						{
+							"name": "List all Domains",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/domains"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Domain",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/domains"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"domainname\": \".intra.susshi.io\",\n  \"description\": \"Intranet Domain\",\n  \"active\": true,\n  \"proxy_realm\": \"proxy01\",\n  \"memberships\": [\n    \"intranet_domains\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Domain - Single Object",
+					"item": [
+						{
+							"name": "Show a Domain",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/domains/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Domain",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/domains/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"domainname\": \".intra.susshi.io\",\n  \"description\": \"Intranet Domain\",\n  \"active\": true,\n  \"proxy_realm\": \"proxy01\",\n  \"memberships\": [\n    \"intranet_domains\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups to/from a Domain Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/domains/:id|:target|:target@:proxy_realm/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "13",
+											"description": "Identifier"
+										},
+										{
+											"key": "target",
+											"value": ".intra.susshi.io",
+											"description": "Name of domain target"
+										},
+										{
+											"key": "proxy_realm",
+											"value": "proxy01",
+											"description": "Proxy realm"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove domain target to/from group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"Intranet Servers\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Domain",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/domains/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Dynamic Targets",
+					"item": [
+						{
+							"name": "List all Dynamic Targets",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/dynamics"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Dynamic Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/dynamics"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"hostname\": \"server011.intra.susshi.io\",\n  \"description\": \"Server 011\",\n  \"active\": true,\n  \"proxy_realm\": \"proxy01\",\n  \"memberships\": [\n    \"Intranet Servers\"\n  ],\n  \"target_host_keys\": [\n    {\n      \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n    }\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Dynamic Target - Single Object",
+					"item": [
+						{
+							"name": "Show a Dynamic Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/dynamics/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Dynamic Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/dynamics/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"hostname\": \"server011.intra.susshi.io\",\n  \"description\": \"Server 011\",\n  \"active\": true,\n  \"proxy_realm\": \"proxy01\",\n  \"memberships\": [\n    \"Intranet Servers\"\n  ],\n  \"target_host_keys\": [\n    {\n      \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n    }\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups \u0026 TargetHostKeys to/from a Dynamic Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/dynamics/:id|:target|:target@:proxy_realm/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "13",
+											"description": "Identifier"
+										},
+										{
+											"key": "target",
+											"value": "server011.intra.susshi.io",
+											"description": "Name of dynamic target host"
+										},
+										{
+											"key": "proxy_realm",
+											"value": "proxy01",
+											"description": "Proxy realm"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove dynamic target host to/from group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"Intranet Servers\"\n  ],\n  \"target_host_keys\": [\n    {\n      \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n    }\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Dynamic Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/dynamics/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "proxy_realm"
+										},
+										{
+											"key": "id"
+										},
+										{
+											"key": "target"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Network Targets",
+					"item": [
+						{
+							"name": "List all Network Targets",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/networks"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Network Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/networks"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"network\": \"192.168.50.0/24\",\n  \"description\": \"The Intranet\",\n  \"active\": true,\n  \"proxy_realm\": \"proxy01\",\n  \"memberships\": [\n    \"Intranet Networks\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Network Target - Single Object",
+					"item": [
+						{
+							"name": "Show a Network Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/networks/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Network Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/networks/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"network\": \"192.168.50.0/24\",\n  \"description\": \"The Intranet\",\n  \"active\": true,\n  \"proxy_realm\": \"proxy01\",\n  \"memberships\": [\n    \"Intranet Networks\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups to/from a Network Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/networks/:id|:target|:target@:proxy_realm/:operation",
+									"variable": [
+										{
+											"key": "proxy_realm",
+											"value": "proxy01",
+											"description": "Proxy realm"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove dynamic target host to/from group"
+										},
+										{
+											"key": "id",
+											"value": "208",
+											"description": "Identifier"
+										},
+										{
+											"key": "target",
+											"value": "10.0.0.0/16",
+											"description": "Name of network target host"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"Intranet Servers\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Network Target",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/networks/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Static Hosts",
+					"item": [
+						{
+							"name": "List all Static Hosts",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/hosts"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Static Host",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/hosts"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"hostname\": \"server121.extra.susshi.io\",\n  \"description\": \"Server 121\",\n  \"memberships\": [\n    \"Intranet Servers\"\n  ],\n  \"active\": true,\n  \"sockets\": [\n    {\n      \"ip_address\": \"192.168.47.11\"\n    }\n  ],\n  \"proxy_realm\": \"proxy01\",\n  \"target_host_keys\": [\n    {\n      \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n    }\n  ],\n  \"scan_target_host_keys\": \"mandatory|intended\"\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Static Host - Single Object",
+					"item": [
+						{
+							"name": "Show a Static Host",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/hosts/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Static Host",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/hosts/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"hostname\": \"server121.extra.susshi.io\",\n  \"description\": \"Server 121\",\n  \"memberships\": [\n    \"Intranet Servers\"\n  ],\n  \"active\": true,\n  \"sockets\": [\n    {\n      \"ip_address\": \"192.168.47.11\"\n    }\n  ],\n  \"proxy_realm\": \"proxy01\",\n  \"target_host_keys\": [\n    {\n      \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n    }\n  ],\n  \"scan_target_host_keys\": \"mandatory|intended\"\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups, TargetHostKeys \u0026 Sockets to/from a Static Host",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/hosts/:id|:target|:target@:proxy_realm/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "13",
+											"description": "Identifier"
+										},
+										{
+											"key": "target",
+											"value": "server011.intra.susshi.io",
+											"description": "Name of static target host"
+										},
+										{
+											"key": "proxy_realm",
+											"value": "proxy01",
+											"description": "Proxy realm"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove static target host to/from group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"Intranet Servers\"\n  ],\n  \"target_host_keys\": [\n    {\n      \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n    }\n  ],\n  \"sockets\": [\n    {\n      \"ip_address\": \"192.168.47.11\"\n    }\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Static Host",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/hosts/:id|:target|:target@:proxy_realm",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "target"
+										},
+										{
+											"key": "proxy_realm"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Groups",
+					"item": [
+						{
+							"name": "List all Groups",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/groups"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/groups"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groupname\": \"Intranet Servers\",\n  \"description\": \"Intranet Servers\",\n  \"active\": true,\n  \"members\": [\n    \"server011.intra.susshi.io\",\n    \"server012.intra.susshi.io\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Group - Single Object",
+					"item": [
+						{
+							"name": "Show a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/groups/:id|:groupname",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "groupname"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/groups/:id|:groupname",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "groupname"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groupname\": \"Intranet Servers\",\n  \"description\": \"Intranet Servers\",\n  \"active\": true,\n  \"members\": [\n    \"server011.intra.susshi.io\",\n    \"server012.intra.susshi.io\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Targets to/from a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/groups/:id|:groupname/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "17",
+											"description": "Identifier"
+										},
+										{
+											"key": "groupname",
+											"value": "Intranet Servers",
+											"description": "Name of target group"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove members to/from a target group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"members\": [\n    \"server011.intra.susshi.io\",\n    \"server121.extra.susshi.io\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/targets/groups/:id|:groupname",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "groupname"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Target Host Keys",
+			"item": [
+				{
+					"name": "Target Host Keys",
+					"item": [
+						{
+							"name": "List all Target Host Keys",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_host_keys"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a new Target Host Key",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_host_keys"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\",\n  \"target\": \"target.susshi.io\"\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Host Keys - Single Object",
+					"item": [
+						{
+							"name": "Show a Target Host key",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_host_keys/:id",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Target Host Key",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_host_keys/:id",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"public_blob\": \"ssh-rsa AAAAB3Nza...dw==\"\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Target Host Key",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_host_keys/:id",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Target Fusions",
+			"item": [
+				{
+					"name": "Target Fusion Links and Groups",
+					"item": [
+						{
+							"name": "List all Target Fusion objects",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Fusion Links",
+					"item": [
+						{
+							"name": "List all Links",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/links"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Link",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/links"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"target_user_name\": \"dbadmin\",\n  \"target_name\": \"dbserver1.intra.corporate.net\",\n  \"description\": \"This is an example link 1\",\n  \"memberships\": [\n    \"Database-Administrations\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Fusion Link - Single Object",
+					"item": [
+						{
+							"name": "Show a Link",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/links/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Link",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/links/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"target_user_name\": \"dbadmin\",\n  \"target_name\": \"dbserver1.intra.corporate.net\",\n  \"description\": \"This is an example link 1\",\n  \"memberships\": [\n    \"Database-Administrations\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Groups to/from a Link",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/links/:id|:name/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "13",
+											"description": "Identifier"
+										},
+										{
+											"key": "name",
+											"value": "dbadmin@dbserver1.intra.corporate.net",
+											"description": "Name of Link"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove Link to/from group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"memberships\": [\n    \"Database-Administrations\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Link",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/links/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Fusion Groups",
+					"item": [
+						{
+							"name": "List all Groups",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/groups"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/groups"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groupname\": \"Database-Administrations\",\n  \"description\": \"The Database administrations\",\n  \"members\": [\n    \"dbadmin@dbserver1.intra.corporate.net\"\n  ]\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Target Fusion Group - Single Object",
+					"item": [
+						{
+							"name": "Show a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/groups/:id|:name",
+									"variable": [
+										{
+											"key": "name"
+										},
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/groups/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"groupname\": \"Database-Administrations\",\n  \"description\": \"The Database administrations\",\n  \"members\": [\n    \"dbadmin@dbserver1.intra.corporate.net\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Links to/from a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/groups/:id|:name/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "29",
+											"description": "Identifier"
+										},
+										{
+											"key": "name",
+											"value": "Database",
+											"description": "Administrations (string, required) - Name of group"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove members from a group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"members\": [\n    \"dbadmin@dbserver1.intra.corporate.net\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Group",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/target_fusions/groups/:id|:name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "name"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Proxies",
+			"item": [
+				{
+					"name": "Proxies",
+					"item": [
+						{
+							"name": "List all Proxies",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/proxies"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a new Proxy",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/proxies"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Proxy01\",\n  \"description\": \"A description\",\n  \"realm\": \"proxy01\",\n  \"hostname\": \"proxy01.corporate.net\",\n  \"port\": 22,\n  \"contact\": \"John Oliva \u003cjohn.o@corporate.net\u003e\",\n  \"comment\": \"Good proxy\",\n  \"use_individual_identities\": true\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Proxy - Single Object",
+					"item": [
+						{
+							"name": "Show a Proxy",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/proxies/:id|{Proxyname}",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Proxy",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/proxies/:id|{Proxyname}",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Proxy01\",\n  \"description\": \"A description\",\n  \"realm\": \"proxy01\",\n  \"hostname\": \"proxy01.corporate.net\",\n  \"port\": 22,\n  \"contact\": \"John Oliva \u003cjohn.o@corporate.net\u003e\",\n  \"comment\": \"Good proxy\",\n  \"use_individual_identities\": true\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Proxy",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/proxies/:id|{Proxyname}",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Bastions",
+			"item": [
+				{
+					"name": "Bastions",
+					"item": [
+						{
+							"name": "List all Bastions",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastions"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a new Bastion",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastions"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Cloud Bastion 01\",\n  \"description\": \"Intranet Bastion\",\n  \"active\": true,\n  \"position\": 11,\n  \"position_before\": 12,\n  \"position_after\": 11,\n  \"source_ip_members\": [\n    \"Any IPv4\"\n  ],\n  \"susshi_user_members\": [\n    \"oliver\",\n    \"jens\",\n    \"alexander\"\n  ],\n  \"proxy_members\": [\n    \"Proxy01\"\n  ],\n  \"profile\": \"Bastion Full Access\",\n  \"debug_level\": 0\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Bastion - Single Object",
+					"item": [
+						{
+							"name": "Show an Bastion",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastions/:id|:bastion_name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "bastion_name"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update an Bastion",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastions/:id|:bastion_name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "bastion_name"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Cloud Bastion 01\",\n  \"description\": \"Intranet Bastion\",\n  \"active\": true,\n  \"position\": 11,\n  \"position_before\": 12,\n  \"position_after\": 11,\n  \"source_ip_members\": [\n    \"Any IPv4\"\n  ],\n  \"susshi_user_members\": [\n    \"oliver\",\n    \"jens\",\n    \"alexander\"\n  ],\n  \"proxy_members\": [\n    \"Proxy01\"\n  ],\n  \"profile\": \"Bastion Full Access\",\n  \"debug_level\": 0\n}"
+								}
+							}
+						},
+						{
+							"name": "Add or remove Relationships to/from an Bastion",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastions/:id|:bastion_name/:operation",
+									"variable": [
+										{
+											"key": "id",
+											"value": "5",
+											"description": "Identifier"
+										},
+										{
+											"key": "bastion_name",
+											"value": "Cloud Bastion 01",
+											"description": "Name of bastion"
+										},
+										{
+											"key": "operation",
+											"value": "add",
+											"description": "Add or remove network to/from group"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"source_ip_members\": [\n    \"Intranet\",\n    \"DevNet\"\n  ],\n  \"susshi_user_members\": [\n    \"oliver\"\n  ],\n  \"proxy_members\": [\n    \"Proxy01\"\n  ]\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete an Bastion",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastions/:id|:bastion_name",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "bastion_name"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Bastion Profiles",
+			"item": [
+				{
+					"name": "Bastion Profiles",
+					"item": [
+						{
+							"name": "List all Bastion Profiles",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastion_profiles"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Create a new Bastion Profile",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastion_profiles"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Bastion Full Access\",\n  \"description\": \"Full Forwarding and logging\",\n  \"client_auth_set_id\": 22,\n  \"LoggingMask\": 17,\n  \"MaxSessionIdleSeconds\": 43200,\n  \"MaxSessionSeconds\": 86400,\n  \"SSHLocalForwards\": [],\n  \"SSHRemoteForwards\": [],\n  \"SSHTcpForwardSsh\": false\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Bastion Profile - Single Object",
+					"item": [
+						{
+							"name": "Show a Bastion Profile",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastion_profiles/:id|:profilename",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "profilename"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						},
+						{
+							"name": "Update a Bastion Profile",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastion_profiles/:id|:profilename",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "profilename"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Bastion Full Access\",\n  \"description\": \"Full Forwarding and logging\",\n  \"client_auth_set_id\": 22,\n  \"LoggingMask\": 17,\n  \"MaxSessionIdleSeconds\": 43200,\n  \"MaxSessionSeconds\": 86400,\n  \"SSHLocalForwards\": [],\n  \"SSHRemoteForwards\": [],\n  \"SSHTcpForwardSsh\": false\n}"
+								}
+							}
+						},
+						{
+							"name": "Delete a Bastion Profile",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/config/bastion_profiles/:id|:profilename",
+									"variable": [
+										{
+											"key": "id"
+										},
+										{
+											"key": "profilename"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Operations",
+			"item": [
+				{
+					"name": "Pending Changes",
+					"item": [
+						{
+							"name": "List pending changes",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/pending_changes"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Activate pending changes",
+					"item": [
+						{
+							"name": "Activate pending changes",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/activate_changes"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Subscription Information",
+					"item": [
+						{
+							"name": "Subscription information",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/subscription"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Version Information",
+					"item": [
+						{
+							"name": "Version information",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/version"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Gateway Authentication Keys",
+					"item": [
+						{
+							"name": "Gateway Authentication Keys",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/gateway_auth_keys"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Gateway Host Keys",
+					"item": [
+						{
+							"name": "Gateway Host Keys",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/gateway_host_keys"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Health Operations",
+			"item": [
+				{
+					"name": "Gateway Health",
+					"item": [
+						{
+							"name": "List Gateway health",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/health/gateways"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Gateway health - Single Object",
+					"item": [
+						{
+							"name": "Show Gateway health",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/health/gateways/:id|{Gatewayname}",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Proxies Health",
+					"item": [
+						{
+							"name": "List Proxy health",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/health/proxies"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Proxy health - Single Object",
+					"item": [
+						{
+							"name": "Show Proxy health",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/health/proxies/:id|{Proxyname}",
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "Dynamic OTP Operations",
+			"item": [
+				{
+					"name": "Validation",
+					"item": [
+						{
+							"name": "Validate Auth Ticket",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/dotp/validate"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"target_username\": \"admin\",\n  \"target_password\": \"\u003cOTP PW\u003e\",\n  \"target_identity\": \"10.99.44.2\"\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		},
+		{
+			"name": "OpenID Connect Operations",
+			"item": [
+				{
+					"name": "Validation",
+					"item": [
+						{
+							"name": "Validate OIDC session secret",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/oidc/validate"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"secret\": \"lcRP14xZ8U9Tma94gdo8VFVntWMJEq8s\",\n  \"jwt\": {\n    \"iss\": \"https://identity.company.org\",\n    \"aud\": \"XvblGCfMq0lWdo640H8Wp7IP3qbz4sWj\",\n    \"sub\": \"oliver\",\n    \"sid\": \"YthST4svaEf5kiBCrasrwKUpal3kDd3x\"\n  }\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				},
+				{
+					"name": "Back-channel Logout",
+					"item": [
+						{
+							"name": "Sign the user out",
+							"request": {
+								"url": {
+									"protocol": "{{susshi_chef_api_scheme}}",
+									"host": "{{susshi_chef_api_host}}",
+									"path": "/api/v1/operations/oidc/logout"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Api-Token",
+										"value": "{{susshi_chef_api_token}}"
+									},
+									{
+										"key": "Api-Application",
+										"value": "{{susshi_chef_api_application}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"jwt\": {\n    \"iss\": \"https://identity.company.org\",\n    \"aud\": \"XvblGCfMq0lWdo640H8Wp7IP3qbz4sWj\",\n    \"sub\": \"oliver\",\n    \"sid\": \"YthST4svaEf5kiBCrasrwKUpal3kDd3x\"\n  }\n}"
+								}
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"protocol": "",
+							"host": "",
+							"path": ""
+						},
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Api-Token",
+								"value": "{{susshi_chef_api_token}}"
+							},
+							{
+								"key": "Api-Application",
+								"value": "{{susshi_chef_api_application}}"
+							}
+						],
+						"body": {}
+					}
+				}
+			],
+			"request": {
+				"url": {
+					"protocol": "",
+					"host": "",
+					"path": ""
+				},
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Api-Token",
+						"value": "{{susshi_chef_api_token}}"
+					},
+					{
+						"key": "Api-Application",
+						"value": "{{susshi_chef_api_application}}"
+					}
+				],
+				"body": {}
+			}
+		}
+	]
+}

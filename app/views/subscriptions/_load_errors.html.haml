@@ -1,0 +1,3 @@
+- if load_errors
+  = message_panel 'We have some issues ...', type: :warning, icon: 'exclamation-triangle' do
+    = load_errors.join(", ")

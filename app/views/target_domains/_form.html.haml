@@ -1,0 +1,23 @@
+= simple_form_for(@target_domain, remote: request.xhr?) do |f|
+
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @target_domain.partition.name }, label: 'Partition'
+
+  = f.input_with_icon :domainname, icon: 'fa-globe-africa', label: 'Domain Name', hint: 'Please enter a fully qualified domainname.'
+  = f.input_with_icon :description, icon: 'fa-info'
+
+  - if Proxy.any?
+    = f.input_with_icon :proxy_id, collection: Proxy.all_collection,
+                     icon: 'fa-plug', label: 'Proxy', include_blank: true
+
+  .checkbox.checkbox-primary
+    = f.input :active, label: 'Target is active'
+
+  .hr-line-dashed
+
+  = f.input_dual :target_group_ids, collection: TargetGroup.duallist_collection(@target_domain.partition.id), label: 'Memberships'
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

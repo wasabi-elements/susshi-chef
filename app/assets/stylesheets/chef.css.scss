@@ -1,0 +1,731 @@
+// ============================================================
+// Variables
+// ============================================================
+
+// Brand
+$color-teal:              #1ab394;
+
+// Backgrounds
+$color-bg-dark:           #212236;
+$color-navy-dark:         #3a3b51;
+$color-navy-mid:          #405a6a;
+$color-navy-modal:        #304050;
+
+// Text
+$color-text-muted:        #676a6c;
+$color-text-dark:         #363636;
+$color-placeholder:       #888888;
+$color-required:          #777777;
+
+// Semantic
+$color-error:             #a94442;
+$color-success:           #32ab34;
+$color-warning-light:     #ffdf66;
+$color-disabled-bg:       #eeeeee;
+
+// UI Elements
+$color-row-group-bg:      #f0f0f0;
+$color-denied-stripe:     #fcf8e3;
+$color-hr-dashed:         #d0d0d0;
+$color-target-info:       #bcbcbc;
+$color-feature-border:    #99999c;
+
+// Duallistbox
+$color-duallist-add:      #85c533;
+$color-duallist-remove:   #f47f31;
+
+// Login
+$color-login-bg:          #fcfdff;
+$color-login-btn:         #5e92ca;
+$color-login-btn-hover:   #5370af;
+
+
+// ============================================================
+// Base & Typography
+// ============================================================
+
+html body {
+  font-size: 14px;
+  overflow: inherit;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: $color-bg-dark;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 200;
+}
+
+a, a:link, a:visited {
+  color: $color-text-muted;
+  font-weight: 500;
+}
+
+a:hover {
+  color: $color-teal;
+}
+
+label {
+  white-space: nowrap;
+
+  &.required:after {
+    content: "*";
+    color: $color-required;
+    padding-left: 5px;
+    font-size: 70%;
+  }
+}
+
+
+// ============================================================
+// Layout
+// ============================================================
+
+div#wrapper {
+  display: table;
+}
+
+.col-sm-icon {
+  width: 20px;
+}
+
+.pagination {
+  margin: 0px;
+}
+
+.margin-bottom-xs { margin-bottom: 8px; }
+.margin-bottom-sm { margin-bottom: 12px; }
+.margin-bottom-md { margin-bottom: 20px; }
+.margin-bottom-lg { margin-bottom: 40px; }
+
+
+// ============================================================
+// Navigation
+// ============================================================
+
+nav.navbar-static-side {
+  font-size: 13px;
+}
+
+a.navbar-minimalize {
+  color: white;
+}
+
+body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav li:hover > .nav-second-level,
+.mini-navbar .nav li:focus > .nav-second-level {
+  min-width: 200px;
+}
+
+.mini-navbar {
+  .navbar-default {
+    .landing_link {
+      display: none;
+    }
+    .nav-second-level {
+      border-radius: 0 6px 6px 0 !important;
+      padding-bottom: unset;
+    }
+  }
+}
+
+.navbar-default {
+  .system_link a,
+  .system_link.active a {
+    background-color: $color-navy-mid !important;
+  }
+
+  .system_link ul li a,
+  .system_link.active ul li a {
+    background-color: $color-navy-dark !important;
+  }
+
+  hr {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border: 1px solid $color-navy-mid;
+  }
+
+  .landing_link {
+    text-align: center;
+    a {
+      background-color: unset;
+      display: block;
+      padding-left: unset;
+      padding-right: unset;
+      .nav-label {
+        font-weight: lighter;
+        :hover {
+          background-color: unset;
+        }
+      }
+    }
+  }
+
+  .pending_changes {
+    text-align: center;
+    a {
+      display: block;
+      padding-left: unset;
+      padding-right: unset;
+      i {
+        margin-right: unset;
+      }
+    }
+  }
+
+  .nav-border-top {
+    border-top: 1px solid $color-teal;
+  }
+  .nav-border-bottom {
+    border-bottom: 1px solid $color-teal;
+  }
+
+  .nav-header,
+  .nav-second-level {
+    background-color: $color-navy-dark;
+  }
+
+  .nav {
+    li.active {
+      //border-left-width: 1px;
+      border-left: unset;
+      background-color: $color-navy-dark;
+    }
+
+    a {
+      outline: none;
+    }
+  }
+}
+
+
+// ============================================================
+// Modals
+// ============================================================
+
+.modal-dialog {
+  width: 900px;
+  margin: 30px auto;
+
+  .modal-header {
+    padding: 10px;
+    height: 40px;
+    background-color: $color-navy-modal;
+    color: white;
+
+    h3 {
+      margin-top: 1px;
+    }
+    button {
+      color: white;
+    }
+  }
+}
+
+
+// ============================================================
+// Tables
+// ============================================================
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  vertical-align: middle;
+}
+
+tr {
+  &.disabled {
+    background-image: repeating-linear-gradient(145deg, #fff, #fff 30px, #eee 30px, #eee 60px);
+  }
+
+  &.denied {
+    background-image: repeating-linear-gradient(145deg, #fff, #fff 30px, $color-denied-stripe 30px, $color-denied-stripe 60px);
+  }
+
+  &.policy-thead {
+    border-bottom: 2px solid white !important;
+  }
+
+  &.row-group-spacer {
+    height: 14px;
+  }
+
+  &.policy td {
+    background-color: white;
+  }
+
+  td.row-group-title {
+    font-weight: 500;
+    font-size: 14px;
+    border-top: 2px solid white !important;
+    background-color: $color-row-group-bg;
+    box-shadow: 0px -8px 14px -7px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Fixes an alignment error in Index Views (Accesses)
+tbody tr td ul {
+  margin-bottom: 0;
+}
+
+tbody#system_events-tbody {
+  td {
+    padding: 2px 10px;
+  }
+  span.btn {
+    margin-bottom: 0px;
+  }
+}
+
+tbody#accesses-tbody td ul li i {
+  width: 24px;
+  text-align: center;
+  padding-right: 6px;
+  font-size: 14px;
+}
+
+
+// ============================================================
+// Forms
+// ============================================================
+
+.panel-body, .ibox-content {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 3px 6px 0px;
+}
+
+div.ibox-content > form.simple_form {
+  margin-top: 30px;
+}
+
+div#paginator_info {
+  margin-top: 3px;
+}
+
+select#per_page {
+  margin-top: 3px;
+}
+
+p.help-block {
+  max-width: 90%;
+}
+
+.help-block {
+  margin-bottom: 0px;
+}
+
+div.input-group span.input-group-addon i {
+  min-width: 20px !important;
+}
+
+.has-error div.chosen-container a,
+.has-error ul.chosen-choices {
+  border-color: $color-error;
+}
+
+.checkbox input[type="checkbox"].styled:checked + label:after,
+.checkbox input[type="radio"].styled:checked + label:after,
+.checkbox input[type=checkbox]:checked + label:after,
+input[type="checkbox"].styled:checked + label:after,
+input[type="radio"].styled:checked + label:after {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+
+// ============================================================
+// Badges & Labels
+// ============================================================
+
+.badge {
+  padding: 5px 12px 6px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.label {
+  padding: 3px 11px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+span.label {
+  &.feature {
+    width: 24px;
+    height: 24px;
+    display: inline-block !important;
+    padding: 5px;
+    color: white;
+    border-color: $color-feature-border;
+  }
+
+  & + span.label {
+    margin-left: 3px;
+  }
+}
+
+.label-warning-light, .badge-warning-light {
+  background-color: $color-warning-light;
+  color: #ffffff;
+}
+
+
+// ============================================================
+// Chosen (Select)
+// ============================================================
+
+div.tabs-container .chosen-container {
+  min-width: 100% !important;
+}
+
+div.chosen-container {
+  width: 100% !important;
+}
+
+.chosen-container {
+  display: block;
+
+  &-single .chosen-single {
+    border-radius: 1px;
+    padding: 4px 12px;
+    font-size: 14px;
+  }
+}
+
+.chosen-disabled {
+  opacity: 1 !important;
+  background-color: $color-disabled-bg;
+
+  a.chosen-single-with-deselect {
+    background-color: $color-disabled-bg;
+  }
+}
+
+
+// ============================================================
+// Components
+// ============================================================
+
+// Breadcrumb
+ol.breadcrumb li.active {
+  font-weight: bold;
+}
+
+// Duallistbox
+div.bootstrap-duallistbox-container {
+  i.glyphicon-arrow-right {
+    color: $color-duallist-add;
+  }
+  i.glyphicon-arrow-left {
+    color: $color-duallist-remove;
+  }
+}
+
+// File input
+.file {
+  border: 0;
+  margin-right: 0;
+}
+
+// Drag handle
+.handle:hover {
+  cursor: grab !important;
+}
+
+// Flot Chart
+.flot-chart {
+  height: 250px;
+}
+
+// Log level buttons
+.btn-loglevel {
+  min-width: 27px;
+  max-width: 27px;
+  max-height: 20px;
+  font-size: 12px;
+  vertical-align: middle;
+
+  .debug-level {
+    font-size: 80%;
+  }
+}
+
+// Dashed separator
+.hr-line-dashed {
+  border-top: 1px dashed $color-hr-dashed;
+}
+
+// Target info
+span.target_info {
+  color: $color-target-info;
+
+  span.target {
+    color: $color-text-muted;
+    font-weight: 600;
+  }
+  span.proxy {
+    color: $color-teal;
+  }
+}
+
+
+// ============================================================
+// Utilities
+// ============================================================
+
+.btn-warning {
+  color: white !important;
+}
+
+.text-success {
+  color: $color-success !important;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+ul.values {
+  list-style-type: none;
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+a.sort_link {
+  color: $color-text-muted;
+}
+
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.btn-primary.active:hover,
+.btn-primary.active:focus {
+  color: white !important;
+}
+
+
+// ============================================================
+// Login Screen
+// ============================================================
+
+body.login {
+  background-image: url("background_login.avif");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100%;
+  background-color: $color-login-bg;
+  background-position: center bottom;
+  margin-bottom: 50px;
+
+  .input:-webkit-autofill {
+    -webkit-text-fill-color: white !important;
+    -webkit-transition-property: background-color !important;
+  }
+
+  input.btn {
+    background: $color-login-btn;
+    border-color: white;
+  }
+
+  .form-control:focus {
+    border-color: $color-login-btn-hover;
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus,
+  .btn-primary:active,
+  .btn-primary.active,
+  .btn-primary:active:focus,
+  .btn-primary:active:hover,
+  .btn-primary.active:hover,
+  .btn-primary.active:focus {
+    background: $color-login-btn-hover;
+  }
+
+  div.row.logo {
+    margin-bottom: 50px;
+  }
+}
+
+div.loginscreen {
+  margin-top: 150px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  width: 500px !important;
+  max-width: 500px !important;
+  padding: 50px 100px 20px;
+  color: $color-text-dark;
+
+  img {
+    margin-bottom: 20px;
+  }
+
+  input::placeholder {
+    color: $color-placeholder;
+    opacity: 1;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border-radius: 20px;
+    color: $color-text-dark;
+    text-align: center;
+    border-color: white;
+    font-size: 16px;
+  }
+
+  input[type="submit"] {
+    border-radius: 10px;
+    border: none;
+  }
+
+  div.alert.alert-danger {
+    padding: 15px 0px;
+  }
+
+  p.error {
+    margin-top: 20px;
+    font-size: 16px;
+    color: $color-error;
+  }
+
+  ul.errors {
+    list-style-type: none;
+    color: $color-error;
+    text-align: left;
+  }
+
+  h3 {
+    font-size: 25px;
+  }
+
+  form {
+    padding-top: 20px;
+  }
+
+  h4 {
+    padding-top: 30px;
+    font-weight: lighter;
+    font-size: 80%;
+  }
+}
+
+
+// ============================================================
+// Information Text
+// ============================================================
+
+.information-text {
+  p {
+    font-size: 16px;
+
+    &.bold {
+      font-weight: 600;
+    }
+  }
+
+  ul {
+    font-size: 16px;
+    list-style: none;
+    padding-left: 20px;
+
+    li {
+      padding-left: 25px;
+      position: relative;
+      margin-bottom: 10px;
+      line-height: 1.3;
+
+      &::before {
+        content: "✓";
+        color: white;
+        background-color: $color-teal;
+        border-radius: 50%;
+        width: 1.2em;
+        height: 1.2em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        left: 0;
+        top: 0.2em;
+        font-size: 0.8em;
+        font-weight: bold;
+      }
+    }
+  }
+
+  a {
+    color: $color-teal;
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+  form {
+    .col-sm-offset-2 {
+      margin-left: 0;
+    }
+    .col-sm-10 {
+      width: 50%;
+    }
+  }
+}
+
+
+// ============================================================
+// Animations
+// ============================================================
+
+@keyframes ring {
+  0%   { transform: rotate(0); }
+  1%   { transform: rotate(30deg); }
+  3%   { transform: rotate(-28deg); }
+  5%   { transform: rotate(34deg); }
+  7%   { transform: rotate(-32deg); }
+  9%   { transform: rotate(30deg); }
+  11%  { transform: rotate(-28deg); }
+  13%  { transform: rotate(26deg); }
+  15%  { transform: rotate(-24deg); }
+  17%  { transform: rotate(22deg); }
+  19%  { transform: rotate(-20deg); }
+  21%  { transform: rotate(18deg); }
+  23%  { transform: rotate(-16deg); }
+  25%  { transform: rotate(14deg); }
+  27%  { transform: rotate(-12deg); }
+  29%  { transform: rotate(10deg); }
+  31%  { transform: rotate(-8deg); }
+  33%  { transform: rotate(6deg); }
+  35%  { transform: rotate(-4deg); }
+  37%  { transform: rotate(2deg); }
+  39%  { transform: rotate(-1deg); }
+  41%  { transform: rotate(1deg); }
+  43%  { transform: rotate(0); }
+  100% { transform: rotate(0); }
+}
+
+.bell-icon {
+  display: inline-block;
+  transform-origin: 50% 4px;
+
+  &.ringing {
+    animation: ring 5s ease-in-out infinite;
+  }
+}

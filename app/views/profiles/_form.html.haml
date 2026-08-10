@@ -1,0 +1,195 @@
+= simple_form_for(@profile, remote: request.xhr?) do |f|
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @profile.partition.name }, label: 'Partition'
+
+  = f.input_with_icon :name, icon: 'fa-star'
+  = f.input_with_icon :description, icon: 'fa-info'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :MaxSessionSeconds, icon: 'fa-clock', label: 'Max Session Time', hint: 'In seconds. Leave empty for unlimited session time.'
+  = f.input_with_icon :MaxSessionIdleSeconds, icon: 'fa-clock', label: 'Max Idle Time', hint: 'In seconds. Leave empty for unlimited idle time.'
+  - if current_user.has_role_read_partition?(current_user.partition)
+    - hint = raw("<b>Partition default</b> settings are defined in the <b>Target Sessions</b> tab at " + (link_to "Partition / Edit Settings",  edit_partition_setting_path(id: current_user.partition.partition_setting.id)))
+
+  .hr-line-dashed
+
+  = f.input_with_icon :client_auth_set_id, collection: ClientAuthSet.all_collection, label: "Client Authentication Set", icon: 'fa-key', include_blank: false,
+                      input_html: { onchange: "$('.client_auth_set_details').hide(); $('#client_auth_set_details_' + this.value).show();" }
+
+  .form-group
+    .col-sm-2
+    .col-sm-10
+      - @profile.client_auth_set ||= ClientAuthSet.find(ClientAuthSet.all_collection.first.last)
+
+      - ClientAuthSet.all.each do |cas|
+        - display = @profile.client_auth_set&.id == cas.id ? "block" : "none"
+        .client_auth_set_details{id: "client_auth_set_details_#{cas.id}", style: "display: #{display};"}
+          %p Summary of Client Authentication Set
+
+          %ul
+            %li
+              %span{style: "display: inline-block; min-width: 150px;"}
+                %b Description:
+              = cas.description
+            %li
+              %span{style: "display: inline-block; min-width: 150px;"}
+                %b Available Methods:
+              = [cas.publickey_client_auth.try(:human_type), cas.interactive_client_auth.try(:human_type)].compact.join(", ")
+            %li
+              %span{style: "display: inline-block; min-width: 150px;"}
+                %b Required Methods:
+              = cas.auth_logic_human
+            %li
+              %span{style: "display: inline-block; min-width: 150px;"}
+                %b Caching Enabled:
+              %i{class: "fa fa-toggle-#{cas.cache_enabled ? 'on' : 'off'}"}
+
+          Show #{link_to("more", client_auth_set_path(cas), remote: true, data: { toggle:  'modal', target: '#modal-dialog' })}...
+
+  .hr-line-dashed
+
+  #auth_selections
+    - errors = @profile.errors['TargetPreferredAuthentications']
+    - if errors.any?
+      .div.row
+        .div.col-sm-2
+        .div.col-sm-10
+          .alert.alert-danger
+            %p=errors.join(',')
+
+    = f.input_with_icon :TargetPreferredAuthentications, collection: Profile.target_authentication_collection, label: "Pref. Target Authentication",
+                        selected: @profile.TargetPreferredAuthentications[0], icon: 'fa-key', include_blank: 'Partition default', :error => false,
+                        input_html: { name: "profile[TargetPreferredAuthentications][]", id: "profile_TargetPreferredAuthentications_0" }
+
+    = field_set_tag(nil, id: 'profile_TargetPreferredAuthentications_optional') do
+      - for c in (1..3)
+        = f.input_with_icon :TargetPreferredAuthentications, collection: Profile.target_authentication_collection, label: "Pref. Target Authentication ##{c+1}",
+                                  include_blank: true, selected: @profile.TargetPreferredAuthentications[c], icon: 'fa-key', :error => false,
+                                  input_html: { name: "profile[TargetPreferredAuthentications][]", id: "profile_TargetPreferredAuthentications_#{c}", class: 'no-chosen' }
+
+    #agent-auth-hint.div.row
+      .div.col-sm-2
+      .div.col-sm-10
+        .alert.alert-warning
+          %p * Please note that the "Public Key - User SSH Auth Agent Forwarding" method sets the authentication phase with the client to a state in which none of the authentication methods password and keyboard-interactive with the client are possible anymore. If the server offers a public key authentication and this does not lead to success with a key, further authentications are no longer possible.
+
+  .hr-line-dashed
+
+  #target_selections_user
+    = f.input_with_icon :TargetUser, label: 'Target User Overwrite', icon: 'fa-user', hint: "This allows to overwrite the target user statically. You may use '$1' to reference the original user."
+
+  .hr-line-dashed
+
+  = f.input_with_icon :TargetPasswordSource, collection: Profile.target_password_source_collection, label: 'Target Password Source', icon: 'fa-key'
+
+  .form-group
+    .col-sm-2
+    .col-sm-10
+      %p.help-block
+        If the target requests a password (Password or Keyboard-Interactive method), this setting controls the behaviour:
+      %p.help-block
+        %ul
+          %li
+            %b User Dialog
+            %br
+            The password request is forwarded to the user, which is the default.
+          %li
+            %b Preserve Password
+            %br
+            An attempt is made to log on to the target system with the same password as used during gateway authentication.
+            %br
+            This only works, if the user is authentication with password or keyboard-interactive on the gateway.
+          %li
+            %b Static Password
+            %br
+            A password can be saved in the Profile that is used on the target without showing to the user.
+            %br
+            It is recommended to set the target user overwrite option as well.
+          %li
+            %b Dynamic One-Time Password
+            %br
+            For each target authentication, a individual One-Time Password is generated and send to the target.
+            %br
+            The One-Time Password can be verified by an API call within the configured validity time.
+            %br
+            This is an enterprise edition feature.
+
+  #target_selections_static
+    = f.input_with_icon :TargetPassword, as: :password, label: 'Target Password', icon: 'fa-key'
+    = f.input_with_icon :TargetPassword_confirmation, as: :password, label: 'Confirm Target Password', icon: 'fa-key'
+
+  #target_selections_dotp
+    = f.input_with_icon :TargetPasswordLength, icon: 'fa-hashtag', label: 'Target Password length', hint: 'The OTP password length in characters.'
+    = f.input_with_icon :TargetPasswordValidSeconds, icon: 'fa-clock', label: 'Max Validity', hint: 'In seconds. Time, the dynamic OTP password is valid.'
+
+    .form-group
+      .col-sm-2
+      .col-sm-10
+        .checkbox.checkbox-primary
+          = f.input :TargetPasswordCheckIdentity, wrapper: :no_deco, label: 'Check requesting device identity (IP or hostname) against target connecting to', hint: 'This slightly improves security, but comes with the cost that the target has to use the same IP for backend authentication as the User attempts to log in to.'
+
+  #target_selections_continue
+
+    .form-group
+      .col-sm-2
+      .col-sm-10
+        .checkbox.checkbox-primary
+          = f.input :TargetPasswordContinue, wrapper: :no_deco, label: 'On auth-failure, continue with User Dialog authentication.'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :TargetHostKeyLearning, icon: 'fa-graduation-cap', collection: Profile.hostkey_learning_collection, label: 'Target Hostkey Learning'
+
+  .hr-line-dashed
+
+  = f.input 'Permissions' do
+    .checkbox.checkbox-primary
+      = f.input :SSHInteractive, wrapper: :no_deco, label: 'Interactive Session'
+      = f.input :SSHSecureCopy, wrapper: :no_deco, label: 'Secure Copy (SCP)'
+      = f.input :SSHSecureFileTransfer, wrapper: :no_deco, label: 'Secure File Transfer (SFTP)'
+      = f.input :SSHAgentForward, wrapper: :no_deco, label: 'Auth Agent Forwarding'
+      = f.input :SSHX11Forward, wrapper: :no_deco, label: 'X11 Forwarding'
+      = f.input :SSHTcpForwardSsh, wrapper: :no_deco, label: 'Allow SSH session over TCP forward'
+      = f.input :SSHSocketForward, wrapper: :no_deco, label: 'Allow Unix Domain Socket Forwarding'
+
+  .hr-line-dashed
+
+  = f.input 'Logging Mask' do
+    = f.fields_for :lm do |lm|
+      .checkbox.checkbox-primary
+        = lm.input :session, as: :boolean, wrapper: :no_deco, label: 'Session Logging', input_html: { checked: @logging_mask[:session]}
+        = lm.input :tr_client, as: :boolean, wrapper: :no_deco, label: 'Client Input (keystrokes)', input_html: { checked: @logging_mask[:tr_client]}
+        = lm.input :tr_target, as: :boolean, wrapper: :no_deco, label: 'Target Output (screen output)', input_html: { checked: @logging_mask[:tr_target]}
+        = lm.input :filetransfer, as: :boolean, wrapper: :no_deco, label: 'File Transfer details', input_html: { checked: @logging_mask[:filetransfer]}
+        = lm.input :portforward, as: :boolean, wrapper: :no_deco, label: 'Port Forwardings (.pcap)', input_html: { checked: @logging_mask[:portforward]}
+        = lm.input :x11, as: :boolean, wrapper: :no_deco, label: 'X11 Logging (.pcap)', input_html: { checked: @logging_mask[:x11]}
+        = lm.input :agent, as: :boolean, wrapper: :no_deco, label: 'Auth Agent Logging', input_html: { checked: @logging_mask[:agent]}
+        = lm.input :socket, as: :boolean, wrapper: :no_deco, label: 'Unix Domain Socket Forwarding', input_html: { checked: @logging_mask[:socket]}
+
+  - if User.any_log_encryption_recipient?
+    = f.input 'Audit log encryption' do
+      .checkbox.checkbox-primary
+        = f.input :LogEncryption, as: :boolean, wrapper: :no_deco, label: 'Encrypt audit logs for administrators with configured session log encryption key. Other administrators will then no longer be able to read the logs.'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :SSHSessionSubsystems, as: :array, icon: 'fa-subway', label: 'Subsystems', input_html: { min: 1, max: 100 }, hint: 'Format: exact naming of subsystems, no regex matching! SFTP is controlled by Secure File Transfer switch.'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :SSHLocalForwards, as: :array, icon: 'fa-share', label: 'Local Forwards', input_html: { min: 1, max: 100 }, hint: 'Format: IPv4:Port, [IPv6]:Port or Hostname:Port. Asterisk (*) is supported for host and port. "localhost" can be used as a short form for three rules matching localhost, 127.0.0.1 and ::1.'
+  = f.input_with_icon :SSHRemoteForwards, as: :array, icon: 'fa-reply', label: 'Remote Forwards', input_html: { min: 1, max: 100 }, hint: 'Format: localhost:Port, IPv4_bindaddress:Port or [IPv6_bindaddress]:Port. Asterisk (*) is supported for host and port. Please specify "localhost" for regular remote port forwarding requests, e.g. -R 8000:localhost:80. If user specifies a bind address different than localhost, use bind address as host part, e.g. -R 192.168.0.10:8000:my-web-server:80.'
+
+  .hr-line-dashed
+
+  = f.input_with_icon :SSHCommandExecs, as: :array, icon: 'fa-terminal', label: 'Command Execs', input_html: { min: 1, max: 100 }, hint: 'Format: Perl compatible regular expressions (PCRE), SCP is controlled by Secure Copy switch.'
+
+  .hr-line-dashed
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back
+
+= render(:partial => 'form_javascript')

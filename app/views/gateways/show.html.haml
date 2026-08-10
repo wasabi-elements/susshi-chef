@@ -1,0 +1,85 @@
+- breadcrumb @gateway
+
+- if @gateway.created_at > (SwiftGateway.maximum(:created_at) || 0)
+  = message_panel "Gateway is not activated yet", type: :warning, icon: 'info-circle' do
+    Please active the pending changes before trying to bind the gateway with suSSHi Chef.
+
+- if @gateway.ssl_client_fingerprint != @gateway.sic_certificate_fingerprint
+  = message_panel "Gateway Registration", type: :info, icon: "exclamation-triangle" do
+    %p To bind this gateway to suSSHi Chef, please run the container with the CHEF URL <code>#{raw(sic_registration_url(@gateway))}</code>.
+    %p For more information, please refer to the documentation.
+
+= panel do
+  %h3 Information
+  = attributes_table do
+    = row_key_value "Name", @gateway.name, icon: 'fa-dungeon'
+    = row_key_value "Partition", @gateway.partition.name, icon: 'fa-cube'
+    = row_key_value "Identifier", @gateway.susshid_identifier, icon: 'fa-globe'
+    - @gateway.listen_addresses.each_with_index do |listen_address, index|
+      = row_key_value "Listen Address #{index + 1}", listen_address
+
+  %h3 Status
+  = attributes_table do
+    - status = @status['status'] rescue 'unknown'
+    - suspended = @status['suspended'] rescue 'unknown'
+    = row_key_value_block "Status", icon: 'fa-lightbulb' do
+      - if status == 'running'
+        - if suspended == true
+          %span.badge.badge-success
+            %i.fa.fa-pause
+            Monitor Suspended
+        - else
+          %span.badge.badge-primary Running
+      - else
+        %span.badge.badge-warning
+          - if @gateway.sic_host.blank?
+            Please bind the gateway
+          - else
+            Failed - not started?
+    = row_key_value_block "Pending Changes", icon: 'fa-gem' do
+      - if status == 'running'
+        - pending = @gateway.swift_changes_pending(@status['version'] || 0)
+        - if pending > 0
+          %span.badge.badge-warning= "#{pluralize(pending, 'Change')} pending"
+        - else
+          %span.badge.badge-primary
+            No Changes pending
+      - else
+        %span.badge.badge-warning
+          - if @gateway.created_at > (SwiftGateway.maximum(:created_at) || 0)
+            Please activate pending changes first
+          - else
+            Unknown
+    - if status == 'running'
+      = row_key_value "Software Version", @status['software_version'], icon: 'fa-code'
+      = row_key_value "System Time", @status['system_time'], icon: 'far fa-clock'
+      = row_key_value "Active Sessions", @status['active_sessions'], icon: 'fa-chart-area'
+
+    = row_key_value_block "Restart Gateway", icon: 'fa-sync-alt' do
+      = link_to 'Restart Gateway', restart_gateway_path(@gateway), class: 'btn btn-white',
+        data: { confirm: 'This will restart the gateway process and reload configuration. No active sessions will get disrupted, but gateway may not handel new connections for 1-2 seconds.'}
+    = row_key_value_block "Shutdown Gateway", icon: 'fa-stop-circle' do
+      = link_to "Shutdown Gateway", shutdown_gateway_path(@gateway), class: 'btn btn-white',
+        data: { confirm: 'Are you sure?', verify: 'yes', verify_text: 'This will shutdown the gateways master process and stop all running sessions on gateway. Type "yes" to confirm.'}
+    - case suspended
+    - when true
+      = row_key_value_block "Unsuspend Monitor Server", icon: 'fa-play' do
+        = link_to 'Unsuspend Monitor Server', unsuspend_gateway_path(@gateway), class: 'btn btn-white',
+          data: { confirm: 'This will unsuspend the gateways monitor server which will then return to normal operation.' }
+    - when false
+      = row_key_value_block "Suspend Monitor Server", icon: 'fa-pause' do
+        = link_to 'Suspend Monitor Server', suspend_gateway_path(@gateway), class: 'btn btn-white',
+          data: { confirm: 'This will suspend the gateways monitor server which will then reply with 423 Locked messages.'}
+
+  %h3 Secure Internal Communication
+  = attributes_table do
+    = row_key_value "Hostname / IP Address", @gateway.sic_host.blank? ? '- not set - ' : @gateway.sic_host, icon: 'fa-dungeon'
+    = row_key_value "Key Identifier", raw(@gateway.sic_certificate_key_id), icon: 'fa-fingerprint'
+    = row_key_value "Valid Until", raw(@gateway.sic_certificate_not_after), icon: 'fa-clock'
+    = row_key_value_block "Renew Certificate", icon: 'fa-sync-alt' do
+      = link_to "Renew Certificate", renew_gateway_certificate_path(@gateway), class: 'btn btn-white',
+        data: { confirm: 'Active sessions remain unaffected, but new connections may be unavailable for 1–2 seconds.'}
+    - if @gateway.ssl_client_fingerprint != @gateway.sic_certificate_fingerprint
+      = row_key_value "SIC URL", raw(sic_registration_url(@gateway)), icon: "fa-link"
+
+  = show_action_buttons(@gateway)

@@ -1,0 +1,26 @@
+defaults: &DEFAULTS
+  version: "26.08"
+  version_info: Release 26.08
+  copyright: 2017-2026 by Wasabi Elements GmbH
+
+development:
+  <<: *DEFAULTS
+
+devint:
+  <<: *DEFAULTS
+
+test:
+  <<: *DEFAULTS
+
+production:
+  <<: *DEFAULTS
+
+release:
+  <<: *DEFAULTS
+
+integration:
+  <<: *DEFAULTS
+
+apitest:
+  <<: *DEFAULTS
+

@@ -1,0 +1,18 @@
+= simple_form_for(@target_group, remote: request.xhr?) do |f|
+  = f.error_notification
+
+  = f.input :partition_id, as: :hidden
+  = f.fields_for :partition do
+    = f.input_with_icon :partition_name, disabled: true, icon: 'fa-cube', input_html: { value: @target_group.partition.name }, label: 'Partition'
+
+  = f.input_with_icon :groupname, icon: 'fa-object-group', label: 'Group Name'
+  = f.input_with_icon :description, icon: 'fa-info'
+
+  .checkbox.checkbox-primary
+    = f.input :active, label: 'Group is active'
+
+  .hr-line-dashed
+  = f.input_dual :target_ids, collection: Target.duallist_collection(@target_group.partition.id, false), label: 'Members'
+
+
+  = f.button :submit_cancel, html: { class: 'btn-primary' }, cancel: :back

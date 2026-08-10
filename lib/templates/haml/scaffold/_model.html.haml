@@ -1,0 +1,14 @@
+%tr
+  %td
+    %i.fa.fa-star-o
+  <%- attributes.each do |attribute| -%>
+  <%- if attribute.class == TrueClass or attribute.class == FalseClass -%>
+  %td
+    = boolean_value(<%= singular_table_name %>.<%= attribute.name %>)
+  <%- else -%>
+  %td= <%= singular_table_name %>.<%= attribute.name %>
+  <%- end -%>
+  <%- end -%>
+
+  %td.text-right
+    = index_action_buttons(<%= singular_table_name %>, { :destroy => is_active_controller('<%= plural_table_name %>', true) })

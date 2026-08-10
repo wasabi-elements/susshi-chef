@@ -1,0 +1,27 @@
+%h3 Renew your password
+Your current password has expired.
+%br
+Please set a new password.
+
+- if resource.errors.any?
+  - errors = resource.errors.full_messages.uniq.sort
+  - if errors.count > 1
+    %p.error There were errors:
+    .alert.alert-danger
+      %ul.errors
+        = (raw errors.each_with_index.map { |msg,index| content_tag(:li, "#{index+1}. #{msg}") }.join)
+  - else
+    %p.error There was an error:
+    .alert.alert-danger
+      %ul.errors
+        = (raw errors.first)
+
+= form_for(resource, as: resource_name, url: [resource_name, :password_expired], html: { method: :put }) do |f|
+  .form-group
+    = f.password_field :current_password, autofocus: true, class: 'form-control', :placeholder =>  'Current password'
+  .form-group
+    = f.password_field :password, autocomplete: 'off', class: 'form-control', :placeholder =>  'New password'
+  .form-group
+    = f.password_field :password_confirmation, autocomplete: 'off', class: 'form-control', :placeholder =>  'Confirm new password'
+
+  = f.submit  'Change my password', class: 'btn btn-primary block full-width m-b'

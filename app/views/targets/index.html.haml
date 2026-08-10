@@ -1,0 +1,21 @@
+- breadcrumb :targets
+
+= panel do
+  = bootstrap_search_form_for @q, :remote => true, :class => 'auto_submit_on_change' do |f|
+    .row
+      .col-sm-2
+        = f.select :type_eq, Target.types_collection, include_blank: true, label: 'Type'
+      - if @any_proxy
+        .col-sm-4
+          = f.text_field :name_cont, placeholder: 'contains', label: 'Name'
+        .col-sm-2
+          = f.select :proxy_id_eq, Proxy.all_collection, include_blank: true, label: 'Proxy'
+      - else
+        .col-sm-6
+          = f.text_field :name_cont, placeholder: 'contains', label: 'Name'
+      .col-sm-2
+        = f.text_field :description_cont, placeholder: 'contains', label: 'Description'
+      .col-sm-2
+        = f.select :active_eq, Target.active_collection, include_blank: true, label: 'Active'
+
+= list_panel(:targets, @targets, @q)
