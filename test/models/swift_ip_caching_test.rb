@@ -74,9 +74,11 @@ class SwiftIpCacheTest < ActiveSupport::TestCase
     cached = SwiftIpCacheTestHelper.lookup(create: true, refresh: true, source_ip: CLIENT_IP_V4)
     assert cached
 
-    # Outdated after another 4 seconds, because not updated
+    # Outdated after another 4 seconds, because not updated. Asked with refresh,
+    # because that is what evaluates the idle time — a lookup without it asks
+    # about the total lifetime instead, which has not run out yet.
     sleep 4
-    cached = SwiftIpCacheTestHelper.lookup(source_ip: CLIENT_IP_V4)
+    cached = SwiftIpCacheTestHelper.lookup(refresh: true, source_ip: CLIENT_IP_V4)
     assert_not cached
   end
 
@@ -101,26 +103,37 @@ class SwiftIpCacheTest < ActiveSupport::TestCase
     cached = SwiftIpCacheTestHelper.lookup(create: true, refresh: true, source_ip: CLIENT_IP_V6)
     assert cached
 
-    # Outdated after another 4 seconds, because not updated
+    # Outdated after another 4 seconds, because not updated. See the IPv4 test
+    # above for why this one asks with refresh.
     sleep 4
-    cached = SwiftIpCacheTestHelper.lookup(source_ip: CLIENT_IP_V6)
+    cached = SwiftIpCacheTestHelper.lookup(refresh: true, source_ip: CLIENT_IP_V6)
     assert_not cached
   end
 
+  # Without refresh there is nothing to refresh, so the idle time has no meaning:
+  # the entry lives until max_cache_time and not a second less. This is the
+  # behaviour a Client Auth Set gets with cache_refresh disabled.
   test "Entry for IP #{CLIENT_IP_V4} and do not refresh" do
     SwiftIpCaching.all.destroy_all
+    times = { cache_idle_time: 2, max_cache_time: 6 }
 
     # Create cache entry
-    cached = SwiftIpCacheTestHelper.lookup(create: true, source_ip: CLIENT_IP_V4)
+    cached = SwiftIpCacheTestHelper.lookup(create: true, source_ip: CLIENT_IP_V4, **times)
     assert_not cached
 
     # Test if valid
-    cached = SwiftIpCacheTestHelper.lookup(source_ip: CLIENT_IP_V4)
+    cached = SwiftIpCacheTestHelper.lookup(source_ip: CLIENT_IP_V4, **times)
     assert cached
 
-    # Sleep a bit
-    sleep 3.5
-    cached = SwiftIpCacheTestHelper.lookup(source_ip: CLIENT_IP_V4)
+    # Still valid past the idle time: nothing refreshes it, so nothing expires it
+    # either.
+    sleep 2.5
+    cached = SwiftIpCacheTestHelper.lookup(source_ip: CLIENT_IP_V4, **times)
+    assert cached
+
+    # Gone once the total lifetime is over.
+    sleep 4
+    cached = SwiftIpCacheTestHelper.lookup(source_ip: CLIENT_IP_V4, **times)
     assert_not cached
   end
 
