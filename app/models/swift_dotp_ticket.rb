@@ -86,8 +86,16 @@ class SwiftDotpTicket < ApplicationRecord
         target_user:  target_user
       ).where('valid_until > ?', Time.now)
 
-      unless target_identity.blank? or target_password[0] != 'i'
-        tickets = tickets.where(target_identity: target_identity)
+      # An identity bound ticket announces itself in the first character of its
+      # password, see #create_ticket.
+      identity_bound = target_identity.present? && target_password[0] == 'i'
+
+      if identity_bound
+        # target_identity is encrypted, and not deterministically, so every write
+        # produces different ciphertext: a WHERE on it can never match. The
+        # candidates are already narrowed to one partition, one target user and
+        # the unexpired ones, so the comparison happens here instead.
+        tickets = tickets.reject { |ticket| ticket.target_identity != target_identity }
       else
         tickets = tickets.where('target_identity IS NULL')
       end
