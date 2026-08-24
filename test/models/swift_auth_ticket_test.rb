@@ -23,7 +23,17 @@ USERINFO      = { username: "oliver", name: "Oliver Rauscher" }
 SUSSHI_UNIQID = "20251015-044155-0001-26461"
 SECRET_LENGTH = 32
 
-JWT = { "aud" => "AUD", "iss" => "https://issuer/application/o/susshi/", "sid" => "SID", "sub" => "oliver" }
+# The payload suSSHi Sous Chef hands over. "uid" is the claim validate_ticket
+# maps to a suSSHi user; "sub" is the identity provider's own subject and is only
+# stored. Not named JWT: that is the jwt gem's own module, and shadowing it here
+# would follow every test in the same process.
+JWT_PAYLOAD = {
+  "uid" => "oliver",
+  "aud" => "AUD",
+  "iss" => "https://issuer/application/o/susshi/",
+  "sid" => "SID",
+  "sub" => "oliver"
+}.freeze
 
 class SwiftAuthTicketTestHelper
   class << self
@@ -60,7 +70,7 @@ class SwiftAuthTicketTest < ActiveSupport::TestCase
 
     assert SwiftAuthTicket.validate_ticket(
       secret: ticket.secret,
-      jwt:    JWT
+      jwt:    JWT_PAYLOAD
     )
   end
 
@@ -71,7 +81,7 @@ class SwiftAuthTicketTest < ActiveSupport::TestCase
 
     assert_not SwiftAuthTicket.validate_ticket(
       secret: ticket.secret,
-      jwt:    JWT
+      jwt:    JWT_PAYLOAD
     )
   end
 
@@ -81,12 +91,12 @@ class SwiftAuthTicketTest < ActiveSupport::TestCase
 
     assert SwiftAuthTicket.validate_ticket(
       secret: secret,
-      jwt:    JWT
+      jwt:    JWT_PAYLOAD
     )
 
     assert_not SwiftAuthTicket.validate_ticket(
       secret: secret,
-      jwt:    JWT
+      jwt:    JWT_PAYLOAD
     )
   end
 
@@ -96,13 +106,24 @@ class SwiftAuthTicketTest < ActiveSupport::TestCase
 
     assert SwiftAuthTicket.validate_ticket(
       secret: secret,
-      jwt:    JWT
+      jwt:    JWT_PAYLOAD
     )
 
     assert SwiftAuthTicket.validate_ticket(
       secret: secret,
-      jwt:    JWT,
+      jwt:    JWT_PAYLOAD,
       state:  :validated
+    )
+  end
+
+  # Regression: the lookup maps "uid" to a suSSHi user. A payload that only
+  # carries the provider's "sub" claim identifies nobody here.
+  test "Create and lookup ticket without the uid claim" do
+    ticket = SwiftAuthTicketTestHelper.create_ticket(max_issue_time: 5, state: :issued)
+
+    assert_not SwiftAuthTicket.validate_ticket(
+      secret: ticket.secret,
+      jwt:    JWT_PAYLOAD.except("uid")
     )
   end
 
