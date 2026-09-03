@@ -1,13 +1,20 @@
 - breadcrumb @gateway
 
-- if @gateway.created_at > (SwiftGateway.maximum(:created_at) || 0)
-  = message_panel "Gateway is not activated yet", type: :warning, icon: 'info-circle' do
-    Please active the pending changes before trying to bind the gateway with suSSHi Chef.
-
 - if @gateway.ssl_client_fingerprint != @gateway.sic_certificate_fingerprint
-  = message_panel "Gateway Registration", type: :info, icon: "exclamation-triangle" do
-    %p To bind this gateway to suSSHi Chef, please run the container with the CHEF URL <code>#{raw(sic_registration_url(@gateway))}</code>.
-    %p For more information, please refer to the documentation.
+  - uri = URI.parse(sic_registration_url(@gateway))
+  = message_panel "Gateway Registration", type: :info, icon: "info-circle" do
+    %p To bind this gateway to suSSHi Chef, run the container with <code>SUSSHI_CHEF_URL</code> set to <code>#{raw(uri.to_s)}</code>.
+
+  - if /127\.0\.0\.1|localhost|::1/.match?(uri.to_s)
+    = message_panel "Attention", type: :warning, icon: "exclamation-triangle" do
+      %p
+        Inside the gateway container, <b>#{uri.host}</b> would point to the container itself — not suSSHi Chef.
+        Replace <b>#{uri.host}</b> with a suSSHi Chef hostname or IP address that the gateway container can resolve and reach.
+      %p
+        %i.fa.fa-info-circle
+        If both containers run in the same Docker network, suSSHi Chef's Compose service name works well.
+      %p
+        For more information, please refer to the documentation.
 
 = panel do
   %h3 Information
