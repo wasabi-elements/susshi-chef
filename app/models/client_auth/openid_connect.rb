@@ -18,7 +18,7 @@
 class ClientAuth::OpenidConnect < ClientAuth
 
   PROPERTIES = {
-    kbd_int_auth_title:       {
+    kbd_int_auth_title: {
       as:          :text,
       label:       "Title",
       icon:        "fa-info",
@@ -43,7 +43,7 @@ class ClientAuth::OpenidConnect < ClientAuth
   #-- Validators
 
   validates :kbd_int_auth_instruction, format: { with: /\A.*%secret%.*\z/m, message: 'must at least include the variable %secret%' }, allow_blank: true
-  validates :session_end_on_logout, inclusion: { in: %w[0 1] }
+  validates :session_end_on_logout, inclusion: { in: [true, false] }
 
   #-- Class methods
 
@@ -67,12 +67,16 @@ class ClientAuth::OpenidConnect < ClientAuth
 
   #-- Instance methods
 
+  def preferred_authentications
+    %w[openid-connect]
+  end
+
   def required_auth
     "openid-connect"
   end
 
-  def preferred_authentications
-    %w[openid-connect]
+  def session_end_on_logout=(value)
+    super ActiveModel::Type::Boolean.new.cast(value)
   end
 
 end
