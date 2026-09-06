@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_07_172741) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_17_060001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "hstore"
@@ -482,9 +482,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_07_172741) do
   create_table "subscriptions", force: :cascade do |t|
     t.datetime "activated_at", precision: nil
     t.datetime "created_at", null: false
+    t.datetime "last_pull_at"
+    t.string "last_pull_message"
+    t.string "last_pull_state"
     t.string "subscription_key"
     t.text "token"
     t.datetime "updated_at", null: false
+    t.datetime "withdrawn_at"
   end
 
   create_table "susshi_user_keys", force: :cascade do |t|

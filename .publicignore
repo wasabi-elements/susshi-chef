@@ -1,4 +1,5 @@
 .dockerignore
+.env*
 .gitlab-ci.yml
 .gitlab/
 .railsview

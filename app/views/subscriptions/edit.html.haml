@@ -1,0 +1,41 @@
+- breadcrumb :subscription
+- subscription_content_for_navbar(@subscription)
+- load_errors ||= nil
+
+= panel do
+  .information-text
+    %h2 Thank You for Using Our Software
+    .hr-line-dashed
+
+  - if load_errors
+    = render partial: "load_errors", locals: { load_errors: }
+  - else
+
+    - if @subscription.errors.messages[:validity].blank?
+      %p You have a valid support subscription.
+      %p.bold Thank you for your support!
+
+    = render partial: "subscription_details", locals: { subscription: @subscription }
+
+    %p.text-center
+      = link_to "Refresh Subscription", subscription_path(@subscription.id), method: :patch, class: "btn btn-primary", style: "color: white;"
+
+    - if defined?(EE::Engine)
+
+      - if %w[refused invalid].include?(@subscription.last_pull_state)
+        %br
+        %h2 Subscription Key
+        .hr-line-dashed
+        = message_panel 'The last renewal was rejected', type: :warning, icon: 'exclamation-triangle' do
+          %ul
+            %li.warning= @subscription.last_pull_message
+
+        - intro = ["This subscription keeps working until it expires, but it will not renew until the key is corrected.",
+                   "Please enter a new subscription key you received from support. The installation then fetches its subscription itself and renews it automatically."]
+        = render partial: "activation", locals: { heading: "Reactivate Your Subscription Online", intro: }
+
+      - if !@subscription.pulling?
+        - intro = "This installation runs from a mounted subscription file. Enter a subscription key to have it renew itself instead."
+        = render partial: "activation", locals: { heading: "Subscription Key", intro: }
+
+  = render partial: "links"

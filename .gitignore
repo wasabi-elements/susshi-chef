@@ -58,3 +58,7 @@ config/initializers/_local_config.rb
 
 # Env files
 .env
+
+# dotenv-rails also reads .env.development, .env.development.local and .env.local.
+.env.*
+!.env.development.local.example

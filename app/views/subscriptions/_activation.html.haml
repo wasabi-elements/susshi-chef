@@ -1,0 +1,7 @@
+%br
+%h2= heading
+.hr-line-dashed
+
+- Array(intro).each do |paragraph|
+  %p= paragraph
+= render partial: "form"

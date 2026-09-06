@@ -35,7 +35,8 @@ class SubscriptionsController < ApplicationController
   def create
     authorize :subscription, :edit?
 
-    @subscription = Subscription.new(subscription_params)
+    @subscription = Subscription.first_or_initialize
+    @subscription.assign_attributes(subscription_params)
     @errors = @subscription.load
 
     respond_to do |format|

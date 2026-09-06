@@ -81,16 +81,13 @@ class Subscription < ActiveRecord::Base
       destroy_all
     end
 
-    def mount_hint
-      "Please mount it as a Docker secret at /run/secrets/subscription.token or as a file at /subscription.token into the container."
-    end
   end
 
   #-- Instance methods
 
   def load
     path = SUBSCRIPTION_FILE_PATHS.find { |p| File.exist?(p) }
-    return ["No subscription.token found. #{Subscription.mount_hint}"] unless path
+    return ["No subscription.token found."] unless path
 
     self.token        = File.read(path).strip
     self.activated_at = Time.now
@@ -155,6 +152,18 @@ class Subscription < ActiveRecord::Base
     expires_in_days <= 30
   end
 
+  # One sentence for the administrator, or nil when there is nothing to say.
+  # Thirty days is the right lead time here: nothing renews a mounted token
+  # file, so replacing it is somebody's job.
+  def expiry_warning
+    return nil unless expires_soon?
+
+    days = expires_in_days
+    return "Your subscription expires today." if days <= 0
+
+    "Your subscription will expire in #{days} #{"day".pluralize(days)}."
+  end
+
   def feature?(feature_name)
     defined?(EE::Engine) && active? && claims.features.include?(feature_name)
   end
@@ -199,7 +208,7 @@ class Subscription < ActiveRecord::Base
 
   def validate_token
     if token.blank?
-      errors.add(:token, "No subscription token installed")
+      errors.add(:token, "No subscription installed")
     elsif claims.nil?
       errors.add(:token, @claims_error || "The subscription token is not valid")
     elsif claims.audience != AUDIENCE

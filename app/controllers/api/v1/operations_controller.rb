@@ -100,7 +100,7 @@ module Api::V1
         sub_hash.merge!({
           valid:             subscription.valid?,
           validation_errors: subscription.errors.messages.any? ? subscription.errors.messages : nil,
-          expires_soon:      subscription.expires_soon? ? "Expires in about #{subscription.expires_in_days} days" : nil,
+          expires_soon:      subscription.expiry_warning,
         }.compact)
 
         sub_hash.merge!({

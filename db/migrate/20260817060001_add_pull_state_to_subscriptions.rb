@@ -15,18 +15,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-module ExternalLinksHelper
+class AddPullStateToSubscriptions < ActiveRecord::Migration[8.1]
+  def change
+    add_column :subscriptions, :last_pull_at, :datetime
+    add_column :subscriptions, :last_pull_state, :string
+    add_column :subscriptions, :last_pull_message, :string
 
-  def external_link_susshi_url = "https://www.susshi.io"
-
-  def external_link_docs_url = "https://docs.susshi.io"
-
-  def external_link_floss_url = "https://docs.susshi.io/legal/licenses.html"
-
-  def external_link_subscription_plan_url = "https://www.susshi.io/pricing"
-
-  def external_link_github_url = "https://www.github.com/wasabi-elements"
-
-  def external_link_registry_url = "https://hub.docker.com/u/wasabielements"
-
+    # Set when the vendor withdrew the subscription. Deliberately separate from
+    # last_pull_state: an unreachable service overwrites the state of the last
+    # attempt, and a withdrawal must not evaporate with it.
+    add_column :subscriptions, :withdrawn_at, :datetime
+  end
 end

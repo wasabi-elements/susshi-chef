@@ -6,10 +6,9 @@
     - if @subscription.valid?
       - subscription_content_for_navbar(@subscription)
       - unless @subscription.expired?
-        - if @subscription.expires_soon?
-          - days = @subscription.expires_in_days
-          = message_panel 'Your subscription will expire soon', type: :warning, icon: 'exclamation-triangle' do
-            = "Your subscription will expire #{days == 0 ? "today" : "in #{days} day#{"s" if days > 1}"}."
+        - if (warning = @subscription.expiry_warning)
+          = message_panel 'Your subscription needs attention', type: :warning, icon: 'exclamation-triangle' do
+            = warning
 
     - else
       - content_for(:navbar_subscription, "No Subscription")

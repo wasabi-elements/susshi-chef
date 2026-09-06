@@ -1,0 +1,20 @@
+.information-text
+  %h2 Enterprise Edition — No Active Subscription
+  .hr-line-dashed
+  = render partial: "activation_problems"
+  %p Your suSSHi Chef Enterprise Edition is installed, but no valid subscription is active. Enterprise features are currently disabled.
+
+  - intro = "Please enter your subscription key you received with your subscription. The installation then fetches its subscription itself and renews it automatically."
+  = render partial: "activation", locals: { heading: "Activate Your Subscription Online", intro: }
+  %br
+  %br
+
+  %p.font-bold No Internet Access?
+  %p
+    Air-gapped installations receive a signed token file instead. Ask your suSSHi vendor for one, quoting the Installation Identifier:
+    %span.font-bold #{Preference.instance.installation_identifier}
+  %p Once received, please mount it as a Docker secret at /run/secrets/subscription.token or as a file at /subscription.token into the container.
+  %br
+
+  %p.font-bold Need a subscription?
+  %p= "View our #{link_to "Subscription Plans", external_link_subscription_plan_url, target: "_blank", rel: "noopener noreferrer"}."

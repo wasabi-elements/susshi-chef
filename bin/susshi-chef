@@ -224,6 +224,17 @@ $CRON
 [[ $? -ne 0 ]] && echo "... failed. Aborting" && exit 1
 su -s /bin/bash susshi -c "RAILS_ENV=$RAILS_ENV $BUNDLE exec whenever --update-cron >/dev/null" # config/schedule.rb
 
+if [[ -d $INSTALL_DIR/engines/ee ]]; then
+  echo "=> Fetching subscription ..."
+  su -s /bin/bash susshi -c "RAILS_ENV=$RAILS_ENV \
+    SUBSCRIPTION_SERVICE_URL='${SUBSCRIPTION_SERVICE_URL}' \
+    SUBSCRIPTION_SERVICE_CA_BUNDLE='${SUBSCRIPTION_SERVICE_CA_BUNDLE}' \
+    SUBSCRIPTION_SERVICE_SSL_VERIFY_NONE='${SUBSCRIPTION_SERVICE_SSL_VERIFY_NONE}' \
+    HTTPS_PROXY='${HTTPS_PROXY}' NO_PROXY='${NO_PROXY}' \
+    $BUNDLE exec rails chef_ee:subscription:pull" || \
+    echo "... could not fetch the subscription, continuing with the stored one."
+fi
+
 echo "=> Starting NGINX ..."
 cat <<EOF >/opt/wasabi/susshi-chef/config/nginx/conf.d/ui-ssl-proto.conf
     ssl_protocols       ${NGINX_SSL_PROTOCOLS:-TLSv1.2 TLSv1.3};

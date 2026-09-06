@@ -1,0 +1,14 @@
+:ruby
+  problems = Array(@errors).compact_blank
+  problems = @subscription.errors[:token].to_a if problems.empty?
+  if problems.empty?
+    problems = @subscription.errors.messages.except(:subscription_key, :token).values.flatten
+  end
+  problems = problems.uniq
+
+
+- if problems.any?
+  = message_panel 'We have some issues ...', type: :warning, icon: 'exclamation-triangle' do
+    %ul
+      - problems.each do |problem|
+        %li.warning= problem

@@ -43,3 +43,20 @@ end
 every "40 3 * * *" do
   rake "db:sessions:trim"
 end
+
+# Only the Enterprise Edition can fetch a subscription; without it the task does
+# not exist and cron would fail every night.
+if defined?(EE::Engine)
+  # cron does not inherit the container environment — whatever the subscription
+  # fetch needs has to be written into the crontab here, or the nightly run would
+  # behave differently from the one at container start.
+  env "SUBSCRIPTION_SERVICE_URL", ENV["SUBSCRIPTION_SERVICE_URL"]
+  env "SUBSCRIPTION_SERVICE_CA_BUNDLE", ENV["SUBSCRIPTION_SERVICE_CA_BUNDLE"]
+  env "SUBSCRIPTION_SERVICE_SSL_VERIFY_NONE", ENV["SUBSCRIPTION_SERVICE_SSL_VERIFY_NONE"]
+  env "HTTPS_PROXY", ENV["HTTPS_PROXY"]
+  env "NO_PROXY", ENV["NO_PROXY"]
+
+  every "50 3 * * *" do
+    rake "chef_ee:subscription:pull"
+  end
+end
