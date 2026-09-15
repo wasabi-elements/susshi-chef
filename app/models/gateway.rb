@@ -83,7 +83,7 @@ class Gateway < ApplicationRecord
     end
 
     def renew_sic_certificates(enforce: false)
-      Gateway.where.not(ssl_client_fingerprint: nil).each do |gateway|
+      Gateway.find_each do |gateway|
         renew = enforce ||
           Time.now >= gateway.sic_certificate_not_before + ENV['SIC_CERTS_EXPIRY_DAYS'].to_i.days ||
             Time.now >= gateway.sic_certificate_not_after - ENV['SIC_CERTS_EXPIRY_DAYS'].to_i.days
