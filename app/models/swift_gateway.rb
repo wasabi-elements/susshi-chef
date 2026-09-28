@@ -20,6 +20,29 @@ class SwiftGateway < Swift
 
   belongs_to :partition
 
+  def sic_certificate_expired?
+    return true if sic_certificate.blank?
+
+    Time.now > OpenSSL::X509::Certificate.new(sic_certificate).not_after
+  end
+
+  def renew_sic_certificate
+    gateway = Gateway.find_by_susshid_identifier(identifier)
+    return false if gateway.blank?
+
+    ActiveRecord::Base.transaction do
+      gateway.create_sic_certificate
+      gateway.create_syslog_certificate
+
+      update!(
+        sic_key: gateway.sic_key.try(:data),
+        sic_certificate: gateway.sic_certificate.try(:data),
+        syslog_key: gateway.syslog_key.try(:data),
+        syslog_certificate: gateway.syslog_certificate.try(:data)
+      )
+    end
+  end
+
   class << self
     def by_reachability(partition_id)
       queue = Queue.new(SwiftGateway.where(partition_id: partition_id))

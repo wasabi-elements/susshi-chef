@@ -61,6 +61,8 @@ module Api::V1
     #--- Initialize SIC
     def sic
       if Devise.secure_compare(@params.psk.to_s, @params.gateway.sic_psk.to_s)
+        @params.gateway.renew_sic_certificate if @params.gateway.sic_certificate_expired?
+
         if (cert = SSL::Sic.create_sic_certificate_p12(@params.gateway, @params.memcrypt_key))
           # Record requesting IP address for further SIC communication, e.g. chef remote commands
           if @params.gateway.sic_host.blank?
