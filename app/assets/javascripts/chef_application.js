@@ -35,44 +35,18 @@ registerClearSearchForm = function() {
 };
 
 registerDynamicFields = function() {
-    $("form").on('click', '.add-fields', function(event) {
+    /* rebinding via namespace avoids stacked handlers when called again for modal dialogs */
+    $("form").off('click.dynamicFields').on('click.dynamicFields', '.add-fields', function(event) {
+        event.preventDefault();
+        var all_inputs = $(this).parent().parent().find('input, textarea');
+        var last_input = all_inputs.last();
+        var max = last_input.data('max');
 
-        var length;
-        var max;
-        var all_input_groups;
-        var group = $(this).data('group');
-
-        if (group) {
-            var all_input_groups = $('div.add-group.'+group);
-            length = all_input_groups.length;
-            max = $(this).data('max');
-            if (max == null) {
-                max = 100;
-            }
-        } else {
-            var all_inputs = $(this).parent().parent().find('input, textarea');
-            var last_input = all_inputs.last();
-            all_input_groups = last_input.parent('div.input-group');
-            length = all_inputs.length;
-            max = all_inputs.last().data('max');
+        /* clone the single last field only, never the surrounding input-group */
+        if (all_inputs.length < max) {
+            last_input.after(last_input.clone().val('').removeAttr('id'));
         }
-        if (length < max) {
-            if (all_input_groups.length > 0) {
-                /* clone group and remove index if any */
-                var new_objects = all_input_groups.last().clone();
-                var time = new Date().getTime();
-                new_objects.find('input, textarea').each(function (index, value) {
-                    var name = $(this).attr('name').replace(/\[[0-9]+\]/g, '['+time+']');
-                    $(this).attr('name', name).val('');
-                });
-                all_input_groups.last().after(new_objects);
-                all_input_groups.last().addClass('margin-bottom-sm');
-            } else {
-                last_input.after(last_input.clone().val(null));
-            }
-            event.preventDefault();
-        }
-        if (length + 1 == max) {
+        if (all_inputs.length + 1 >= max) {
             $(this).remove();
         }
     });
