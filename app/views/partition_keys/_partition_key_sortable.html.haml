@@ -18,7 +18,7 @@
   - if proxy
     %td
       - if partition_key_sortable.proxy_id
-        = link_to partition_key_sortable.proxy.name, partition_key_sortable.proxy
+        = link_to partition_key_sortable.proxy.name, ee.proxy_path(partition_key_sortable.proxy)
       - else
         = '-'
   %td= partition_key_sortable.created_at
