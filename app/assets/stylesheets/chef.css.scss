@@ -350,6 +350,12 @@ input[type="radio"].styled:checked + label:after {
   font-weight: 900;
 }
 
+// dynamic-fields-for add/remove links wrap a whole form row; hide the focus ring on mouse click
+a[data-dynamic-fields-add]:focus:not(:focus-visible),
+a[data-dynamic-fields-remove]:focus:not(:focus-visible) {
+  outline: none;
+}
+
 
 // ============================================================
 // Badges & Labels
