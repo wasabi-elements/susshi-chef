@@ -123,6 +123,31 @@ SimpleForm.setup do |config|
     end
   end
 
+  # like horizontal_input_group, plus a button to clear the field
+  config.wrappers :horizontal_input_group_clearable, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :label, class: 'col-sm-2 control-label'
+
+    b.wrapper tag: 'div', class: 'col-sm-10' do |ba|
+      ba.wrapper tag: 'div', class: 'input-group col-sm-12' do |append|
+        append.wrapper tag: 'span', class: 'input-group-addon' do |addon|
+          addon.wrapper :icon, tag: 'i' do
+          end
+        end
+        append.use :input, class: 'form-control'
+        append.wrapper tag: 'span', class: 'input-group-btn' do |clear|
+          clear.wrapper :clear_button, tag: 'a', class: 'btn btn-default clear-field' do |button|
+            button.wrapper tag: 'i', class: 'fa fa-times' do
+            end
+          end
+        end
+      end
+      ba.use :error, wrap_with: { tag: 'span', class: 'help-block' }
+      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    end
+  end
+
   config.wrappers :horizontal_boolean, tag: 'div', class: 'form-group', error_class: 'has-error' do |b|
     b.use :html5
     b.optional :readonly

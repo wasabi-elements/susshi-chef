@@ -32,8 +32,8 @@
           %h3 General Network Settings
           .hr-line-dashed
           = f.input_with_icon :AddressFamily, collection: PartitionSetting.af_collection, label: 'Address family', icon: 'fa-globe'
-          = f.input_with_icon :ListenPorts, label: 'Listening Ports', as: :array, input_html: { type: :integer }, icon: 'fa-ship'
-          = f.input :DnsSearchDomainsBlob, as: :text, label: 'DNS search domains', :input_html => { rows: @partition_setting.DnsSearchDomains.count + 3 },
+          = f.input_with_icon :ListenPorts, label: 'Listening Ports', as: :array, input_html: { min: 1, type: :integer }, icon: 'fa-ship'
+          = f.input_with_icon :DnsSearchDomainsBlob, as: :text, label: 'DNS search domains', :input_html => { rows: @partition_setting.DnsSearchDomains.count + 3 },
             icon: 'fa-globe', hint: 'Enter one DNS domain per line or a list either comma or space separated. Mixed is also supported.'
 
           %br
@@ -47,7 +47,7 @@
           %br
           %h3 Infrastructure Protection
           .hr-line-dashed
-          = f.input :DenyTargetAddresses, label: 'Forbidden Target IPs', as: :array, hint: "All addresses listed here are inaccessible for the gateway. Use this parameter to protect your suSSHi infrastructure. This also filters target objects for allowed and reachable IP addresses.", input_html: { type: :string }
+          = f.input_with_icon :DenyTargetAddresses, label: 'Forbidden Target IPs', as: :array, icon: 'fa-ban', hint: "All addresses listed here are inaccessible for the gateway. Use this parameter to protect your suSSHi infrastructure. This also filters target objects for allowed and reachable IP addresses.", input_html: { min: 1, type: :string }
 
       #tab-2.tab-pane
         .panel-body
@@ -177,7 +177,7 @@
           .hr-line-dashed
           = f.input_with_icon :LoginGraceTime, label: 'Login Grace Time', icon: 'fa-clock'
 
-          = f.input :Banner, label: 'Login Banner', icon: 'fa-sign-in', input_html: { rows: 5, style: "font-family: monospace;" }
+          = f.input_with_icon :Banner, label: 'Login Banner', icon: 'fa-sign-in-alt', input_html: { rows: 5, style: "font-family: monospace;" }
 
           .checkbox.checkbox-primary
             = f.input :ClientCompression, label: 'Client compression'
@@ -310,7 +310,7 @@
           .panel-body
             %h3 Trusted Gateway Addresses
             .hr-line-dashed
-            = f.input :GatewayAddresses, label: 'Gateway Addresses', as: :array, input_html: { min: 1, type: :string }
+            = f.input_with_icon :GatewayAddresses, label: 'Gateway Addresses', as: :array, icon: 'fa-plug', input_html: { min: 1, type: :string }
 
   = f.button :submit_cancel, 'Update Preferences', html: { class: 'btn-primary' }, cancel: :back
 

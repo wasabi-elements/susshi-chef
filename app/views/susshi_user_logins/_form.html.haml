@@ -29,7 +29,7 @@
 
   = f.simple_fields_for :susshi_user_keys, dynamic: true do |k|
     .key-group
-      = k.input :public_blob, label: 'Public Userkey', input_html: {rows: 8, class: 'sshkey-input-with-title'}, hint: "Supported formats are PKCS1 (openSSH's .pub files), PKCS8 and SSH Public Key File Format (RFC4716)."
+      = k.input_with_icon :public_blob, icon: 'fa-key', label: 'Public Userkey', input_html: {rows: 8, class: 'sshkey-input-with-title'}, hint: "Supported formats are PKCS1 (openSSH's .pub files), PKCS8 and SSH Public Key File Format (RFC4716)."
       = k.input_with_icon :title, icon: 'fa-info-circle', label: 'Title'
       = remove_fields_link_helper k, 'Remove Userkey'
 

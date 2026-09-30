@@ -44,11 +44,32 @@ registerDynamicFields = function() {
 
         /* clone the single last field only, never the surrounding input-group */
         if (all_inputs.length < max) {
-            last_input.after(last_input.clone().val('').removeAttr('id'));
+            var last_row = last_input.closest('div.array-row');
+            if (last_row.length > 0) {
+                /* input_with_icon: clone the row holding one field, its icon and remove button */
+                var new_row = last_row.clone();
+                new_row.find('input').val('').removeAttr('id');
+                last_row.after(new_row);
+            } else {
+                last_input.after(last_input.clone().val('').removeAttr('id'));
+            }
         }
         if (all_inputs.length + 1 >= max) {
             $(this).remove();
         }
+    }).on('click.dynamicFields', '.remove-field', function(event) {
+        event.preventDefault();
+        var row = $(this).closest('div.array-row');
+
+        /* keep the last row, so there is still a field to enter values */
+        if (row.siblings('div.array-row').length > 0) {
+            row.remove();
+        } else {
+            row.find('input').val('');
+        }
+    }).on('click.dynamicFields', '.clear-field', function(event) {
+        event.preventDefault();
+        $(this).closest('div.input-group').find('input').val('');
     });
 };
 

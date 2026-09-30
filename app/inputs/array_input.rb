@@ -22,26 +22,48 @@ class ArrayInput < SimpleForm::Inputs::StringInput
   def input(wrapper_options)
     input_html_options[:type] ||= input_type
     max = input_html_options.delete(:max) || 1000
+    field_class = options[:icon_html] ? 'form-control' : 'form-control margin-bottom-sm'
 
     count = 0
     existing_values = Array(object.public_send(attribute_name)).collect do |array_el|
-      count+=1
-      @builder.text_field(nil, input_html_options.merge(value: array_el, name: "#{object_name}[#{attribute_name}][]",
-                                                        data: { max: max }, class: 'form-control margin-bottom-sm',
-                                                        id: "#{object_name}_#{attribute_name.to_s.underscore}_#{count}"))
+      count += 1
+
+      field_row(
+        @builder.text_field(
+          nil,
+          input_html_options.merge(
+            value: array_el,
+            name: "#{object_name}[#{attribute_name}][]",
+            data: { max: max },
+            class: field_class,
+            id: "#{object_name}_#{attribute_name.to_s.underscore}_#{count}"
+          )
+        )
+      )
     end
 
     min = input_html_options.delete(:min) || count
-
 
     plus = min > count ? min - count : 0
     plus = 0 if (count + plus) > max
 
     for i in (1..plus) do
-      count+=1
-      existing_values.push @builder.text_field(nil, input_html_options.merge(value: nil, name: "#{object_name}[#{attribute_name}][]",
-                                                                             data: { max: max }, class: "form-control margin-bottom-sm",
-                                                                             id: "#{object_name}_#{attribute_name.to_s.underscore}_#{count}"))
+      count += 1
+
+      existing_values.push(
+        field_row(
+          @builder.text_field(
+            nil,
+            input_html_options.merge(
+              value: nil,
+              name: "#{object_name}[#{attribute_name}][]",
+              data: { max: max },
+              class: field_class,
+              id: "#{object_name}_#{attribute_name.to_s.underscore}_#{count}"
+            )
+          )
+        )
+      )
     end
 
     if count < max
@@ -54,6 +76,25 @@ class ArrayInput < SimpleForm::Inputs::StringInput
     end
 
     existing_values.join.html_safe
+  end
+
+  # input_with_icon: each value gets its own input-group with icon and remove button
+  def field_row(field)
+    return field unless options[:icon_html]
+
+    icon_addon = content_tag(:span, class: 'input-group-addon') do
+      content_tag(:i, nil, options[:icon_html])
+    end
+
+    remove_button = content_tag(:span, class: 'input-group-btn') do
+      content_tag(:a, href: '#', class: 'btn btn-default remove-field', title: 'Remove') do
+        content_tag(:i, nil, class: 'fa fa-times')
+      end
+    end
+
+    content_tag(:div, class: 'input-group array-row margin-bottom-sm') do
+      icon_addon + field + remove_button
+    end
   end
 
   def input_type

@@ -320,8 +320,24 @@ div.input-group span.input-group-addon i {
   min-width: 20px !important;
 }
 
+// .float-e-margins .btn adds a bottom margin, which would stretch the input-group row
+div.input-group span.input-group-btn .btn {
+  margin-bottom: 0;
+}
+
+// same colors as the deselect "x" of chosen (chosen-sprite.png)
+a.remove-field,
+a.clear-field {
+  color: #888888;
+
+  &:hover, &:focus {
+    color: #464646;
+  }
+}
+
 .has-error div.chosen-container a,
-.has-error ul.chosen-choices {
+.has-error ul.chosen-choices,
+.has-error .input-group-btn .btn {
   border-color: $color-error;
 }
 

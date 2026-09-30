@@ -56,7 +56,13 @@ module SimpleForm
       options = args.extract_options!
       if (icon = options.delete(:icon))
         options[:icon_html] = { class: "fa #{icon}"}
-        options[:wrapper] = :horizontal_input_group
+        # array inputs render an input-group with icon per row themselves
+        options[:wrapper] = :horizontal_input_group unless options[:as] == :array
+        # single fields only: add a button to clear the field
+        if options.delete(:clearable) && options[:as] != :array
+          options[:wrapper] = :horizontal_input_group_clearable
+          options[:clear_button_html] = { href: '#', title: 'Clear' }
+        end
       end
       args << options
       input(*args, &block)

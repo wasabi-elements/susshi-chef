@@ -31,6 +31,6 @@
 
     = f.simple_fields_for 'group' do |g|
       = g.input_dual :ids, collection: TargetGroup.duallist_collection(current_user.partition.id), label: 'Add to existing groups'
-      = g.input :name, label: 'Create a new group', hint: 'If non-empty, a group with given name will be created containing all hosts of this scan.'
+      = g.input_with_icon :name, icon: 'fa-object-group', label: 'Create a new group', hint: 'If non-empty, a group with given name will be created containing all hosts of this scan.'
 
     = f.button :submit_cancel, 'Create & Update hosts!', html: { class: 'btn-primary' }, cancel: scan_target_hosts_path

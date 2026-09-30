@@ -1,4 +1,4 @@
 = simple_form_for @subscription, url: subscriptions_path, method: :post do |f|
-  = f.input :subscription_key, icon: "fa-certificate", input_html: { value: nil, autocomplete: "off" }, label: false, placeholder: "Subscription Key"
+  = f.input_with_icon :subscription_key, icon: "fa-certificate", input_html: { value: nil, autocomplete: "off" }, label: false, placeholder: "Subscription Key"
 
   = f.button :submit, class: 'btn-primary', value: "Activate Online Subscription", cancel: false

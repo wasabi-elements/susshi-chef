@@ -26,7 +26,7 @@
   .hr-line-dashed
 
   = f.simple_fields_for :target_host_keys, dynamic: true do |k|
-    = k.input :public_blob, label: 'Public Hostkey', input_html: {rows: 8}, hint: "Supported formats are PKCS1 (e.g. openSSH's knownhosts file), PKCS8 and SSH Public Key File Format (RFC4716)."
+    = k.input_with_icon :public_blob, icon: 'fa-key', label: 'Public Hostkey', input_html: {rows: 8}, hint: "Supported formats are PKCS1 (e.g. openSSH's knownhosts file), PKCS8 and SSH Public Key File Format (RFC4716)."
     = remove_fields_link_helper k, 'Remove'
 
   = add_fields_link_helper f, :target_host_keys, 'Add Hostkey'
