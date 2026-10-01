@@ -29,7 +29,7 @@
       = row_key_value 'First login', "#{@susshi_user_login.first_use_at} -- #{distance_of_time_in_words(Time.now - @susshi_user_login.first_use_at)} ago", icon: 'fa-history'
       = row_key_value 'Last login', "#{@susshi_user_login.last_use_at} -- #{distance_of_time_in_words(Time.now - @susshi_user_login.last_use_at)} ago", icon: 'fa-history'
       - unless swift_user.blank? or swift_user.last_auth_fail_at.blank?
-        - last = Time.at(swift_user.last_auth_fail_at.to_i)
+        - last = Time.zone.at(swift_user.last_auth_fail_at.to_i)
         = row_key_value 'Last Auth fail', "#{last} -- #{distance_of_time_in_words(Time.now - last)} ago", icon: 'fa-history'
       = row_key_value 'Login count', @susshi_user_login.use_count, icon: 'fa-chart-area'
 
