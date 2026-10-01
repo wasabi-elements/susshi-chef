@@ -33,7 +33,7 @@ class ClientAuth::Totp < ClientAuth
     kbd_int_auth_prompt:      {
       label:       "KBD-Interactive Prompt",
       icon:        "fa-info",
-      placeholder: "Gateway password:_"
+      placeholder: "TOTP token:_"
     },
   }
 

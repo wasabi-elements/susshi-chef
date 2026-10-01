@@ -35,10 +35,11 @@
               - interactive_type.const_get('PROPERTIES').each do |property, options|
                 - next if options.blank?
 
+                - options = options.deep_dup
                 - if options[:as] == :password
-                  - (options[:input_html] ||= {}).merge!(value: @client_auth_set.interactive_client_auth.try(property) || options[:default])
+                  - (options[:input_html] ||= {}).merge!(value: @client_auth_set.interactive_client_auth.try(property))
                 - if options[:as] == :boolean
-                  - (options[:input_html] ||= {}).merge!(checked: @client_auth_set.interactive_client_auth.try(property) || options[:default] || false)
+                  - (options[:input_html] ||= {}).merge!(checked: @client_auth_set.interactive_client_auth.try(property) || false)
                   = f.input options[:title] do
                     .checkbox.checkbox-primary
                       = c.input property, wrapper: :no_deco, **options
@@ -62,7 +63,7 @@
       #cache_idle_settings
         = f.input_with_icon :cache_idle_time, label: 'Cache Idle Time', icon: 'fa-clock'
       = f.input_with_icon :auth_logic_cached, icon: 'fa-sign-in-alt', collection: ClientAuthSet.auth_logic_collection,
-                          label: 'Required Methods (when in cache)', include_blank: false
+                          label: 'Required Methods (when cached)', include_blank: false
       = f.input_with_icon :cache_whitelist_text, label: 'Whitelist', icon: 'fa-network-wired', as: :text,
         hint: 'Caching is always returning "cached" for source IP addresses matching this list. The entries can be separated by whitespaces or commas.',
         :input_html => { rows: @client_auth_set.cache_whitelist.try(:count).to_i + 3 }

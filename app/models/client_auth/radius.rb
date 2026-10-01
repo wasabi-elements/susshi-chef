@@ -38,13 +38,14 @@ class ClientAuth::Radius < ClientAuth
     kbd_int_auth_prompt: {
       label: "KBD-Interactive Prompt",
       icon: "fa-info",
-      placeholder: "Gateway password:_"
+      placeholder: "Radius password:_"
     },
     auth_server: {
       label: "Radius Server IP",
       icon: "fa-network-wired"
     },
     auth_secret: {
+      as: :password,
       label: "Radius Server Secret",
       icon: "fa-key"
     },
@@ -85,25 +86,26 @@ class ClientAuth::Radius < ClientAuth
 
     def valid_user_input?(swift_susshi_user:, user_input:, properties: {})
       radius = Radius::Auth.new(
-        properties["auth_server"],
+        [properties["auth_server"], properties["auth_port"].presence].compact.join(":"),
         nil,
-        properties["auth_timeout"],
+        (properties["auth_timeout"].presence || DEFAULT_SERVER_TIMEOUT).to_i,
         Rails.root.join("app", "lib", "radius", "dictionary.rfc2865").to_s
       )
 
       radius.check_passwd(swift_susshi_user.name, user_input, properties["auth_secret"])
-    rescue Exception => e
+    rescue StandardError => e
+      Rails.logger.warn("RADIUS authentication failed: #{e.message}")
       false
     end
   end
 
   #-- Instance methods
 
-  def radius_auth_port=(value)
+  def auth_port=(value)
     super (value.blank? ? DEFAULT_SERVER_PORT : value).try(:to_i)
   end
 
-  def radius_auth_timeout=(value)
+  def auth_timeout=(value)
     super (value.blank? ? DEFAULT_SERVER_TIMEOUT : value).try(:to_i)
   end
 

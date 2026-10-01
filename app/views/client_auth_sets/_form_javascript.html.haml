@@ -4,21 +4,21 @@
     const selected = $("#client_auth_set_interactive_client_auth_attributes_type option:selected").val();
 
     $(".interactive_auth_type_settings").fadeOut(0);
-    $(".interactive_auth_type_settings input").attr("disabled", "disabled");
+    $(".interactive_auth_type_settings input, .interactive_auth_type_settings textarea").attr("disabled", "disabled");
 
     if (selected === "") {
         $(".interactive_auth_settings").fadeOut(0);
-        $(".interactive_auth_settings input").val("");
+        $(".interactive_auth_settings input, .interactive_auth_settings textarea").val("");
         $("#client_auth_set_interactive_client_auth_attributes__destroy").val("1");
-        $(".interactive_auth_type_settings input").val("");
+        $(".interactive_auth_type_settings input, .interactive_auth_type_settings textarea").val("");
     } else {
         $(".interactive_auth_settings").fadeIn("slow");
         $("#client_auth_set_interactive_client_auth_attributes__destroy").val("");
-        $(".interactive_auth_type_settings:not([id='" + selected + "']) input").val("");
+        $(".interactive_auth_type_settings:not([id='" + selected + "']) input, .interactive_auth_type_settings:not([id='" + selected + "']) textarea").val("");
 
         const attributesSection = document.getElementById(selected);
         $(attributesSection).fadeIn("slow");
-        attributesSection?.querySelectorAll("input").forEach(input => $(input).removeAttr("disabled"));
+        attributesSection?.querySelectorAll("input, textarea").forEach(input => $(input).removeAttr("disabled"));
     }
   }
 

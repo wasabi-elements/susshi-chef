@@ -123,16 +123,18 @@ class ClientAuth < ApplicationRecord
   end
 
   def properties_with_defaults
-    props = self.properties
+    defaults = {}
+
     if self.class.const_defined? "PROPERTIES"
       properties_def = self.class.const_get "PROPERTIES"
       properties_def.each do |key, values|
-        if props[key.to_s].blank? and values[:placeholder]
-          props[key] = values[:placeholder]
+        if self.properties[key.to_s].blank? and values[:placeholder]
+          defaults[key.to_s] = values[:placeholder]
         end
       end
     end
-    props
+
+    self.properties.merge(defaults)
   end
 
   def human_type

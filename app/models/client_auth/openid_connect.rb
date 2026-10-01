@@ -20,13 +20,13 @@ class ClientAuth::OpenidConnect < ClientAuth
   PROPERTIES = {
     kbd_int_auth_title: {
       as:          :text,
-      label:       "Title",
+      label:       "KBD-Interactive Title",
       icon:        "fa-info",
       placeholder: "suSSHi2 Gateway OpenID Connect authentication"
     },
     kbd_int_auth_instruction: {
       as:          :text,
-      label:       "Instruction",
+      label:       "KBD-Interactive Instruction",
       icon:        "fa-info",
       placeholder: "Please login on https://susshi.company/o/%secret%\n\nYour session will continue once you have authenticated successfully.",
       hint:        "The text must include the variable %secret% that will get filled with the actual secret during authentication.",
