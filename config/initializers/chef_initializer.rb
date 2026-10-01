@@ -42,7 +42,7 @@ if File.executable?("/usr/sbin/rsyslogd")
 end
 
 #-- GIT Version
-GIT_INFO = (File.read(File.join(Rails.root, "config", ".git_info")).strip) rescue "develop"
+GIT_INFO = (File.read(File.join(Rails.root, "config", ".git_info")).strip.presence || "unknown") rescue "develop"
 
 #-- SIC Expiration
 SIC_CERTS_LIFETIME_DAYS_DEFAULT = 47
