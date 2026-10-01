@@ -10,5 +10,5 @@
     = object_counter_badge(profile.accesses, tooltip: false)
   %td.text-right.text-nowrap
     = index_action_buttons(profile, { destroy: is_active_controller('profiles', true) ? profile.is_destroyable? : false})
-    = link_to clone_profile_path(profile), class: 'btn btn-xs btn-white' do
+    = link_to clone_profile_path(profile), class: 'btn btn-xs btn-white', title: 'Clone Profile' do
       %i.fa.fa-clone

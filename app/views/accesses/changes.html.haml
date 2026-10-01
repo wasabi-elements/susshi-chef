@@ -11,7 +11,8 @@
           - if @problems == false
             %h3= "#{pluralize(@swift_changes.count, 'change')} pending in total."
             %span.vertical-date Now
-            %p= link_to 'Activate', activate_accesses_path, class: 'btn btn-warning', data: {confirm: 'Are you sure?<br/><br/>Depending on the number of objects, the activation could take some time.<br/><br/>Stay calm!' }
+            - activate_text = "<strong>#{pluralize(@swift_changes.count, 'pending change')}</strong> will be activated on the gateways.\n\n<span class='text-muted'><i class='fa fa-clock'></i> Depending on the number of objects, this can take some time.</span>"
+            %p= link_to 'Activate', activate_accesses_path, class: 'btn btn-warning', data: {confirm: activate_text }
           - else
             %h3 Keys missing!
             %p You have to provide at least one 'active' Partition Host Key and one Partition Authentication Key.
