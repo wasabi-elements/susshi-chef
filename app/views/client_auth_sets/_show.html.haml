@@ -32,7 +32,7 @@
               - if value.blank? && options[:placeholder]
                 %pre= "#{options[:placeholder].strip} (default)"
               - elsif options[:as] == :password
-                %pre= value.to_s.gsub(/\S/, '*')
+                %pre= value.present? ? '********' : ''
               - else
                 %pre= value
 
