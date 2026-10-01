@@ -97,9 +97,9 @@
 
           %h3 Client Authentication Methods
           .hr-line-dashed
-          - for c in (0..2)
+          - PartitionSetting.client_authentication_collection.count.times do |c|
             = f.input_with_icon :PreferredAuthentications, collection: PartitionSetting.client_authentication_collection, label: "Pref. Authentication ##{c+1}",
-                                input_html: { name: "partition_setting[PreferredAuthentications][]"}, include_blank: true,
+                                input_html: { name: "partition_setting[PreferredAuthentications][]", id: "partition_setting_PreferredAuthentications_#{c}" }, include_blank: true,
                                 selected: @partition_setting.PreferredAuthentications[c], icon: 'fa-key'
           .div.row
             .div.col-sm-2
@@ -197,9 +197,9 @@
                   %p=errors.join(',')
 
           #auth_selections
-            - for c in (0..3)
+            - PartitionSetting.target_authentication_collection.count.times do |c|
               = f.input_with_icon :TargetPreferredAuthentications, collection: PartitionSetting.target_authentication_collection, label: "Pref. Authentication ##{c+1}",
-                                  input_html: { name: "partition_setting[TargetPreferredAuthentications][]"}, include_blank: true,
+                                  input_html: { name: "partition_setting[TargetPreferredAuthentications][]", id: "partition_setting_TargetPreferredAuthentications_#{c}" }, include_blank: true,
                                   selected: @partition_setting.TargetPreferredAuthentications[c], icon: 'fa-key', :error => false
 
           .div.row
@@ -230,60 +230,60 @@
         .panel-body
           %h3 Client Side Packet Ciphers
           .hr-line-dashed
-          - for c in (1..PartitionSetting.ciphers_collection.count)
-            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.ciphers_collection, label: (c == 1 ? 'Allowed Client Cipher ':'')+"##{c}",
-                                input_html: { name: "partition_setting[ClientCiphers][]"}, include_blank: true,
-                                selected: @partition_setting.ClientCiphers[c-1], icon: 'fa-key'
+          - PartitionSetting.ciphers_collection.count.times do |c|
+            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.ciphers_collection, label: (c == 0 ? 'Allowed Client Cipher ':'')+"##{c+1}",
+                                input_html: { name: "partition_setting[ClientCiphers][]", id: "partition_setting_ClientCiphers_#{c}" }, include_blank: true,
+                                selected: @partition_setting.ClientCiphers[c], icon: 'fa-key'
 
           %br
           %h3 Target Side Ciphers
           .hr-line-dashed
-          - for c in (1..PartitionSetting.ciphers_collection.count)
-            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ciphers_collection, label: (c == 1 ? 'Preferred Target Cipher ':'')+"##{c}",
-                                input_html: { name: "partition_setting[TargetCiphers][]"}, include_blank: true,
-                                selected: @partition_setting.TargetCiphers[c-1], icon: 'fa-key'
+          - PartitionSetting.ciphers_collection.count.times do |c|
+            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ciphers_collection, label: (c == 0 ? 'Preferred Target Cipher ':'')+"##{c+1}",
+                                input_html: { name: "partition_setting[TargetCiphers][]", id: "partition_setting_TargetCiphers_#{c}" }, include_blank: true,
+                                selected: @partition_setting.TargetCiphers[c], icon: 'fa-key'
 
       #tab-8.tab-pane
         .panel-body
           %h3 Client Side Hash Algorithms
           .hr-line-dashed
-          - for c in (1..PartitionSetting.hmacs_collection.count)
-            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.hmacs_collection, label: (c == 1 ? 'Allowed Client Hash ':'')+"##{c}",
-                                input_html: { name: "partition_setting[ClientHmacs][]"}, include_blank: true,
-                                selected: @partition_setting.ClientHmacs[c-1], icon: 'fa-signature'
+          - PartitionSetting.hmacs_collection.count.times do |c|
+            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.hmacs_collection, label: (c == 0 ? 'Allowed Client Hash ':'')+"##{c+1}",
+                                input_html: { name: "partition_setting[ClientHmacs][]", id: "partition_setting_ClientHmacs_#{c}" }, include_blank: true,
+                                selected: @partition_setting.ClientHmacs[c], icon: 'fa-signature'
 
           %br
           %h3 Target Side Hash Algorithms
           .hr-line-dashed
-          - for c in (1..PartitionSetting.hmacs_collection.count)
-            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.hmacs_collection, label: (c == 1 ? 'Preferred Target Hash ':'')+"##{c}",
-                                input_html: { name: "partition_setting[TargetHmacs][]"}, include_blank: true,
-                                selected: @partition_setting.TargetHmacs[c-1], icon: 'fa-signature'
+          - PartitionSetting.hmacs_collection.count.times do |c|
+            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.hmacs_collection, label: (c == 0 ? 'Preferred Target Hash ':'')+"##{c+1}",
+                                input_html: { name: "partition_setting[TargetHmacs][]", id: "partition_setting_TargetHmacs_#{c}" }, include_blank: true,
+                                selected: @partition_setting.TargetHmacs[c], icon: 'fa-signature'
       #tab-9.tab-pane
         .panel-body
           %h3 Client Side KEX Algorithms
           .hr-line-dashed
-          - for c in (1..PartitionSetting.ssh_kex_algorithms_collection.count)
-            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.ssh_kex_algorithms_collection, label: (c == 1 ? 'Allowed KEX Algorithm ':'')+"##{c}",
-                                input_html: { name: "partition_setting[ClientKexAlgorithms][]"}, include_blank: true,
-                                selected: @partition_setting.ClientKexAlgorithms[c-1], icon: 'fa-key'
+          - PartitionSetting.ssh_kex_algorithms_collection.count.times do |c|
+            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.ssh_kex_algorithms_collection, label: (c == 0 ? 'Allowed KEX Algorithm ':'')+"##{c+1}",
+                                input_html: { name: "partition_setting[ClientKexAlgorithms][]", id: "partition_setting_ClientKexAlgorithms_#{c}" }, include_blank: true,
+                                selected: @partition_setting.ClientKexAlgorithms[c], icon: 'fa-key'
 
           %br
           %h3 Target Side KEX Algorithms
           .hr-line-dashed
-          - for c in (1..PartitionSetting.ssh_kex_algorithms_collection.count)
-            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ssh_kex_algorithms_collection, label: (c == 1 ? 'Pref. KEX Algorithm ':'')+"##{c}",
-                                input_html: { name: "partition_setting[TargetKexAlgorithms][]"}, include_blank: true,
-                                selected: @partition_setting.TargetKexAlgorithms[c-1], icon: 'fa-key'
+          - PartitionSetting.ssh_kex_algorithms_collection.count.times do |c|
+            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ssh_kex_algorithms_collection, label: (c == 0 ? 'Pref. KEX Algorithm ':'')+"##{c+1}",
+                                input_html: { name: "partition_setting[TargetKexAlgorithms][]", id: "partition_setting_TargetKexAlgorithms_#{c}" }, include_blank: true,
+                                selected: @partition_setting.TargetKexAlgorithms[c], icon: 'fa-key'
 
       #tab-10.tab-pane
         .panel-body
           %h3 Client Side Hostkey Algorithms
           .hr-line-dashed
-          - for c in (1..PartitionSetting.ssh_hostkey_type_collection.count)
-            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.ssh_hostkey_type_collection, label: (c == 1 ? 'Allowed Hostkey Algorithm ':'')+"##{c}",
-                                input_html: { name: "partition_setting[ClientHostkeyAlgorithms][]"}, include_blank: true,
-                                selected: @partition_setting.ClientHostkeyAlgorithms[c-1], icon: 'fa-key'
+          - PartitionSetting.ssh_hostkey_type_collection.count.times do |c|
+            = f.input_with_icon :ClientCiphers, collection: PartitionSetting.ssh_hostkey_type_collection, label: (c == 0 ? 'Allowed Hostkey Algorithm ':'')+"##{c+1}",
+                                input_html: { name: "partition_setting[ClientHostkeyAlgorithms][]", id: "partition_setting_ClientHostkeyAlgorithms_#{c}" }, include_blank: true,
+                                selected: @partition_setting.ClientHostkeyAlgorithms[c], icon: 'fa-key'
 
           .div.row
             .div.col-sm-2
@@ -294,10 +294,10 @@
           %br
           %h3 Target Side Hostkey Algorithms
           .hr-line-dashed
-          - for c in (1..PartitionSetting.ssh_hostkey_type_collection.count)
-            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ssh_hostkey_type_collection, label: (c == 1 ? 'Pref. Hostkey Algorithm ':'')+"##{c}",
-                                input_html: { name: "partition_setting[TargetHostkeyAlgorithms][]"}, include_blank: true,
-                                selected: @partition_setting.TargetHostkeyAlgorithms[c-1], icon: 'fa-key'
+          - PartitionSetting.ssh_hostkey_type_collection.count.times do |c|
+            = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ssh_hostkey_type_collection, label: (c == 0 ? 'Pref. Hostkey Algorithm ':'')+"##{c+1}",
+                                input_html: { name: "partition_setting[TargetHostkeyAlgorithms][]", id: "partition_setting_TargetHostkeyAlgorithms_#{c}" }, include_blank: true,
+                                selected: @partition_setting.TargetHostkeyAlgorithms[c], icon: 'fa-key'
 
           .div.row
             .div.col-sm-2
