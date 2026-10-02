@@ -16,6 +16,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 class SwiftClientAuthSet < Swift
+  encrypts :interactive_auth_properties
 
   belongs_to :partition
 
