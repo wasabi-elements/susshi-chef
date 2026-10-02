@@ -81,7 +81,17 @@ class ClientAuthSetsController < ApplicationController
   end
 
   def update
-    if @client_auth_set.update(client_auth_set_params)
+    _params = client_auth_set_params
+    if (interactive = _params[:interactive_client_auth_attributes])
+      # Another method gets a new record, so its setters and validations apply
+      if interactive[:type].present? && interactive[:type] != @client_auth_set.interactive_client_auth&.type
+        interactive.delete(:id)
+      end
+      # Form never shows stored secrets: an empty secret field keeps the current one
+      secret_property_keys.each { |key| interactive.delete(key) if interactive[key].blank? }
+    end
+
+    if @client_auth_set.update(_params)
       respond_to do |format|
         format.html { redirect_to client_auth_sets_path, flash: { success: 'Client Auth Set was successfully updated.' } }
         format.js   { render js: 'location.reload();' }
@@ -104,7 +114,6 @@ class ClientAuthSetsController < ApplicationController
       authorize @client_auth_set
     end
 
-
     def client_auth_set_params
       params.require(:client_auth_set).permit(:partition_id, :name, :description, :comment,
                                               :cache_enabled, :cache_idle_time, :max_cache_time, :cache_refresh, :cache_whitelist_text,
@@ -112,7 +121,6 @@ class ClientAuthSetsController < ApplicationController
                                               publickey_client_auth_attributes: {},
                                               interactive_client_auth_attributes: {})
     end
-
 
     def prepare_form(object = nil)
       if object
@@ -126,6 +134,12 @@ class ClientAuthSetsController < ApplicationController
       end
     end
 
+    def secret_property_keys
+      ClientAuth.interactive_types.flat_map do |type|
+        next [] unless type.const_defined?('PROPERTIES')
+        type.const_get('PROPERTIES').select { |_, options| options[:as] == :password }.keys.map(&:to_s)
+      end.uniq
+    end
 end
 
 
