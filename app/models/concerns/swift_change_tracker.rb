@@ -93,7 +93,7 @@ module SwiftChangeTracker
                    when 'FalseClass', 'TrueClass'
                      "Switched #{name} from #{%w(OFF ON)[values.first && 1 || 0]} to #{%w(OFF ON)[values.last && 1 || 0]}." if values.first != values.last
                    else
-                     "Updated #{name}."
+                     "Updated #{name}." if values.first != values.last
                    end
         end
       end
