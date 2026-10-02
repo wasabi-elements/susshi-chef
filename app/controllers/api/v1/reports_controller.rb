@@ -96,7 +96,7 @@ module Api::V1
 
             if user and (ca_set_id || 0) > 0
               unless (cas = SwiftClientAuthSet.where(partition_id: part_id, id: ca_set_id).first).blank?
-                if cas.cache_enabled? && cas.operational?
+                if cas.cache_enabled?
                   SwiftIpCaching.lookup(
                     create:               true,
                     refresh:              cas.cache_refresh,

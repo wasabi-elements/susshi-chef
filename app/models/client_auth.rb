@@ -19,7 +19,9 @@ class ClientAuth < ApplicationRecord
 
   include SwiftChangeTracker
 
-  store_accessor :properties, :kbd_int_auth_title, :kbd_int_auth_instruction, :kbd_int_auth_prompt
+  DEFAULT_PROPERTIES = %i[kbd_int_auth_title kbd_int_auth_instruction kbd_int_auth_prompt]
+
+  store_accessor :properties, *DEFAULT_PROPERTIES
 
   # Collect all store accessor properties from the subclasses
   Rails.application.config.after_initialize do
@@ -78,10 +80,6 @@ class ClientAuth < ApplicationRecord
 
     def category
       'invalid'
-    end
-
-    def operational?(properties = {})
-      true
     end
 
     def partial_name

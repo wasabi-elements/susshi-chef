@@ -40,19 +40,6 @@ class SwiftClientAuthSet < Swift
     response[:ClientAuthsRequired] = cached ? self.required_auths_cached : self.required_auths
     response[:ClientAuthsPreferred] = self.preferred_auths
 
-    if response[:ClientAuthsRequired].include? 'interactive'
-      unless ((client_auth = self.interactive_auth_properties['type'].constantize) rescue nil).nil?
-        unless client_auth.operational?(self.interactive_auth_properties)
-          response[:ClientAuthsRequired] = ['publickey']
-
-          unless self.interactive_auth_properties['fallback_message'].blank?
-            response[:Configuration] ||= {}
-            response[:Configuration][:Banner] = self.interactive_auth_properties['fallback_message']
-          end
-        end
-      end
-    end
-
     response[:Configuration] ||= {}
     response[:Configuration].merge!(
       ClientGatewayAuthTitle:       self.interactive_auth_properties['kbd_int_auth_title'],
@@ -111,15 +98,6 @@ class SwiftClientAuthSet < Swift
 
   def cache_whitelist
     self.cache_properties['whitelist'] || []
-  end
-
-  def operational?
-    return true if self.interactive_auth_properties.blank?
-    return true unless self.interactive_auth_properties.dig("status", "expires_at").is_a? Integer
-    return true unless self.interactive_auth_properties.dig("status", "expires_at") > Time.now.to_i
-    return true unless [true, false].include? self.interactive_auth_properties.dig("status", "operational")
-
-    self.interactive_auth_properties.dig("status", "operational")
   end
 
 end
