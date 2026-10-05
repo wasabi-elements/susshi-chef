@@ -16,7 +16,7 @@
         %li
           %a{"data-toggle" => "tab", :href => "#tab-6"} Target Sessions
         %li
-          %a{"data-toggle" => "tab", :href => "#tab-7"} Ciphers
+          %a{"data-toggle" => "tab", :href => "#tab-7"} Packet Ciphers
         %li
           %a{"data-toggle" => "tab", :href => "#tab-8"} Hash Algorithms
         %li
@@ -236,7 +236,7 @@
                                 selected: @partition_setting.ClientCiphers[c], icon: 'fa-key'
 
           %br
-          %h3 Target Side Ciphers
+          %h3 Target Side Packet Ciphers
           .hr-line-dashed
           - PartitionSetting.ciphers_collection.count.times do |c|
             = f.input_with_icon :TargetCiphers, collection: PartitionSetting.ciphers_collection, label: (c == 0 ? 'Preferred Target Cipher ':'')+"##{c+1}",
