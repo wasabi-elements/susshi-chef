@@ -138,7 +138,7 @@ SimpleForm.setup do |config|
         append.use :input, class: 'form-control'
         append.wrapper tag: 'span', class: 'input-group-btn' do |clear|
           clear.wrapper :clear_button, tag: 'a', class: 'btn btn-default clear-field' do |button|
-            button.wrapper tag: 'i', class: 'fa fa-times' do
+            button.wrapper tag: 'i', class: 'fa fa-eraser' do
             end
           end
         end
