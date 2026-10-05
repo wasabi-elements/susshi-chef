@@ -253,20 +253,20 @@ Chef::Application.routes.draw do
 
   #-- PartitionKeys
 
-  resources :partition_keys do
+  resources :partition_keys, except: [ :new ] do
     get 'page/:page', :action => :index, :on => :collection
     get 'new/hostkey', action: :new_host_key, on: :collection
     get 'new/authkey', action: :new_auth_key, on: :collection
     post 'move/:klass', action: :move, on: :collection
   end
 
-  resources :partition_host_keys, controller: :partition_keys, type: 'PartitionHostKey'
-  resources :partition_auth_keys, controller: :partition_keys, type: 'PartitionAuthKey'
-  resources :proxy_auth_keys, controller: :partition_keys, type: 'ProxyAuthKey'
+  resources :partition_host_keys, controller: :partition_keys, type: 'PartitionHostKey', except: [ :new ]
+  resources :partition_auth_keys, controller: :partition_keys, type: 'PartitionAuthKey', except: [ :new ]
+  resources :proxy_auth_keys, controller: :partition_keys, type: 'ProxyAuthKey', except: [ :new ]
 
   #-- PartitionSettings
 
-  resources :partition_settings do
+  resources :partition_settings, except: [ :new ] do
     get 'page/:page', :action => :index, :on => :collection
   end
 
@@ -290,7 +290,7 @@ Chef::Application.routes.draw do
     get "send_test_mail", :action => :send_test_mail
   end
 
-  resources :subscriptions
+  resources :subscriptions, only: [ :index, :create, :update, :destroy ]
 
   #-- Profiles
 
@@ -311,14 +311,14 @@ Chef::Application.routes.draw do
 
   #-- SourceIps
 
-  resources :source_ips do
+  resources :source_ips, except: [ :new ] do
     get 'page/:page', :action => :index, :on => :collection
     get 'new/net', action: :new_net, on: :collection
     get 'new/group', action: :new_group, on: :collection
   end
 
-  resources :source_ip_nets, controller: :source_ips, type: 'SourceIpNet'
-  resources :source_ip_groups, :controller => :source_ips, type: 'SourceIpGroup'
+  resources :source_ip_nets, controller: :source_ips, type: 'SourceIpNet', except: [ :new ]
+  resources :source_ip_groups, :controller => :source_ips, type: 'SourceIpGroup', except: [ :new ]
 
   #-- SusshiUsers
 
@@ -373,7 +373,7 @@ Chef::Application.routes.draw do
 
   #-- Target Users
 
-  resources :target_users do
+  resources :target_users, except: [ :new ] do
     get 'page/:page', :action => :index, :on => :collection
     get 'new/login', action: :new_login, on: :collection
     get 'new/regex', action: :new_regex, on: :collection
@@ -381,10 +381,10 @@ Chef::Application.routes.draw do
     get 'new/mapping', action: :new_mapping, on: :collection
   end
 
-  resources :target_user_logins, controller: :target_users, type: 'TargetUserLogin'
-  resources :target_user_regexes, :controller => :target_users, type: 'TargetUserRegex'
-  resources :target_user_groups, :controller => :target_users, type: 'TargetUserGroup'
-  resources :target_user_mappings, :controller => :target_users, type: 'TargetUserMapping'
+  resources :target_user_logins, controller: :target_users, type: 'TargetUserLogin', except: [ :new ]
+  resources :target_user_regexes, :controller => :target_users, type: 'TargetUserRegex', except: [ :new ]
+  resources :target_user_groups, :controller => :target_users, type: 'TargetUserGroup', except: [ :new ]
+  resources :target_user_mappings, :controller => :target_users, type: 'TargetUserMapping', except: [ :new ]
 
   #-- Users
 
