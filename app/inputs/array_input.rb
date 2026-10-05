@@ -102,6 +102,6 @@ class ArrayInput < SimpleForm::Inputs::StringInput
   end
 
   def label_html_options
-    super.merge(for: "#{@builder.object_name}_#{attribute_name}_1i")
+    super.merge(for: "#{@builder.object_name}_#{attribute_name.to_s.underscore}_1")
   end
 end
