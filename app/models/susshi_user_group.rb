@@ -42,7 +42,7 @@ class SusshiUserGroup < SusshiUser
 
   #-- Validations
   validates :groupname, :presence => true
-  validates :groupname, exclusion: { in: %w(ALL), message: 'ALL is a reserved keyword' }
+  validates :groupname, format: { without: /\Aall\z/i, message: 'ALL is a reserved keyword' }
   validates :groupname, format: { with: /\A[a-zA-Z0-9._:@\\\/\- ]+\z/, message: 'contains invalid characters'  }
   validates :groupname, :uniqueness => { case_sensitive: false, scope: :partition_id, message: 'gateway user with same name already exists within partition' }
 

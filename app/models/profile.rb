@@ -33,7 +33,7 @@ class Profile < ApplicationRecord
   #-- Validations
 
   validates :name, :presence => true
-  validates :name, exclusion: { in: %w(DENY), message: 'DENY is a reserved keyword' }
+  validates :name, format: { without: /\Adeny\z/i, message: 'DENY is a reserved keyword' }
   validates :name, :uniqueness => { case_sensitive: false, scope: :partition_id, message: 'profile with same name already exists within partition' }
   validate :local_forwards_validation
   validate :remote_forwards_validation

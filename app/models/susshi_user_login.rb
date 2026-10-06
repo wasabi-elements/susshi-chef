@@ -73,7 +73,7 @@ class SusshiUserLogin < SusshiUser
   #-- Validations
   validates :username, :presence => true
   validates :username, :uniqueness => { case_sensitive: false, scope: :partition_id, message: 'gateway user with same name already exists within partition' }
-  validates :username, exclusion: { in: %w(ALL), message: 'ALL is a reserved keyword' }
+  validates :username, format: { without: /\Aall\z/i, message: 'ALL is a reserved keyword' }
   validates :username, format: { with: /\A[a-zA-Z0-9._\-]+\z/, message: 'contains invalid characters' }
   validates :fullname, :presence => true
   validates :password, confirmation: true, if: -> { self.password_changed? }
