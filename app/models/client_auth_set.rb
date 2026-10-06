@@ -146,7 +146,7 @@ class ClientAuthSet < ApplicationRecord
   def is_destroyable?
     return {false: 'Is provided by System'} if system_int
     return {false: 'Is assigned to a Bastion Profile'} if bastion_profiles.any?
-    return {false: 'Is assigned to a Access Profile'} if profiles.any?
+    return {false: 'Is assigned to an Access Profile'} if profiles.any?
 
     { true: "Delete '#{self.name}'" } unless self.name.blank?
   end
@@ -222,7 +222,7 @@ class ClientAuthSet < ApplicationRecord
     publickey_method_missing = self.publickey_client_auth.blank? || self.publickey_client_auth.marked_for_destruction?
 
     if %w[all any].include?(self.auth_logic) && (interactive_method_missing || publickey_method_missing)
-      errors.add(:auth_logic, 'ALL any ANY require both, an Interactive and a Public Key Authentication method to be selected.')
+      errors.add(:auth_logic, 'ALL and ANY require both, an Interactive and a Public Key Authentication method to be selected.')
     end
 
     if self.auth_logic == 'interactive'
