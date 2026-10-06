@@ -33,7 +33,8 @@ class Swift::Updater::SusshiUser
             user_keys[key.key_type] ||= []
             user_keys[key.key_type] << key.public_blob.split(/\s+/).last
           end
-          user_ids  = user.susshi_user_group_ids
+          #user_ids  = user.susshi_user_group_ids
+          user_ids  = user.susshi_user_groups.where(active: true).pluck(:id)
           user_ids << user.id
           access_ids = AccessesSusshiUser.where(susshi_user_id: user_ids).pluck(:access_id).uniq + all_users_access_ids
           bastion_ids = BastionsSusshiUser.where(susshi_user_id: user_ids).pluck(:bastion_id)

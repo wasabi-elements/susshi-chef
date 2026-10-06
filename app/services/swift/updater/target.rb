@@ -31,7 +31,7 @@ class Swift::Updater::Target
         TargetHost.includes(:proxy, :target_sockets, :target_host_keys, target_user_host_keys: [:susshi_user_login]).where(active: true, partition_id: partition_id).each do |target|
           host_keys  = target_host_keys(target)
           user_keys = target_user_host_keys(target)
-          host_ids  = target.target_group_ids
+          host_ids  = target.target_groups.where(active: true).pluck(:id)
           host_ids << target.id
           access_ids = AccessesTarget.where(target_id: host_ids).pluck(:access_id).uniq
           access_ids += target_fusion_access_ids(target.id)
@@ -52,7 +52,7 @@ class Swift::Updater::Target
         TargetDynamic.includes(:proxy, :target_host_keys, target_user_host_keys: [:susshi_user_login]).where(active: true, partition_id: partition_id).each do |target|
           host_keys  = target_host_keys(target)
           user_keys = target_user_host_keys(target)
-          host_ids  = target.target_group_ids
+          host_ids  = target.target_groups.where(active: true).pluck(:id)
           host_ids << target.id
           access_ids = AccessesTarget.where(target_id: host_ids).pluck(:access_id).uniq
           access_ids += target_fusion_access_ids(target.id)
@@ -68,7 +68,7 @@ class Swift::Updater::Target
           end
         end
         TargetDomain.includes(:proxy).where(active: true, partition_id: partition_id).each do |target|
-          host_ids  = target.target_group_ids
+          host_ids  = target.target_groups.where(active: true).pluck(:id)
           host_ids << target.id
           access_ids = AccessesTarget.where(target_id: host_ids).pluck(:access_id).uniq
           access_ids += target_fusion_access_ids(target.id)
@@ -83,7 +83,7 @@ class Swift::Updater::Target
         end
         TargetNetwork.includes(:proxy).where(active: true, partition_id: partition_id).each do |target|
           next if target.proxy.blank? and target_address_denied?(target.network)
-          host_ids  = target.target_group_ids
+          host_ids  = target.target_groups.where(active: true).pluck(:id)
           host_ids << target.id
           access_ids = AccessesTarget.where(target_id: host_ids).pluck(:access_id).uniq
           access_ids += target_fusion_access_ids(target.id)
