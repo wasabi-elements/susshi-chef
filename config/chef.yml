@@ -1,6 +1,6 @@
 defaults: &DEFAULTS
-  version: "26.09"
-  version_info: Release 26.09
+  version: "26.10"
+  version_info: Release 26.10
   copyright: 2017-2026 by Wasabi Elements GmbH
 
 development:
